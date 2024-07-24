@@ -31,15 +31,15 @@ class LoginController extends Controller
         $user = Auth::user();
         switch ($user->role) {
             case 'admin':
-                return '/admin/home';
+                return '/home';
             case 'warga':
-                return '/warga/home';
+                return '/home';
             case 'rt':
-                return '/rt/home';
+                return '/home';
             case 'rw':
-                return '/rw/home';
+                return '/home';
             case 'kelurahan':
-                return '/kelurahan/home';
+                return '/home';
             default:
                 return '/home';
         }
