@@ -13,8 +13,8 @@ class SKTMController extends Controller
      */
     public function index()
     {
-        $sktms = SKTM::all();
-        return view('pelayanan.sktm.index', compact('sktms'));
+        $data = SKTM::all();
+        return view('pelayanan.sktm.index', compact('data'));
     }
 
     /**
@@ -56,8 +56,7 @@ class SKTMController extends Controller
 
         SKTM::create($data);
 
-        \Log::info('Redirecting to home route');
-        return redirect()->route('dashboard')->with('success', 'Data Telah Tersimpan, Harap Menunggu Validasi Dari Pihak RT');
+        return redirect()->route('home')->with('success', 'Data Telah Tersimpan, Harap Menunggu Validasi Dari Pihak RT');
     }
 
     /**
@@ -65,7 +64,8 @@ class SKTMController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data = SKTM::findOrfail($id);
+        return view('pelayanan.sktm.show', compact('data'));
     }
 
     /**
@@ -73,7 +73,8 @@ class SKTMController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = SKTM::findOrfail($id);
+        return view('pelayanan.sktm.edit', compact('data'));
     }
 
     /**
@@ -81,7 +82,39 @@ class SKTMController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            // Temukan data berdasarkan ID
+            $model = SKTM::findOrFail($id);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['errors' => ['Data tidak ditemukan']], 404);
+        }
+        $request->validate([
+            'nama_lengkap' => 'required|string|max:255',
+            'jenis_kelamin' => 'required|string|max:255',
+            'nik' => 'required|numeric',
+            'alamat' => 'required|string',
+            'rt' => 'required|string',
+            'rw' => 'required|string',
+        ]);
+
+        $data = [];
+
+        // Simpan file foto jika ada
+        $this->processImageUpload($request, 'foto_ktp', $data, $model);
+        $this->processImageUpload($request, 'foto_kk', $data, $model);
+
+        $model->update([
+            'nama_lengkap' => $request->nama_lengkap,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'nik' => $request->nik,
+            'alamat' => $request->alamat,
+            'rt' => $request->rt,
+            'rw' => $request->rw,
+            'foto_kk' => $data['foto_kk'] ?? $model->foto_kk,
+            'foto_ktp' => $data['foto_ktp'] ?? $model->foto_ktp,
+        ]);
+
+        return redirect()->route('sktms.index')->with('success', 'Data Telah Tersimpan');
     }
 
     /**
@@ -89,7 +122,18 @@ class SKTMController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $data = SKTM::findOrFail($id);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Data tidak ditemukan.'], 404);
+        }
+
+        // Hapus semua file terkait
+        $this->deleteRelatedFiles($data);
+
+        // Hapus data dari basis data
+        $data->delete();
+        return redirect()->route('sktms.index')->with('success', 'Data Telah Terhapus');
     }
 
     private function deleteRelatedFiles($data)
