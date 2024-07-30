@@ -93,7 +93,7 @@
                                     class="fa fa-user-circle-o"></i><span class="hide-menu">Profile</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="table-basic.html" aria-expanded="false"><i
-                                    class="fa fa-table"></i><span class="hide-menu">Tables</span></a>
+                                    class="fa fa-history"></i><span class="hide-menu">Riwayat</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="icon-fontawesome.html" aria-expanded="false"><i
                                     class="fa fa-smile-o"></i><span class="hide-menu">Icons</span></a>

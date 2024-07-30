@@ -13,19 +13,20 @@ class SKTMController extends Controller
 {
     public function index()
     {
-        $data = SKTM::all();
-        return view('pelayanan.sktm.index', compact('data'));
-    }
-
-    public function data()
-    {
         $user = Auth::user();
 
-        if (!in_array($user->role, ['rt', 'admin'])) {
+        // Cek akses berdasarkan role user
+        if ($user->role == 'kelurahan') {
+            // Untuk user dengan role 'kelurahan', tampilkan hanya data yang tervalidasi
+            $data = SKTM::where('validasi', 'tervalidasi')->get();
+        } elseif (!in_array($user->role, ['rt', 'admin'])) {
+            // Cek akses untuk role lainnya
             return redirect()->back()->with('error', 'Anda tidak memiliki akses ke halaman ini.');
+        } else {
+            // Untuk user dengan role 'rt', hanya tampilkan data berdasarkan RT mereka
+            // Untuk role 'admin', tampilkan semua data
+            $data = $user->role === 'rt' ? SKTM::where('rt', $user->rt)->get() : SKTM::all();
         }
-
-        $data = $user->role === 'rt' ? SKTM::where('rt', $user->rt)->get() : SKTM::all();
 
         return view('pelayanan.sktm.index', compact('data'));
     }
