@@ -25,3 +25,4 @@
 <script src="{{ asset('admin-master/assets/node_modules/c3-master/c3.min.js') }}"></script>
 <!-- Chart JS -->
 <script src="{{ asset('admin-master/js/dashboard1.js') }}"></script>
+@yield('script')

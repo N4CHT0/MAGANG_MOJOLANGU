@@ -13,7 +13,11 @@ Route::get('/', function () {
 Auth::routes();
 Route::middleware(['auth'])->group(function () {
     Route::resource('users', UserController::class);
-    Route::resource('sktms', SKTMController::class);
+    Route::get('sktms/data', [SKTMController::class, 'data'])->name('sktms.data');
+    Route::resource('sktms', SKTMController::class)->except(['data']);
+    Route::post('sktms/{id}/validate', [SKTMController::class, 'validateSKTM'])->name('sktm.validate');
+    Route::post('sktms/{id}/reject', [SKTMController::class, 'rejectSKTM'])->name('sktm.reject');
+    Route::get('/sktms/{id}/download', [SKTMController::class, 'downloadSKTM'])->name('sktms.download');
 });
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');

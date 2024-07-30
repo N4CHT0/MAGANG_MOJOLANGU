@@ -5,29 +5,96 @@ namespace App\Http\Controllers;
 use App\Models\SKTM;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class SKTMController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $data = SKTM::all();
         return view('pelayanan.sktm.index', compact('data'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function data()
+    {
+        $user = Auth::user();
+
+        if (!in_array($user->role, ['rt', 'admin'])) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki akses ke halaman ini.');
+        }
+
+        $data = $user->role === 'rt' ? SKTM::where('rt', $user->rt)->get() : SKTM::all();
+
+        return view('pelayanan.sktm.index', compact('data'));
+    }
+
+    public function validateSKTM(Request $request, $id)
+    {
+        $data = SKTM::findOrFail($id);
+        $data->validasi = 'tervalidasi';
+        $data->save();
+
+        return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM berhasil divalidasi.');
+    }
+
+    public function rejectSKTM(Request $request, $id)
+    {
+        $request->validate([
+            'keterangan' => 'required|string'
+        ]);
+
+        $data = SKTM::findOrFail($id);
+        $data->validasi = 'ditolak';
+        $data->keterangan = $request->input('keterangan');
+        $data->save();
+
+        return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM ditolak.');
+    }
+
+    public function downloadSKTM($id)
+    {
+        $data = SKTM::findOrFail($id);
+        $pdf = $this->generatePDF($data);
+
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->output();
+        }, 'sktm_report.pdf');
+    }
+
+    private function generatePDF($data)
+    {
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml(view('report.surat_pengantar', compact('data'))->render());
+        $dompdf->setPaper('F4', 'portrait');
+        $dompdf->render();
+
+        return $dompdf;
+    }
+
+    public function onlyView()
+    {
+        $user = Auth::user();
+
+        if (!in_array($user->role, ['rw'])) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki akses ke halaman ini.');
+        }
+
+        $data = $user->role === 'rw' ? SKTM::where('rw', $user->rw)->get() : SKTM::all();
+
+        return view('pelayanan.sktm.index', compact('data'));
+    }
+
     public function create()
     {
         return view('pelayanan.sktm.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -50,7 +117,6 @@ class SKTMController extends Controller
             'rw' => $request->rw,
         ];
 
-        // Simpan file foto jika ada
         $this->processImageUpload($request, 'foto_ktp', $data);
         $this->processImageUpload($request, 'foto_kk', $data);
 
@@ -59,31 +125,21 @@ class SKTMController extends Controller
         return redirect()->route('home')->with('success', 'Data Telah Tersimpan, Harap Menunggu Validasi Dari Pihak RT');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $data = SKTM::findOrfail($id);
         return view('pelayanan.sktm.show', compact('data'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $data = SKTM::findOrfail($id);
         return view('pelayanan.sktm.edit', compact('data'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         try {
-            // Temukan data berdasarkan ID
             $model = SKTM::findOrFail($id);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['errors' => ['Data tidak ditemukan']], 404);
@@ -99,7 +155,6 @@ class SKTMController extends Controller
 
         $data = [];
 
-        // Simpan file foto jika ada
         $this->processImageUpload($request, 'foto_ktp', $data, $model);
         $this->processImageUpload($request, 'foto_kk', $data, $model);
 
@@ -117,9 +172,6 @@ class SKTMController extends Controller
         return redirect()->route('sktms.index')->with('success', 'Data Telah Tersimpan');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         try {
@@ -128,17 +180,15 @@ class SKTMController extends Controller
             return response()->json(['error' => 'Data tidak ditemukan.'], 404);
         }
 
-        // Hapus semua file terkait
         $this->deleteRelatedFiles($data);
 
-        // Hapus data dari basis data
         $data->delete();
         return redirect()->route('sktms.index')->with('success', 'Data Telah Terhapus');
     }
 
     private function deleteRelatedFiles($data)
     {
-        $fileFields = ['foto'];
+        $fileFields = ['foto_ktp', 'foto_kk'];
 
         foreach ($fileFields as $fieldName) {
             if ($data->$fieldName) {
@@ -154,15 +204,12 @@ class SKTMController extends Controller
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->storeAs('public/img', $imageName);
 
-            // Hapus file lama jika sedang melakukan update
             if ($model && $model->$fieldName) {
                 Storage::delete('public/img/' . $model->$fieldName);
             }
 
-            // Tambahkan nama file ke data
             $data[$fieldName] = $imageName;
         } elseif ($model && $model->$fieldName) {
-            // Jika tidak ada file baru diupload, tetapi ada file lama, gunakan file lama
             $data[$fieldName] = $model->$fieldName;
         }
     }

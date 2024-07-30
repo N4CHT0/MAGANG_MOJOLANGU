@@ -14,7 +14,6 @@ class HomeController extends Controller
     public function index()
     {
         $user = auth()->user();
-        \Log::info('User role: ' . $user->role);
 
         switch ($user->role) {
             case 'admin':
