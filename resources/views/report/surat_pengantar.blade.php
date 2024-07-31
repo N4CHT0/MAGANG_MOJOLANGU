@@ -8,18 +8,18 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            margin: 0px;
+            padding: 0px;
             font-size: 13px;
         }
 
         .container {
             width: 210mm;
-            height: 297mm;
+            height: 330mm; /* Ukuran tinggi kertas F4 */
             margin: auto;
-            padding: 10mm;
+            padding: 10px;
             box-sizing: border-box;
-            border: 1px solid black;
+            /* border: 1px solid black; */
         }
 
         .header {
@@ -33,17 +33,17 @@
         .header div {
             text-align: center;
             border: 1px solid black;
-            padding: 5px;
+            padding: 1px;
             flex: 1;
-            margin: 0 5px;
-            font-size: 40px;
-            font-weight: bold;
+            margin: 5px;
+            font-size: 30px;
+            font-weight: normal;
         }
 
         .header .center {
             flex: 4;
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: normal;
         }
 
         .content {
@@ -59,7 +59,6 @@
         .contentisi strong {
             display: inline-block;
             width: 200px;
-            /* Adjust width as needed */
             margin-top: 2px;
             margin-bottom: 2px;
         }
@@ -68,16 +67,9 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            /* Add margin below the table */
         }
 
-        .content th {
-            border: 1px solid black;
-            padding: 5px;
-            text-align: left;
-            position: relative;
-        }
-
+        .content th,
         .content td {
             border: 1px solid black;
             padding: 5px;
@@ -96,6 +88,13 @@
             transform: translateY(-50%);
         }
 
+        .checked .checkbox::after {
+            content: '√';
+            position: absolute;
+            left: 3px;
+            top: -2px;
+        }
+
         .signature {
             margin-top: 20px;
             display: flex;
@@ -109,18 +108,18 @@
 
         @media print {
             @page {
-                size: F4;
-                margin: 0;
+                size: 210mm 330mm; /* Ukuran kertas F4 */
+                margin: 20mm; /* Margin presisi di sisi kanan, kiri, dan bawah */
             }
 
             body {
                 width: 210mm;
-                height: 297mm;
+                height: 330mm;
             }
 
             .container {
                 margin: 0;
-                border: none;
+                padding: 0;
             }
         }
     </style>
@@ -162,7 +161,7 @@
                     </th>
                     <th>2. BORO KERJA<div class="checkbox"></div>
                     </th>
-                    <th>3. SKTM<div class="checkbox"></div>
+                    <th class="checked">3. SKTM<div class="checkbox"></div>
                     </th>
                     <th>4. IJIN KERAMAIAN<div class="checkbox"></div>
                     </th>
@@ -170,30 +169,11 @@
                     </th>
                 </tr>
                 <tr>
-                    <td>SYARAT-SYARATNYA:<br>Fc. KTP pemohon 1x<br>FC Kartu Kerluarga 1x</td>
-                    <td>SYARAT-SYARATNYA:<br>Fc. KK+KTP pemohon 1x<br>... (list continues)</td>
+                    <td>SYARAT-SYARATNYA:<br>Fc. KTP pemohon 1x<br>FC Kartu Keluarga 1x</td>
+                    <td>SYARAT-SYARATNYA:<br>Fc. KK+KTP pemohon 1x<br>... (daftar berlanjut)</td>
                     <td>SYARAT-SYARATNYA:<br>Fc. Kartu Keluarga 1x<br>Fc. E-KTP 1x</td>
-                    <td>SYARAT-SYARATNYA:<br>Fc. E-KTP 1x<br>... (list continues)</td>
-                    <td>SYARAT-SYARATNYA:<br>Fc. Sertifikat tanah 1x<br>... (list continues)</td>
-                </tr>
-                <tr>
-                    <th>1. SKU/SKDU<div class="checkbox"></div>
-                    </th>
-                    <th>2. BORO KERJA<div class="checkbox"></div>
-                    </th>
-                    <th>3. SKTM<div class="checkbox"></div>
-                    </th>
-                    <th>4. IJIN KERAMAIAN<div class="checkbox"></div>
-                    </th>
-                    <th>5. IMB/SPPL<div class="checkbox"></div>
-                    </th>
-                </tr>
-                <tr>
-                    <td>SYARAT-SYARATNYA:<br>Fc. KTP pemohon 1x<br>... (list continues)</td>
-                    <td>SYARAT-SYARATNYA:<br>Fc. KK+KTP pemohon 1x<br>... (list continues)</td>
-                    <td>SYARAT-SYARATNYA:<br>Fc. Kartu Keluarga 1x<br>Fc. E-KTP 1x</td>
-                    <td>SYARAT-SYARATNYA:<br>Fc. E-KTP 1x<br>... (list continues)</td>
-                    <td>SYARAT-SYARATNYA:<br>Fc. Sertifikat tanah 1x<br>... (list continues)</td>
+                    <td>SYARAT-SYARATNYA:<br>Fc. E-KTP 1x<br>... (daftar berlanjut)</td>
+                    <td>SYARAT-SYARATNYA:<br>Fc. Sertifikat tanah 1x<br>... (daftar berlanjut)</td>
                 </tr>
                 <!-- Tambahkan baris lainnya sesuai kebutuhan -->
             </table>
