@@ -38,11 +38,16 @@
                                                         </a>
                                                         @if ($item->validasi != 'tervalidasi')
                                                             <button class="btn btn-success" data-toggle="modal"
-                                                                data-target="#validateModal" data-id="{{ $item->id }}">
+                                                                data-target="#validateModal" data-id="{{ $item->id }}"
+                                                                data-nama="{{ $item->nama_lengkap }}"
+                                                                data-alamat="{{ $item->alamat }}"
+                                                                data-ktp="{{ asset('storage/img/' . $item->foto_ktp) }}"
+                                                                data-kk="{{ asset('storage/img/' . $item->foto_kk) }}">
                                                                 <i class="fa fa-check-circle"></i>
                                                             </button>
                                                         @endif
-                                                        <a href="{{ route('sktms.show', $item->id) }}" class="btn btn-info">
+                                                        <a href="{{ route('sktms.show', $item->id) }}"
+                                                            class="btn btn-info">
                                                             <i class="fa fa-eye"></i>
                                                         </a>
                                                         <a href="{{ route('sktms.edit', $item->id) }}"
