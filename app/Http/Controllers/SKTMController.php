@@ -107,6 +107,8 @@ class SKTMController extends Controller
             'foto_kk' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:10048',
             'foto_ktp' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:10048',
             'rw' => 'required|string',
+            'keperluan' => 'required|string',
+            'tujuan' => 'required|string',
         ]);
 
         $data = [
@@ -116,6 +118,8 @@ class SKTMController extends Controller
             'alamat' => $request->alamat,
             'rt' => $request->rt,
             'rw' => $request->rw,
+            'keperluan' => $request->keperluan,
+            'tujuan' => $request->tujuan,
         ];
 
         $this->processImageUpload($request, 'foto_ktp', $data);
@@ -152,6 +156,8 @@ class SKTMController extends Controller
             'alamat' => 'required|string',
             'rt' => 'required|string',
             'rw' => 'required|string',
+            'keperluan' => 'required|string',
+            'tujuan' => 'required|string',
         ]);
 
         $data = [];
@@ -166,6 +172,8 @@ class SKTMController extends Controller
             'alamat' => $request->alamat,
             'rt' => $request->rt,
             'rw' => $request->rw,
+            'keperluan' => $request->keperluan,
+            'tujuan' => $request->tujuan,
             'foto_kk' => $data['foto_kk'] ?? $model->foto_kk,
             'foto_ktp' => $data['foto_ktp'] ?? $model->foto_ktp,
         ]);

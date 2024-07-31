@@ -21,6 +21,8 @@ class SKTM extends Model
         'jenis_kelamin',
         'foto_ktp',
         'foto_kk',
+        'keperluan',
+        'tujuan',
         'validasi',
         'keterangan',
     ];
