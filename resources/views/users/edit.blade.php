@@ -70,6 +70,8 @@
                     <option value="warga" {{ old('role', $user->role) == 'warga' ? 'selected' : '' }}>Warga</option>
                     <option value="rt" {{ old('role', $user->role) == 'rt' ? 'selected' : '' }}>RT</option>
                     <option value="rw" {{ old('role', $user->role) == 'rw' ? 'selected' : '' }}>RW</option>
+                    <option value="kelurahan" {{ old('role', $user->role) == 'kelurahan' ? 'selected' : '' }}>Kelurahan
+                    </option>
                 </select>
                 @error('role')
                     <div class="invalid-feedback">{{ $message }}</div>

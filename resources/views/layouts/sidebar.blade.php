@@ -89,8 +89,9 @@
                         <li> <a class="waves-effect waves-dark" href="{{ route('home') }}" aria-expanded="false"><i
                                     class="fa fa-tachometer"></i><span class="hide-menu">Beranda</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-profile.html" aria-expanded="false"><i
-                                    class="fa fa-user-circle-o"></i><span class="hide-menu">Profile</span></a>
+                        <li> <a class="waves-effect waves-dark" href="{{ route('users.riwayat') }}"
+                                aria-expanded="false"><i class="fa fa-user-circle-o"></i><span
+                                    class="hide-menu">History</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="table-basic.html" aria-expanded="false"><i
                                     class="fa fa-history"></i><span class="hide-menu">Riwayat</span></a>
@@ -128,8 +129,9 @@
                         <li> <a class="waves-effect waves-dark" href="{{ route('home') }}" aria-expanded="false"><i
                                     class="fa fa-tachometer"></i><span class="hide-menu">Beranda</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-profile.html" aria-expanded="false"><i
-                                    class="fa fa-user-circle-o"></i><span class="hide-menu">Profile</span></a>
+                        <li> <a class="waves-effect waves-dark" href="{{ route('sktms.index') }}"
+                                aria-expanded="false"><i class="fa fa-user-circle-o"></i><span class="hide-menu">Data
+                                    Pengurus SKTM</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="table-basic.html" aria-expanded="false"><i
                                     class="fa fa-table"></i><span class="hide-menu">Tables</span></a>

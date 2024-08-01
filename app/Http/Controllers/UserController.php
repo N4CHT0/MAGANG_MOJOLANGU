@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SKTM;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,6 +16,35 @@ class UserController extends Controller
     {
         $users = User::all();
         return view('users.index', compact('users'));
+    }
+
+    // Display a listing of the resource.
+    public function history()
+    {
+        // Mendapatkan pengguna yang sedang login
+        $user = Auth::user();
+
+        // Mengambil data SKTM yang nama_lengkapnya sama dengan pengguna yang sedang login
+        $sktm = SKTM::where('nama_lengkap', $user->nama_lengkap)
+            ->get()
+            ->map(function ($item) {
+                $item->source = 'Pengajuan SKTM';
+                return $item;
+            });
+
+        // Contoh model lain
+        // $modelLain = ModelLain::where('nama_lengkap', $user->nama_lengkap)
+        //                       ->get()
+        //                       ->map(function($item) {
+        //                           $item->source = 'Pengajuan Model Lain';
+        //                           return $item;
+        //                       });
+
+        // Menggabungkan semua data dalam satu koleksi
+        // $data = $sktm->merge($modelLain); // Jika ada model lain
+        $data = $sktm; // Jika hanya ada satu model
+
+        return view('users.history', compact('data'));
     }
 
     // Show the form for creating a new resource.
