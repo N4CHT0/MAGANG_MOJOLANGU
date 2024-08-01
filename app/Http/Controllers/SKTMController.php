@@ -35,9 +35,46 @@ class SKTMController extends Controller
     {
         $data = SKTM::findOrFail($id);
         $data->validasi = 'tervalidasi';
+
+        // Generate PDF
+        $pdf = $this->generatePDF($data);
+
+        // Save PDF and get filename
+        $pdfName = $this->processPDFUpload($pdf, $id);
+
+        // Save PDF name to 'surat_pengantar'
+        $data->surat_pengantar = $pdfName;
+
         $data->save();
 
-        return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM berhasil divalidasi.');
+        return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM berhasil divalidasi dan PDF telah disimpan.');
+    }
+
+    public function viewPDF($filename)
+    {
+        $path = storage_path('app/public/pdf/' . $filename);
+
+        if (!file_exists($path)) {
+            abort(404);
+        }
+
+        return response()->file($path, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $filename . '"',
+            'Cache-Control' => 'public, must-revalidate, proxy-revalidate',
+            'Pragma' => 'public',
+            'Expires' => '0'
+        ]);
+    }
+
+
+    public function finalSKTM(Request $request, $id)
+    {
+        $data = SKTM::findOrFail($id);
+        $data->validasi = 'final';
+        $data->save();
+
+        return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM berhasil difinalisasi.');
     }
 
     public function rejectSKTM(Request $request, $id)
@@ -56,13 +93,26 @@ class SKTMController extends Controller
 
     public function downloadSKTM($id)
     {
+        // Ambil data SKTM berdasarkan ID
         $data = SKTM::findOrFail($id);
-        $pdf = $this->generatePDF($data);
 
-        return response()->streamDownload(function () use ($pdf) {
-            echo $pdf->output();
-        }, 'sktm_report.pdf');
+        // Pastikan ada nama file PDF di field 'surat_pengantar'
+        if (!$data->surat_pengantar) {
+            return redirect()->back()->with('error', 'File PDF tidak ditemukan.');
+        }
+
+        // Path file PDF di storage
+        $pdfPath = storage_path('app/public/pdf/' . $data->surat_pengantar);
+
+        // Cek apakah file ada
+        if (!file_exists($pdfPath)) {
+            return redirect()->back()->with('error', 'File PDF tidak ditemukan.');
+        }
+
+        // Unduh file PDF
+        return response()->download($pdfPath);
     }
+
 
     private function generatePDF($data)
     {
@@ -76,6 +126,14 @@ class SKTMController extends Controller
         $dompdf->render();
 
         return $dompdf;
+    }
+
+    private function processPDFUpload($pdf, $id)
+    {
+        $pdfName = 'surat_pengantar_' . $id . '.pdf';
+        Storage::put('public/pdf/' . $pdfName, $pdf->output());
+
+        return $pdfName;
     }
 
     public function onlyView()

@@ -25,6 +25,8 @@ class SKTM extends Model
         'tujuan',
         'validasi',
         'keterangan',
+        'surat_pengantar',
+        'produk',
     ];
 
     public function Pengguna()

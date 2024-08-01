@@ -17,6 +17,9 @@ Route::middleware(['auth'])->group(function () {
     // Rute untuk SKTM yang mencakup index, create, store, show, edit, update, destroy
     Route::resource('sktms', SKTMController::class);
 
+    Route::get('/sktm/view-pdf/{filename}', [SKTMController::class, 'viewPDF'])->name('sktm.viewPDF');
+
+
     // Route untuk halaman riwayat pengajuan
     Route::get('/history', [UserController::class, 'history'])->name('users.riwayat');
 
