@@ -205,7 +205,7 @@
                             <textarea class="form-control" id="keterangan" name="keterangan"></textarea>
                         </div>
                         <button type="submit" class="btn btn-success">Finalisasi</button>
-                        <button type="button" id="rejectBtn" class="btn btn-danger">Tolak</button>
+                        <button type="button" id="rejecFinaltBtn" class="btn btn-danger">Tolak</button>
                     </form>
                 </div>
             </div>
@@ -245,9 +245,10 @@
             var kk = button.data('kk');
             var suratPengantar = button.data('pdf'); // Nama file PDF
             var modal = $(this);
-
-            var finalUrl = '{{ route('sktm.viewPDF', ':filename') }}';
-            finalUrl = finalUrl.replace(':filename', encodeURIComponent(suratPengantar)); // Encode nama file
+            var finalUrl = '{{ route('sktm.final', ':id') }}';
+            finalUrl = finalUrl.replace(':id', id);
+            var pdfUrl = '{{ route('sktm.viewPDF', ':filename') }}';
+            pdfUrl = pdfUrl.replace(':filename', encodeURIComponent(suratPengantar)); // Encode nama file
 
             modal.find('#final-id').val(id);
             modal.find('#finalForm').attr('action', finalUrl);
@@ -257,7 +258,16 @@
             modal.find('#tujuan').val(tujuan);
             modal.find('#foto_ktp').attr('src', ktp);
             modal.find('#foto_kk').attr('src', kk);
-            modal.find('#pdf-download').attr('href', finalUrl); // Set href for download link
+            modal.find('#pdf-download').attr('href', pdfUrl); // Set href for download link
+        });
+
+        $('#rejecFinaltBtn').on('click', function() {
+            var modal = $('#finalModal');
+            var id = modal.find('#validate-id').val();
+            var rejectUrl = '{{ route('sktm.reject', ':id') }}';
+            rejectUrl = rejectUrl.replace(':id', id);
+            modal.find('#finalMpdal').attr('action', rejectUrl);
+            modal.find('#finalMpdal').submit();
         });
 
         $('#rejectBtn').on('click', function() {

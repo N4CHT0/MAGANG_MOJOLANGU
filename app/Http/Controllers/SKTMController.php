@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\SKTM;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Illuminate\Support\Facades\Http;
 
 class SKTMController extends Controller
 {
@@ -47,7 +49,49 @@ class SKTMController extends Controller
 
         $data->save();
 
+        // Kirim file PDF ke pengguna terkait
+        $this->sendPDFToUser($data, 'surat_pengantar');
+
         return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM berhasil divalidasi dan PDF telah disimpan.');
+    }
+
+    private function sendPDFToUser(SKTM $sktm, $fileType)
+    {
+        // Cari pengguna berdasarkan nama lengkap dari SKTM
+        $user = User::where('nama_lengkap', $sktm->nama_lengkap)->first();
+
+        if ($user && $user->telegram_number) {
+            // Tentukan nama file PDF berdasarkan jenis
+            $pdfField = ($fileType === 'surat_pengantar') ? 'surat_pengantar' : 'produk';
+            $pdfPath = storage_path('app/public/pdf/' . $sktm->$pdfField);
+
+            // Kirim PDF ke Telegram
+            $this->sendFileToTelegram($user->telegram_number, $pdfPath);
+        }
+    }
+
+    private function sendFileToTelegram($chatId, $filePath)
+    {
+        $telegramToken = env('TELEGRAM_BOT_TOKEN');
+        $url = "https://api.telegram.org/bot$telegramToken/sendDocument";
+
+        // Pastikan file ada sebelum mengirim
+        if (!file_exists($filePath)) {
+            return; // Logika tambahan untuk menangani error
+        }
+
+        $response = Http::attach(
+            'document',
+            file_get_contents($filePath),
+            basename($filePath)
+        )->post($url, [
+            'chat_id' => $chatId,
+        ]);
+
+        // Logika tambahan untuk menangani respons atau error
+        if ($response->failed()) {
+            // Tangani error
+        }
     }
 
     public function viewPDF($filename)
@@ -72,7 +116,25 @@ class SKTMController extends Controller
     {
         $data = SKTM::findOrFail($id);
         $data->validasi = 'final';
+
+        // Kosongkan kolom keterangan jika ada nilainya
+        if (!empty($data->keterangan)) {
+            $data->keterangan = '';
+        }
+
+        // Generate PDF
+        $pdf = $this->generateProductPDF($data);
+
+        // Save PDF and get filename
+        $pdfName = $this->processProductPDFUpload($pdf, $id);
+
+        // Save PDF name to 'product'
+        $data->produk = $pdfName;
+
         $data->save();
+
+        // Kirim file PDF ke pengguna terkait
+        $this->sendPDFToUser($data, 'produk');
 
         return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM berhasil difinalisasi.');
     }
@@ -113,6 +175,28 @@ class SKTMController extends Controller
         return response()->download($pdfPath);
     }
 
+    public function downloadProduct($id)
+    {
+        // Ambil data SKTM berdasarkan ID
+        $data = SKTM::findOrFail($id);
+
+        // Pastikan ada nama file PDF di field 'produk'
+        if (!$data->produk) {
+            return redirect()->back()->with('error', 'File PDF tidak ditemukan.');
+        }
+
+        // Path file PDF di storage
+        $pdfPath = storage_path('app/public/pdf/' . $data->produk);
+
+        // Cek apakah file ada
+        if (!file_exists($pdfPath)) {
+            return redirect()->back()->with('error', 'File PDF tidak ditemukan.');
+        }
+
+        // Unduh file PDF
+        return response()->download($pdfPath);
+    }
+
 
     private function generatePDF($data)
     {
@@ -128,9 +212,31 @@ class SKTMController extends Controller
         return $dompdf;
     }
 
+    private function generateProductPDF($data)
+    {
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml(view('report.surat_keterangan_tidak_mampu', compact('data'))->render());
+        $dompdf->setPaper('F4', 'portrait');
+        $dompdf->render();
+
+        return $dompdf;
+    }
+
     private function processPDFUpload($pdf, $id)
     {
         $pdfName = 'surat_pengantar_' . $id . '.pdf';
+        Storage::put('public/pdf/' . $pdfName, $pdf->output());
+
+        return $pdfName;
+    }
+
+    private function processProductPDFUpload($pdf, $id)
+    {
+        $pdfName = 'surat_keterangan_tidak_mampu' . $id . '.pdf';
         Storage::put('public/pdf/' . $pdfName, $pdf->output());
 
         return $pdfName;
@@ -180,12 +286,55 @@ class SKTMController extends Controller
             'tujuan' => $request->tujuan,
         ];
 
+        // Upload image if available
         $this->processImageUpload($request, 'foto_ktp', $data);
         $this->processImageUpload($request, 'foto_kk', $data);
 
-        SKTM::create($data);
+        // Create SKTM and get the instance
+        $sktm = SKTM::create($data);
+
+        // Send notification to appropriate RT users
+        $this->sendTelegramNotification($sktm->rt, $sktm->rw, $sktm->nama_lengkap);
 
         return redirect()->route('home')->with('success', 'Data Telah Tersimpan, Harap Menunggu Validasi Dari Pihak RT');
+    }
+
+    private function sendTelegramNotification($rt, $rw, $namaLengkap)
+    {
+        // Find users with role 'rt' and matching rt and rw
+        $users = User::where('role', 'rt')
+            ->where('rt', $rt)
+            ->where('rw', $rw)
+            ->get();
+
+        // Notification message
+        $message = "Ada pengajuan SKTM baru dari $namaLengkap di RT $rt dan RW $rw. Harap segera divalidasi.";
+
+        // Send message to all matched users
+        foreach ($users as $user) {
+            // Ensure telegram_number exists before sending message
+            if ($user->telegram_number) {
+                $this->sendMessageToTelegram($user->telegram_number, $message);
+            }
+        }
+    }
+
+
+
+    private function sendMessageToTelegram($chatId, $message)
+    {
+        $telegramToken = env('TELEGRAM_BOT_TOKEN');
+        $url = "https://api.telegram.org/bot$telegramToken/sendMessage";
+
+        $response = Http::post($url, [
+            'chat_id' => $chatId,
+            'text' => $message,
+        ]);
+
+        // Logika tambahan untuk menangani respons atau error
+        if ($response->failed()) {
+            // Tangani error
+        }
     }
 
     public function show(string $id)

@@ -15,7 +15,7 @@
                                     <th>RT</th>
                                     <th>RW</th>
                                     <th>Pengurusan</th>
-                                    <th>Validasi</th>
+                                    <th>Status</th>
                                     @if ($data->some(fn($item) => $item->keterangan))
                                         <th>Keterangan</th>
                                     @endif
@@ -37,6 +37,8 @@
                                                 <span class="badge badge-success">Tervalidasi</span>
                                             @elseif($item->validasi === 'ditolak')
                                                 <span class="badge badge-danger">Ditolak</span>
+                                            @elseif($item->validasi === 'final')
+                                                <span class="badge badge-info">Terfinalisasi</span>
                                             @else
                                                 <span class="badge badge-warning">Sedang Diproses</span>
                                             @endif
@@ -46,9 +48,16 @@
                                         @endif
                                         <td>
                                             <div class="btn-group">
-                                                <a href="#" class="btn btn-info">
-                                                    <i class="fa fa-eye"></i>
-                                                </a>
+                                                <button class="btn btn-info" data-toggle="modal" data-target="#detailModal"
+                                                    data-id="{{ $item->id }}" data-nama="{{ $item->nama_lengkap }}"
+                                                    data-alamat="{{ $item->alamat }}"
+                                                    data-keperluan="{{ $item->keperluan }}"
+                                                    data-tujuan="{{ $item->tujuan }}"
+                                                    data-ktp="{{ asset('storage/img/' . $item->foto_ktp) }}"
+                                                    data-kk="{{ asset('storage/img/' . $item->foto_kk) }}"
+                                                    data-pdf="{{ $item->surat_pengantar }}">
+                                                    <i class="fa fa-info-circle"></i>
+                                                </button>
                                                 <a href="#" class="btn btn-dark">
                                                     <i class="fa fa-download"></i>
                                                 </a>
@@ -63,4 +72,97 @@
             </div>
         </div>
     </div>
+
+    <!-- Detail Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detaillModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detaillModalLabel">Detail Produk</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="detailForm" method="POST" action="">
+                        @csrf
+                        <input type="hidden" name="id" id="detail-id">
+                        <p>Informasi Pengajuan</p>
+                        <div class="form-group">
+                            <label for="nama_lengkap">Nama Lengkap</label>
+                            <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="alamat">Alamat</label>
+                            <input type="text" class="form-control" id="alamat" name="alamat" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="keperluan">Keperluan</label>
+                            <input type="text" class="form-control" id="keperluan" name="keperluan">
+                        </div>
+                        <div class="form-group">
+                            <label for="tujuan">Tujuan</label>
+                            <input type="text" class="form-control" id="tujuan" name="tujuan">
+                        </div>
+                        <div class="form-group">
+                            <label for="foto_ktp">Foto KTP</label>
+                            <img id="foto_ktp" class="img-fluid" alt="Foto KTP">
+                        </div>
+                        <div class="form-group">
+                            <label for="foto_kk">Foto KK</label>
+                            <img id="foto_kk" class="img-fluid" alt="Foto KK">
+                        </div>
+                        <div class="form-group">
+                            <label for="pdf">Surat Pengantar</label>
+                            <p>PDF tidak dapat ditampilkan.
+                                <a id="pdf-download" href="" target="_blank">Klik di sini untuk mengunduh</a>.
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <label for="pdf">Produk</label>
+                            <p>PDF tidak dapat ditampilkan.
+                                <a id="pdf-download" href="" target="_blank">Klik di sini untuk mengunduh</a>.
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <label for="keterangan">Keterangan (jika ditolak)</label>
+                            <textarea class="form-control" id="keterangan" name="keterangan"></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+@section('script')
+    <script>
+        $('#detailModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
+            var nama = button.data('nama');
+            var alamat = button.data('alamat');
+            var keperluan = button.data('keperluan');
+            var tujuan = button.data('tujuan');
+            var ktp = button.data('ktp');
+            var kk = button.data('kk');
+            var suratPengantar = button.data('pdf');
+            var modal = $(this);
+            var detailUrl = '{{ route('sktm.final', ':id') }}';
+            detailUrl = detailUrl.replace(':id', id);
+            var pdfUrl = '{{ route('sktm.viewPDF', ':filename') }}';
+
+            pdfUrl = pdfUrl.replace(':filename', encodeURIComponent(suratPengantar)); // Encode nama file
+
+            modal.find('#detail-id').val(id);
+            modal.find('#detailForm').attr('action', detailUrl);
+            modal.find('#nama_lengkap').val(nama);
+            modal.find('#alamat').val(alamat);
+            modal.find('#keperluan').val(keperluan);
+            modal.find('#tujuan').val(tujuan);
+            modal.find('#foto_ktp').attr('src', ktp);
+            modal.find('#foto_kk').attr('src', kk);
+            modal.find('#pdf-download').attr('href', pdfUrl); // Set href for download link
+        });
+    </script>
 @endsection

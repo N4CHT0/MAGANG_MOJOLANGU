@@ -17,14 +17,14 @@ Route::middleware(['auth'])->group(function () {
     // Rute untuk SKTM yang mencakup index, create, store, show, edit, update, destroy
     Route::resource('sktms', SKTMController::class);
 
-    Route::get('/sktm/view-pdf/{filename}', [SKTMController::class, 'viewPDF'])->name('sktm.viewPDF');
-
+    Route::get('/sktms/view-pdf/{filename}', [SKTMController::class, 'viewPDF'])->name('sktm.viewPDF');
 
     // Route untuk halaman riwayat pengajuan
     Route::get('/history', [UserController::class, 'history'])->name('users.riwayat');
 
     // Rute untuk validasi dan penolakan SKTM
     Route::post('sktms/{id}/validate', [SKTMController::class, 'validateSKTM'])->name('sktm.validate');
+    Route::post('sktms/{id}/final', [SKTMController::class, 'finalSKTM'])->name('sktm.final');
     Route::post('sktms/{id}/reject', [SKTMController::class, 'rejectSKTM'])->name('sktm.reject');
 
     // Rute untuk mengunduh SKTM
@@ -32,4 +32,3 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
