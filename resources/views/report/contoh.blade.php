@@ -74,9 +74,9 @@
         }
 
         .signature {
+            margin-top: 10px;
             display: flex;
             justify-content: space-between;
-
         }
 
         .signature table {
@@ -87,7 +87,6 @@
 
         .signature tr,
         .signature td {
-            font-size: 13px;
             text-align: center;
             border: none;
         }
