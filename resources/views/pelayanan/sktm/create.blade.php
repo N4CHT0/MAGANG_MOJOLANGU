@@ -111,6 +111,25 @@
                                 </div>
                             </div>
 
+                            <div class="mb-3">
+                                <label for="keperluan" class="form-label">Keperluan</label>
+                                <input type="text" class="form-control @error('keperluan') is-invalid @enderror"
+                                    id="keperluan" name="keperluan" required>
+                                @error('keperluan')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="tujuan" class="form-label">Tujuan</label>
+                                <input type="text" class="form-control @error('tujuan') is-invalid @enderror"
+                                    id="tujuan" name="tujuan" required>
+                                @error('tujuan')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+
                             <button type="submit" class="btn btn-primary">Simpan & Ajukan</button>
                         </form>
                     </div>
