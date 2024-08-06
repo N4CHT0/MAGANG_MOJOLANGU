@@ -143,16 +143,46 @@
                 <tr>
                     <th>1. SKU/SKDU</th>
                     <th>2. BORO KERJA</th>
-                    <th class="checked">3. SKTM</th>
+                    <th>3. SKTM</th>
                     <th>4. IJIN KERAMAIAN</th>
                     <th>5. IMB/SPPL</th>
                 </tr>
                 <tr>
-                    <td>SYARAT-SYARATNYA:<br>Fc. KTP pemohon 1x<br>FC Kartu Keluarga 1x</td>
-                    <td>SYARAT-SYARATNYA:<br>Fc. KK+KTP pemohon 1x<br>... (daftar berlanjut)</td>
-                    <td>SYARAT-SYARATNYA:<br>Fc. Kartu Keluarga 1x<br>Fc. E-KTP 1x</td>
-                    <td>SYARAT-SYARATNYA:<br>Fc. E-KTP 1x<br>... (daftar berlanjut)</td>
-                    <td>SYARAT-SYARATNYA:<br>Fc. Sertifikat tanah 1x<br>... (daftar berlanjut)</td>
+                    <td>
+                        SYARAT-SYARATNYA:<br>
+                        Fc. KK + KTP pemohon 1x<br>
+                        Fc. Akta pendirian PT/CV bagi yang sudah terbentuk PT/CV 1x<br>
+                        Fc. Lunas PBB tahun ini 1x<br>
+                        Fc. Surat perjanjian sewa jika tempat usahanya sewa 1x<br>
+                        Fc. Foto tempat usaha 1x<br>
+                        Fc. Nomor Induk Berusaha 1 lbr
+                    </td>
+                    <td>
+                        SYARAT-SYARATNYA:<br>
+                        Fc. KK+KTP pemohon 1x<br>
+                        Fc. berwarna ukuran 4x6 = 3 lbr
+                    </td>
+                    <td>
+                        SYARAT-SYARATNYA:<br>
+                        Fc. Kartu Keluarga 1x<br>
+                        Fc. E-KTP 1x
+                    </td>
+                    <td>
+                        SYARAT-SYARATNYA:<br>
+                        Fc. Kartu Keluarga 1x<br>
+                        Fc. E-KTP 1x<br>
+                        Pelunasan PBB
+                    </td>
+                    <td>
+                        SYARAT-SYARATNYA:<br>
+                        Fc. Kartu Keluarga 1x<br>
+                        Fc. E-KTP 1x<br>
+                        Fc. Sertifikat tanah 1x<br>
+                        Fc. Lunas PBB tahun ini 1x<br>
+                        Asli + copy blanko isian dari dinas perijinan 1x<br>
+                        Fc. KKPR 1x<br>
+                        Fc. Nomor Induk Berusaha 1 lbr
+                    </td>
                 </tr>
             </table>
             <p style="text-align: justify;">Demikian surat pengantar ini kami sampaikan untuk diketahui, atas bantuan
