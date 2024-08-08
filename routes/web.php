@@ -29,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Rute untuk mengunduh SKTM
     Route::get('sktms/{id}/download', [SKTMController::class, 'downloadSKTM'])->name('sktms.download');
+    Route::get('sktms/{id}/download-product', [SKTMController::class, 'downloadProduct'])->name('sktms.product');
 });
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');

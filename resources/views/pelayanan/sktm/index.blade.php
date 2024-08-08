@@ -36,7 +36,7 @@
                                                             class="btn btn-dark">
                                                             <i class="fa fa-download"></i>
                                                         </a>
-                                                        @if ($item->validasi != 'tervalidasi')
+                                                        @if ($item->validasi != 'tervalidasi' && $item->validasi != 'final')
                                                             <button class="btn btn-success" data-toggle="modal"
                                                                 data-target="#validateModal" data-id="{{ $item->id }}"
                                                                 data-nama="{{ $item->nama_lengkap }}"
@@ -67,7 +67,7 @@
                                                             class="btn btn-dark">
                                                             <i class="fa fa-download"></i>
                                                         </a>
-                                                        @if ($item->validasi != 'tervalidasi')
+                                                        @if ($item->validasi != 'tervalidasi' && $item->validasi != 'final')
                                                             <button class="btn btn-success" data-toggle="modal"
                                                                 data-target="#validateModal" data-id="{{ $item->id }}"
                                                                 data-nama="{{ $item->nama_lengkap }}"
