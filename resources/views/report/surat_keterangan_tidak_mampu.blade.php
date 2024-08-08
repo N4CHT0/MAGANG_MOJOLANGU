@@ -131,13 +131,13 @@
 <body>
     <div class="container">
         <div class="header">
-            <div>RW.07</div>
+            <div>RW.{{ $data->rw }}</div>
             <div class="center">
-                <p>RUKUN TETANGGA 08 RUKUN WARGA 07</p>
+                <p>RUKUN TETANGGA {{ $data->rt }} RUKUN WARGA {{ $data->rw }} </p>
                 <p>KELURAHAN MOJOLANGU</p>
                 <p>KECAMATAN LOWOKWARU</p>
             </div>
-            <div>RT.08</div>
+            <div>RT.{{ $data->rt }}</div>
         </div>
         <p>
             Kepada Yth<br>
@@ -185,11 +185,11 @@
             <p style="text-align: justify;">Malang,..................20..</p>
             <div class="signature">
                 <div>
-                    <p>Ketua RW.07</p><br>
+                    <p>Ketua RW.{{ $data->rw }}</p><br>
                     <p>Mulyani, S.Pd</p>
                 </div>
                 <div>
-                    <p>Ketua RT.08</p><br>
+                    <p>Ketua RT.{{ $data->rt }}</p><br>
                     <p>Suwadi</p>
                 </div>
                 <div>
