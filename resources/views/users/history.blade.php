@@ -55,7 +55,8 @@
                                                     data-tujuan="{{ $item->tujuan }}"
                                                     data-ktp="{{ asset('storage/img/' . $item->foto_ktp) }}"
                                                     data-kk="{{ asset('storage/img/' . $item->foto_kk) }}"
-                                                    data-pdf="{{ $item->surat_pengantar }}">
+                                                    data-pdf="{{ $item->surat_pengantar }}"
+                                                    data-product="{{ $item->produk }}">
                                                     <i class="fa fa-info-circle"></i>
                                                 </button>
                                                 <a href="#" class="btn btn-dark">
@@ -120,9 +121,9 @@
                             </p>
                         </div>
                         <div class="form-group">
-                            <label for="pdf">Produk</label>
+                            <label for="product">Produk</label>
                             <p>PDF tidak dapat ditampilkan.
-                                <a id="pdf-download" href="" target="_blank">Klik di sini untuk mengunduh</a>.
+                                <a id="product-download" href="" target="_blank">Klik di sini untuk mengunduh</a>.
                             </p>
                         </div>
                         <div class="form-group">
@@ -147,12 +148,15 @@
             var ktp = button.data('ktp');
             var kk = button.data('kk');
             var suratPengantar = button.data('pdf');
+            var Product = button.data('product');
             var modal = $(this);
             var detailUrl = '{{ route('sktm.final', ':id') }}';
             detailUrl = detailUrl.replace(':id', id);
             var pdfUrl = '{{ route('sktm.viewPDF', ':filename') }}';
+            var productUrl = '{{ route('sktm.viewPDF', ':filename') }}';
 
             pdfUrl = pdfUrl.replace(':filename', encodeURIComponent(suratPengantar)); // Encode nama file
+            productUrl = productUrl.replace(':filename', encodeURIComponent(Product)); // Encode nama file
 
             modal.find('#detail-id').val(id);
             modal.find('#detailForm').attr('action', detailUrl);
@@ -163,6 +167,7 @@
             modal.find('#foto_ktp').attr('src', ktp);
             modal.find('#foto_kk').attr('src', kk);
             modal.find('#pdf-download').attr('href', pdfUrl); // Set href for download link
+            modal.find('#product-download').attr('href', productUrl); // Set href for download link
         });
     </script>
 @endsection

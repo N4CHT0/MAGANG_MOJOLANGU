@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('Selamat Datang Warga Kelurahan Mojolangu') }}</div>
+                    <div class="card-header bg-info text-white">{{ __('Selamat Datang Warga Kelurahan Mojolangu') }}</div>
 
                     <div class="card-body">
                         @if (session('status'))
@@ -20,11 +20,27 @@
             </div>
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('Layanan') }}</div>
+                    <div class="card-header bg-info text-white">{{ __('Layanan') }}</div>
 
                     <div class="card-body">
                         <a href="#" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-file"
                                 style="margin-right: 10px "></i>Pengurusan SKTM</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-info text-white">{{ __('Pemberitahuan') }}</div>
+
+                    <div class="card-body">
+                        <h4>Harap Baca Sebelum Menggunakan Aplikasi</h4>
+                        <h6>1. Pengguna Wajib Memiliki Telegram Yang Berstatus Aktif</h6>
+                        <h6>2. Mengisi ID Telegram Pada Akun, Dapatkan ID Telegram Anda <a
+                                href="https://t.me/userinfobot">Disini</a></h6>
+                        <h6> Jika Kesulitan Harap Lihat Panduan Untuk Mendapat ID Telegram Anda Di Sini</h6><br>
+                        <h6>3. Jika Sudah Mendapat ID Telegram, Harap Masukan ID Telegram Anda <a href="#">Disini</a>
+                        </h6>
+                        <h6>4. Pengguna Hanya Dapat Mengakses Layanan Dengan 1 Akun Untuk 1 Orang Saja.</h6>
                     </div>
                 </div>
             </div>
