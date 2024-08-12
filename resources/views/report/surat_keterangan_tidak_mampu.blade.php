@@ -1,129 +1,126 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Surat Keterangan Tidak Mampu</title>
     <style>
+        @page {
+            size: 210mm 330mm;
+            /* Ukuran F4 */
+            margin-left: 10mm;
+            margin-right: 25mm;
+            margin-top: 10mm;
+            margin-bottom: -15mm;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            margin: 0px;
-            padding: 0px;
-            font-size: 13px;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         .container {
-            width: 210mm;
-            height: 330mm;
-            /* Ukuran tinggi kertas F4 */
-            margin: auto;
-            padding: 10px;
-            box-sizing: border-box;
-            /* border: 1px solid black; */
-        }
-
-        .header {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            border-bottom: 5px solid black;
-            padding-bottom: 10px;
+            width: 100%;
+            padding: 10mm;
+            box-sizing: border-box;
         }
 
-        .header div {
+        .header,
+        .footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            border: 1px solid black;
-            padding: 1px;
-            flex: 1;
-            margin: 5px;
-            font-size: 30px;
-            font-weight: normal;
+            margin-bottom: 10mm;
+            margin-right: 2mm;
         }
 
-        .header .center {
-            flex: 4;
-            font-size: 14px;
-            font-weight: normal;
+        .header img,
+        .footer img {
+            max-width: 100%;
         }
 
         .content {
+            margin-top: 10mm;
+            width: 100%;
+        }
+
+        .content h1 {
             text-align: center;
-            margin-top: 2px;
+            text-decoration: underline;
+            font-size: 24px;
+            margin-bottom: 20px;
         }
 
-        .contentisi {
-            text-align: left;
-            margin-left: 50px;
+        .footer {
+            margin-top: 38mm;
         }
 
-        .contentisi strong {
-            display: inline-block;
-            width: 200px;
-            margin-top: 2px;
-            margin-bottom: 2px;
-        }
-
-        .content table {
+        table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
-        .content th,
-        .content td {
+        table,
+        th,
+        td {
             border: 1px solid black;
-            padding: 5px;
+        }
+
+        th,
+        td {
+            padding: 10px;
             text-align: left;
-            position: relative;
-            font-size: 11px;
         }
 
-        .checkbox {
-            width: 15px;
-            height: 15px;
-            border: 1px solid black;
-            position: absolute;
-            right: 2px;
-            top: 50%;
-            transform: translateY(-50%);
+        .content p {
+            line-height: 1.5;
+            margin: 0 0 10px 0;
+            font-family: sans-serif;
+            font-size: 12px;
         }
 
-        .checked .checkbox::after {
-            content: '√';
-            position: absolute;
-            left: 3px;
-            top: -2px;
+        .notes {
+            margin-top: 15mm;
+            font-size: 10px;
+            text-align: left;
+        }
+
+        .notes p {
+            margin: 5px 0;
         }
 
         .signature {
-            margin-top: 20px;
-            display: flex;
-            justify-content: space-between;
+            margin-top: 25mm;
+            text-align: right;
         }
 
-        .signature div {
-            width: 30%;
-            text-align: center;
+        .signature p {
+            margin: 0;
         }
 
-        @media print {
-            @page {
-                size: 210mm 330mm;
-                /* Ukuran kertas F4 */
-                margin: 20mm;
-                /* Margin presisi di sisi kanan, kiri, dan bawah */
-            }
+        .qr-code {
+            text-align: right;
+            margin-top: 15px;
+        }
 
-            body {
-                width: 210mm;
-                height: 330mm;
-            }
+        .qr-code img {
+            width: 80px;
+            height: 80px;
+        }
 
-            .container {
-                margin: 0;
-                padding: 0;
-            }
+        .content .label {
+            display: inline-block;
+            min-width: 160px;
         }
     </style>
 </head>
@@ -131,72 +128,25 @@
 <body>
     <div class="container">
         <div class="header">
-            <div>RW.{{ $data->rw }}</div>
-            <div class="center">
-                <p>RUKUN TETANGGA {{ $data->rt }} RUKUN WARGA {{ $data->rw }} </p>
-                <p>KELURAHAN MOJOLANGU</p>
-                <p>KECAMATAN LOWOKWARU</p>
-            </div>
-            <div>RT.{{ $data->rt }}</div>
+            <img src="{{ public_path('Surat/header.png') }}" alt="Header Atas">
         </div>
-        <p>
-            Kepada Yth<br>
-            Kepala Kelurahan Mojolangu<br>
-            Kecamatan Lowokwaru Kota Malang<br>
-            Di Tempat
-        </p>
+
         <div class="content">
-            <h2 style="text-decoration: underline;">SURAT PENGANTAR</h2>
-            <p>No. Register RW: .......................</p>
-            <p>No. Register RT: .......................</p>
-            <p style="text-align: justify;">Bersama ini kami mohon bantuannya untuk dilengkapi kebutuhan kepengurusan
-                surat yang diperlukan warga kami di bawah ini:</p>
-            <p class="contentisi">
-                <strong>Nama</strong>: {{ $data->nama_lengkap }}<br>
-                <strong>Jenis Kelamin</strong>: {{ $data->jenis_kelamin }}<br>
-                <strong>NIK/NO. KTP</strong>: {{ $data->nik }}<br>
-                <strong>Alamat</strong>: {{ $data->alamat }}<br>
-                <strong>Keperluan Untuk</strong>: Beri tanda √ pada kotak yang dibutuhkan
-            </p>
-            <table>
-                <tr>
-                    <th>1. SKU/SKDU<div class="checkbox"></div>
-                    </th>
-                    <th>2. BORO KERJA<div class="checkbox"></div>
-                    </th>
-                    <th class="checked">3. SKTM<div class="checkbox"></div>
-                    </th>
-                    <th>4. IJIN KERAMAIAN<div class="checkbox"></div>
-                    </th>
-                    <th>5. IMB/SPPL<div class="checkbox"></div>
-                    </th>
-                </tr>
-                <tr>
-                    <td>SYARAT-SYARATNYA:<br>Fc. KTP pemohon 1x<br>FC Kartu Keluarga 1x</td>
-                    <td>SYARAT-SYARATNYA:<br>Fc. KK+KTP pemohon 1x<br>... (daftar berlanjut)</td>
-                    <td>SYARAT-SYARATNYA:<br>Fc. Kartu Keluarga 1x<br>Fc. E-KTP 1x</td>
-                    <td>SYARAT-SYARATNYA:<br>Fc. E-KTP 1x<br>... (daftar berlanjut)</td>
-                    <td>SYARAT-SYARATNYA:<br>Fc. Sertifikat tanah 1x<br>... (daftar berlanjut)</td>
-                </tr>
-                <!-- Tambahkan baris lainnya sesuai kebutuhan -->
-            </table>
-            <p style="text-align: justify;">Demikian surat pengantar ini kami sampaikan untuk diketahui, atas bantuan
-                dan kerjasama yang baik diucapkan terimakasih.</p>
-            <p style="text-align: justify;">Malang,..................20..</p>
-            <div class="signature">
-                <div>
-                    <p>Ketua RW.{{ $data->rw }}</p><br>
-                    <p>Mulyani, S.Pd</p>
-                </div>
-                <div>
-                    <p>Ketua RT.{{ $data->rt }}</p><br>
-                    <p>Suwadi</p>
-                </div>
-                <div>
-                    <p>Pemohon</p><br>
-                    <p>{{ $data->nama_lengkap }}</p>
-                </div>
-            </div>
+            <h1>INVOICE</h1>
+
+        </div>
+
+        <div class="signature">
+            <p>Surabaya, 2024</p>
+            <p>Mey Prayogo Radi Putro, S.Kom.</p>
+        </div>
+
+        <div class="qr-code">
+            <img src="{{ public_path('kwitansi_keuangan/QR.png') }}" alt="QR Code">
+        </div>
+
+        <div class="footer">
+            <img src="{{ public_path('kwitansi_keuangan/Kop Bawah.png') }}" alt="Kop Bawah">
         </div>
     </div>
 </body>
