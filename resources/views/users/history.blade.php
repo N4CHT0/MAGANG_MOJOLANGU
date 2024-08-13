@@ -59,9 +59,6 @@
                                                     data-product="{{ $item->produk }}">
                                                     <i class="fa fa-info-circle"></i>
                                                 </button>
-                                                <a href="#" class="btn btn-dark">
-                                                    <i class="fa fa-download"></i>
-                                                </a>
                                             </div>
                                         </td>
                                     </tr>
@@ -108,10 +105,12 @@
                         </div>
                         <div class="form-group">
                             <label for="foto_ktp">Foto KTP</label>
+                            <br>
                             <img id="foto_ktp" class="img-fluid" alt="Foto KTP">
                         </div>
                         <div class="form-group">
                             <label for="foto_kk">Foto KK</label>
+                            <br>
                             <img id="foto_kk" class="img-fluid" alt="Foto KK">
                         </div>
                         <div class="form-group">
@@ -125,10 +124,6 @@
                             <p>PDF tidak dapat ditampilkan.
                                 <a id="product-download" href="" target="_blank">Klik di sini untuk mengunduh</a>.
                             </p>
-                        </div>
-                        <div class="form-group">
-                            <label for="keterangan">Keterangan (jika ditolak)</label>
-                            <textarea class="form-control" id="keterangan" name="keterangan"></textarea>
                         </div>
                     </form>
                 </div>

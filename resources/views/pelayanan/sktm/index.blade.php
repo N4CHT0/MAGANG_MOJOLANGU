@@ -1,109 +1,139 @@
 @extends('layouts.main')
 @section('content')
+    <style>
+        #searchInput {
+            width: 100%;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        #searchInput:focus {
+            border-color: #80bdff;
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+        }
+    </style>
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="card-title">Pengajuan Untuk Surat Keterangan Tidak Mampu (SKTM)</div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama Lengkap</th>
-                                    <th>Alamat</th>
-                                    <th>RT</th>
-                                    <th>RW</th>
-                                    @if (Auth::user()->role != 'rw' && Auth::user()->role != 'warga')
-                                        <th>Aksi</th>
-                                    @endif
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php $no = 1 @endphp
-                                @foreach ($data as $item)
+                    <div class="card-body">
+                        <div class="card-title">
+                            <p>Pengajuan Untuk Surat Keterangan Tidak Mampu (SKTM)</p>
+                            <input type="text" id="searchInput" class="form-control" placeholder="Cari...">
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
                                     <tr>
-                                        <td>{{ $no++ }}</td>
-                                        <td>{{ $item->nama_lengkap }}</td>
-                                        <td>{{ $item->alamat }}</td>
-                                        <td>{{ $item->rt }}</td>
-                                        <td>{{ $item->rw }}</td>
+                                        <th>No</th>
+                                        <th>Nama Lengkap</th>
+                                        <th>Alamat</th>
+                                        <th>RT</th>
+                                        <th>RW</th>
                                         @if (Auth::user()->role != 'rw' && Auth::user()->role != 'warga')
-                                            <td>
-                                                <div class="btn-group">
-                                                    @if (Auth::user()->role == 'admin')
-                                                        <a href="{{ route('sktms.download', $item->id) }}"
-                                                            class="btn btn-dark">
-                                                            <i class="fa fa-download"></i>
-                                                        </a>
-                                                        @if ($item->validasi != 'tervalidasi' && $item->validasi != 'final')
-                                                            <button class="btn btn-success" data-toggle="modal"
-                                                                data-target="#validateModal" data-id="{{ $item->id }}"
-                                                                data-nama="{{ $item->nama_lengkap }}"
-                                                                data-alamat="{{ $item->alamat }}"
-                                                                data-ktp="{{ asset('storage/img/' . $item->foto_ktp) }}"
-                                                                data-kk="{{ asset('storage/img/' . $item->foto_kk) }}">
-                                                                <i class="fa fa-check-circle"></i>
-                                                            </button>
-                                                        @endif
-                                                        <a href="{{ route('sktms.show', $item->id) }}"
-                                                            class="btn btn-info">
-                                                            <i class="fa fa-eye"></i>
-                                                        </a>
-                                                        <a href="{{ route('sktms.edit', $item->id) }}"
-                                                            class="btn btn-warning">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
-                                                        <form action="{{ route('sktms.destroy', $item->id) }}"
-                                                            method="POST" style="display:inline;">
-                                                            @csrf
-                                                            @method('delete')
-                                                            <button class="btn btn-danger">
-                                                                <i class="fa fa-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    @elseif (Auth::user()->role == 'rt')
-                                                        <a href="{{ route('sktms.download', $item->id) }}"
-                                                            class="btn btn-dark">
-                                                            <i class="fa fa-download"></i>
-                                                        </a>
-                                                        @if ($item->validasi != 'tervalidasi' && $item->validasi != 'final')
-                                                            <button class="btn btn-success" data-toggle="modal"
-                                                                data-target="#validateModal" data-id="{{ $item->id }}"
-                                                                data-nama="{{ $item->nama_lengkap }}"
-                                                                data-alamat="{{ $item->alamat }}"
-                                                                data-ktp="{{ asset('storage/img/' . $item->foto_ktp) }}"
-                                                                data-kk="{{ asset('storage/img/' . $item->foto_kk) }}">
-                                                                <i class="fa fa-check-circle"></i>
-                                                            </button>
-                                                        @endif
-                                                    @elseif (Auth::user()->role == 'kelurahan')
-                                                        @if ($item->validasi = 'tervalidasi')
-                                                            <button class="btn btn-success" data-toggle="modal"
-                                                                data-target="#finalModal" data-id="{{ $item->id }}"
-                                                                data-nama="{{ $item->nama_lengkap }}"
-                                                                data-alamat="{{ $item->alamat }}"
-                                                                data-keperluan="{{ $item->keperluan }}"
-                                                                data-tujuan="{{ $item->tujuan }}"
-                                                                data-ktp="{{ asset('storage/img/' . $item->foto_ktp) }}"
-                                                                data-kk="{{ asset('storage/img/' . $item->foto_kk) }}"
-                                                                data-pdf="{{ $item->surat_pengantar }}">
-                                                                <i class="fa fa-check-square-o"></i>
-                                                            </button>
-                                                        @elseif ($item->validasi = 'final')
-                                                            <a href="{{ route('sktms.download', $item->id) }}"
-                                                                class="btn btn-dark">
-                                                                <i class="fa fa-download"></i>
-                                                            </a>
-                                                        @endif
-                                                    @endif
-                                                </div>
-                                            </td>
+                                            <th>Aksi</th>
                                         @endif
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @forelse ($data as $item)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $item->nama_lengkap }}</td>
+                                            <td>{{ $item->alamat }}</td>
+                                            <td>{{ $item->rt }}</td>
+                                            <td>{{ $item->rw }}</td>
+                                            @if (Auth::user()->role != 'rw' && Auth::user()->role != 'warga')
+                                                <td>
+                                                    <div class="btn-group">
+                                                        @if (Auth::user()->role == 'admin')
+                                                            @if ($item->validasi != 'tervalidasi' && $item->validasi != 'final')
+                                                                <button class="btn btn-success" data-toggle="modal"
+                                                                    data-target="#validateModal"
+                                                                    data-id="{{ $item->id }}"
+                                                                    data-nama="{{ $item->nama_lengkap }}"
+                                                                    data-alamat="{{ $item->alamat }}"
+                                                                    data-ktp="{{ asset('storage/img/' . $item->foto_ktp) }}"
+                                                                    data-kk="{{ asset('storage/img/' . $item->foto_kk) }}">
+                                                                    <i class="fa fa-check-circle"></i>
+                                                                </button>
+                                                            @elseif ($item->validasi = 'tervalidasi')
+                                                                <a href="{{ route('sktms.download', $item->id) }}"
+                                                                    class="btn btn-dark">
+                                                                    <i class="fa fa-download"></i>
+                                                                </a>
+                                                            @endif
+                                                            <a href="{{ route('sktms.show', $item->id) }}"
+                                                                class="btn btn-info">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
+                                                            <a href="{{ route('sktms.edit', $item->id) }}"
+                                                                class="btn btn-warning">
+                                                                <i class="fa fa-edit"></i>
+                                                            </a>
+                                                            <form action="{{ route('sktms.destroy', $item->id) }}"
+                                                                method="POST" style="display:inline;">
+                                                                @csrf
+                                                                @method('delete')
+                                                                <button class="btn btn-danger">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </form>
+                                                        @elseif (Auth::user()->role == 'rt')
+                                                            @if ($item->validasi != 'tervalidasi' && $item->validasi != 'final')
+                                                                <button class="btn btn-success" data-toggle="modal"
+                                                                    data-target="#validateModal"
+                                                                    data-id="{{ $item->id }}"
+                                                                    data-nama="{{ $item->nama_lengkap }}"
+                                                                    data-alamat="{{ $item->alamat }}"
+                                                                    data-ktp="{{ asset('storage/img/' . $item->foto_ktp) }}"
+                                                                    data-kk="{{ asset('storage/img/' . $item->foto_kk) }}">
+                                                                    <i class="fa fa-check-circle"></i>
+                                                                </button>
+                                                            @elseif ($item->validasi = 'tervalidasi')
+                                                                <a href="{{ route('sktms.download', $item->id) }}"
+                                                                    class="btn btn-dark">
+                                                                    <i class="fa fa-download"></i>
+                                                                </a>
+                                                            @endif
+                                                        @elseif (Auth::user()->role == 'kelurahan')
+                                                            @if ($item->validasi == 'tervalidasi')
+                                                                <button class="btn btn-success" data-toggle="modal"
+                                                                    data-target="#finalModal" data-id="{{ $item->id }}"
+                                                                    data-nama="{{ $item->nama_lengkap }}"
+                                                                    data-alamat="{{ $item->alamat }}"
+                                                                    data-keperluan="{{ $item->keperluan }}"
+                                                                    data-tujuan="{{ $item->tujuan }}"
+                                                                    data-ktp="{{ asset('storage/img/' . $item->foto_ktp) }}"
+                                                                    data-kk="{{ asset('storage/img/' . $item->foto_kk) }}"
+                                                                    data-pdf="{{ $item->surat_pengantar }}">
+                                                                    <i class="fa fa-check-square-o"></i>
+                                                                </button>
+                                                            @elseif ($item->validasi == 'final')
+                                                                <a href="{{ route('sktms.download', $item->id) }}"
+                                                                    class="btn btn-dark">
+                                                                    <i class="fa fa-download"></i>
+                                                                </a>
+                                                            @endif
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                            @endif
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="text-center">Tidak ada data</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -216,6 +246,19 @@
 
 @section('script')
     <script>
+        $(document).ready(function() {
+            $('#searchInput').on('keyup', function() {
+                var value = $(this).val().toLowerCase();
+                $('.table tbody tr').each(function() {
+                    var rowText = $(this).text().toLowerCase();
+                    if (rowText.indexOf(value) > -1) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+        });
         $('#validateModal').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
             var id = button.data('id');

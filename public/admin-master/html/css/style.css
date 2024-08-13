@@ -1,10 +1,4 @@
 @charset "UTF-8";
-/*
-Template Name: Admin Pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
 /**
  * Table Of Content
  *
@@ -17,23 +11,11 @@ File: scss
  *	7. Widgets
  *	8. Custom Templates
  */
-/*
-Template Name: Admin Pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
 /*Theme Colors*/
 /*bootstrap Color*/
 /*Light colors*/
 /*Normal Color*/
 /*Extra Variable*/
-/*
-Template Name: Admin Pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
 /**
  * Table Of Content
  *
@@ -47,8 +29,8 @@ File: scss
  *  8. Custom Templates
  */
 @import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700");
-/******************* 
-Global Styles 
+/*******************
+Global Styles
 *******************/
 @import '../scss/icons/font-awesome/css/font-awesome.min.css';
 @import '../css/spinners.css';
@@ -1140,25 +1122,14 @@ When click on sidebar toggler and also for tablet
     left: 0px;
   }
 }
-/*
-Template Name: Admin pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
-/*
-Template Name: Admin Pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
+
 /*Theme Colors*/
 /*bootstrap Color*/
 /*Light colors*/
 /*Normal Color*/
 /*Extra Variable*/
-/*============================================================== 
- For all pages 
+/*==============================================================
+ For all pages
  ============================================================== */
 #main-wrapper {
   width: 100%;
@@ -2007,18 +1978,7 @@ c3 chart global
   min-height: 340px;
 }
 
-/*
-Template Name: Admin pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
-/*
-Template Name: Admin Pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
+
 /*Theme Colors*/
 /*bootstrap Color*/
 /*Light colors*/
@@ -2107,18 +2067,7 @@ Pagination
   color: rgba(120, 130, 140, 0.13);
 }
 
-/*
-Template Name: Admin pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
-/*
-Template Name: Admin Pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
+
 /*Theme Colors*/
 /*bootstrap Color*/
 /*Light colors*/
@@ -2775,7 +2724,7 @@ Buttons
   background-color: #171515;
 }
 
-/*============================================================== 
+/*==============================================================
  Buttons page
  ============================================================== */
 .button-group .btn {
@@ -2798,18 +2747,7 @@ Buttons
   display: none;
 }
 
-/*
-Template Name: Admin pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
-/*
-Template Name: Admin Pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
+
 /*Theme Colors*/
 /*bootstrap Color*/
 /*Light colors*/
@@ -2953,7 +2891,7 @@ Form summernote
   display: inline-block;
 }
 
-/*============================================================== 
+/*==============================================================
 Form addons page
 ============================================================== */
 /*Bootstrap select*/
@@ -3008,7 +2946,7 @@ Form addons page
   padding: 8px 12px;
 }
 
-/*============================================================== 
+/*==============================================================
 Form Material page
  ============================================================== */
 /*Material inputs*/
@@ -3057,14 +2995,14 @@ Form Material page
 }
 
 /*******************
-Form validation error 
+Form validation error
 ******************/
 .error .help-block {
   color: #fb3a3a;
 }
 
 /*******************
-File Upload 
+File Upload
 ******************/
 .fileupload {
   overflow: hidden;
@@ -3083,7 +3021,7 @@ File Upload
 }
 
 /*******************
-This is for the checkbox radio button and switch 
+This is for the checkbox radio button and switch
 ******************/
 /* Radio Buttons
    ========================================================================== */
@@ -4317,18 +4255,7 @@ input[type=checkbox]:not(:disabled).tabbed:focus ~ .lever::after {
   border-color: #24d2b5;
 }
 
-/*
-Template Name: Admin pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
-/*
-Template Name: Admin Pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
+
 /*Theme Colors*/
 /*bootstrap Color*/
 /*Light colors*/
@@ -4910,18 +4837,7 @@ Table-Jsgrid table
   padding: 0.5em 1em !important;
 }
 
-/*
-Template Name: Admin pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
-/*
-Template Name: Admin Pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
+
 /*Theme Colors*/
 /*bootstrap Color*/
 /*Light colors*/
@@ -5054,19 +4970,6 @@ File: scss
 #slimtest4.ps:hover > .ps__scrollbar-y-rail:hover > .ps__scrollbar-y {
   background-color: #20aee3;
 }
-
-/*
-Template Name: Admin Wrap Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
-/*
-Template Name: Admin Pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
 /*******************
 /*User mail widgets*/
 /*******************/
@@ -5766,14 +5669,8 @@ File: scss
   color: #ffffff;
 }
 
-/*
-Template Name: Admin Pro Admin
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
-/*============================================================== 
- For Laptop & above all (1650px) 
+/*==============================================================
+ For Laptop & above all (1650px)
  ============================================================== */
 @media (min-width: 1650px) {
   .widget-app-columns {
@@ -5797,8 +5694,8 @@ File: scss
     min-height: 240px;
   }
 }
-/*============================================================== 
- For Laptop & above all (1370px) 
+/*==============================================================
+ For Laptop & above all (1370px)
  ============================================================== */
 @media (max-width: 1370px) {
   .widget-app-columns {
@@ -5813,8 +5710,8 @@ File: scss
     min-height: 186px;
   }
 }
-/*-- ============================================================== 
- Small Desktop & above all (1024px) 
+/*-- ==============================================================
+ Small Desktop & above all (1024px)
  ============================================================== */
 @media (min-width: 1024px) {
   .page-wrapper {
@@ -5854,8 +5751,8 @@ File: scss
     display: flex !important;
   }
 }
-/*-- ============================================================== 
- Ipad & above all(768px) 
+/*-- ==============================================================
+ Ipad & above all(768px)
  ============================================================== */
 @media (min-width: 768px) {
   .navbar-header {
@@ -5892,8 +5789,8 @@ File: scss
     -webkit-flex-wrap: nowrap !important;
   }
 }
-/*-- ============================================================== 
- Phone and below ipad(767px) 
+/*-- ==============================================================
+ Phone and below ipad(767px)
  ============================================================== */
 @media (max-width: 767px) {
   .container-fluid {

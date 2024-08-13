@@ -29,10 +29,6 @@
                                     class="fa fa-question-circle"></i><span class="hide-menu">404</span></a>
                         </li>
                     </ul>
-                    <div class="text-center mt-4">
-                        <a href="https://www.wrappixel.com/templates/adminwrap/"
-                            class="btn waves-effect waves-light btn-info hidden-md-down text-white"> Upgrade to Pro</a>
-                    </div>
                 </nav>
                 <!-- End Sidebar navigation -->
             </div>
@@ -69,10 +65,6 @@
                                     class="fa fa-question-circle"></i><span class="hide-menu">404</span></a>
                         </li>
                     </ul>
-                    <div class="text-center mt-4">
-                        <a href="https://www.wrappixel.com/templates/adminwrap/"
-                            class="btn waves-effect waves-light btn-info hidden-md-down text-white"> Upgrade to Pro</a>
-                    </div>
                 </nav>
                 <!-- End Sidebar navigation -->
             </div>
@@ -106,10 +98,6 @@
                                     class="fa fa-question-circle"></i><span class="hide-menu">404</span></a>
                         </li>
                     </ul>
-                    <div class="text-center mt-4">
-                        <a href="https://www.wrappixel.com/templates/adminwrap/"
-                            class="btn waves-effect waves-light btn-info hidden-md-down text-white"> Upgrade to Pro</a>
-                    </div>
                 </nav>
                 <!-- End Sidebar navigation -->
             </div>
@@ -146,10 +134,6 @@
                                     class="fa fa-question-circle"></i><span class="hide-menu">404</span></a>
                         </li>
                     </ul>
-                    <div class="text-center mt-4">
-                        <a href="https://www.wrappixel.com/templates/adminwrap/"
-                            class="btn waves-effect waves-light btn-info hidden-md-down text-white"> Upgrade to Pro</a>
-                    </div>
                 </nav>
                 <!-- End Sidebar navigation -->
             </div>
