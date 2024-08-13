@@ -116,7 +116,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="{{ public_path('Surat/header.png') }}" alt="Header" />
+            <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/header_sktm.jpg'))) }}"
+                alt="header" />
         </div>
         <div class="content">
             <h1>SURAT KETERANGAN TIDAK MAMPU</h1>
