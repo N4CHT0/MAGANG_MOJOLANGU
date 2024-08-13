@@ -90,11 +90,8 @@
                                     class="fa fa-tachometer"></i><span class="hide-menu">Beranda</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="{{ route('users.riwayat') }}"
-                                aria-expanded="false"><i class="fa fa-user-circle-o"></i><span
-                                    class="hide-menu">History</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="table-basic.html" aria-expanded="false"><i
-                                    class="fa fa-history"></i><span class="hide-menu">Riwayat</span></a>
+                                aria-expanded="false"><i class="fa fa-history"></i><span
+                                    class="hide-menu">Riwayat</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="icon-fontawesome.html" aria-expanded="false"><i
                                     class="fa fa-smile-o"></i><span class="hide-menu">Icons</span></a>
