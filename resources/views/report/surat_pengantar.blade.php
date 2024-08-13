@@ -1,110 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Surat Keterangan Tidak Mampu</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surat Pengantar</title>
     <style>
-        @page {
-            size: 210mm 330mm;
-            /* Ukuran F4 */
-            margin-left: 10mm;
-            margin-right: 25mm;
-            margin-top: 10mm;
-            margin-bottom: -15mm;
-        }
-
         body {
-            font-family: Times New Roman;
+            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            /* padding: 0; */
+            font-size: 13px;
         }
 
         .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             width: 100%;
-            padding: 10mm;
+            margin: auto;
             box-sizing: border-box;
         }
 
         .header {
+            border-collapse: collapse;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
             border-bottom: 5px solid black;
-            margin-bottom: 5mm;
-            margin-right: 2mm;
         }
 
-        .header img {
-            max-width: 100%;
+        .th,
+        td {
+            padding: 5px;
+            text-align: center;
+        }
+
+        .header table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 5px;
+        }
+
+        .perihal {
+            margin: 1px 0;
         }
 
         .content {
-            width: 100%;
-        }
-
-        .content h1 {
             text-align: center;
-            text-decoration: underline;
-            font-size: 30px;
-            margin-bottom: 1px;
+            /* margin-top: 1px; */
         }
 
-        .content p {
-            line-height: 1.5;
-            margin: 0 0 10px 0;
-            font-family: Times New Roman;
-            text-align: center;
-            font-size: 20px;
+        .contentisi {
+            text-align: left;
+            margin-left: 50px;
         }
 
-        .isi {
-            width: 100%;
-            text-align: justify;
-        }
-
-        .isi p {
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        .data {
-            width: 100%;
-        }
-
-        .data p {
-            font-size: 16px;
-            line-height: 1.5;
-            margin: 0 0 10px 0;
-        }
-
-        .label {
+        .contentisi strong {
             display: inline-block;
-            width: 120px;
-            /* Lebar label */
+            width: 200px;
+            /* margin-top: 2px;
+            margin-bottom: 2px; */
+        }
+
+        .content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px;
+        }
+
+        .content th,
+        .content td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: left;
+            position: relative;
+            font-size: 11px;
         }
 
         .signature {
+            display: flex;
+            justify-content: space-between;
+
+        }
+
+        .signature table {
             width: 100%;
-            text-align: right;
-            margin-top: 20mm;
+            border-collapse: collapse;
+            border: none;
         }
 
-        .signature p {
-            font-size: 16px;
-            line-height: 1.5;
+        .signature tr,
+        .signature td {
+            font-size: 13px;
+            text-align: center;
+            border: none;
         }
 
-        .signature .ttd {
-            margin-top: 30mm;
+        @media print {
+            @page {
+                margin: 5mm;
+            }
+
+            .container {
+                margin: 0;
+                padding: 0;
+            }
         }
     </style>
 </head>
@@ -112,52 +108,104 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="header.png" alt="Header Atas" />
+            <table>
+                <tr>
+                    <th style="font-size: 30px; border: 1px solid black;">RW 07</th>
+                    <th>RUKUN TETANGGA 08 RUKUN WARGA 07<br>KELURAHAN MOJOLANGU<br>KECAMATAN LOWOKWARU</th>
+                    <th style="font-size: 30px; border: 1px solid black;">RT 08</th>
+                </tr>
+            </table>
         </div>
+
+        <div class="perihal">
+            <p>
+                Kepada Yth<br>
+                Kepala Kelurahan Mojolangu<br>
+                Kecamatan Lowokwaru Kota Malang<br>
+                Di Tempat
+            </p>
+        </div>
+
         <div class="content">
-            <h1>SURAT KETERANGAN TIDAK MAMPU</h1>
-            <p>Nomor : .../.../.........../2024</p>
-        </div>
-        <div class="isi">
-            <p>
-                Yang bertanda tangan dibawah ini Lurah Kelurahan Mojolangu, Kecamatan
-                Lowokwaru, menerangkan bahwa:
+            <h2 style="text-decoration: underline;">SURAT PENGANTAR</h2>
+            <p>No. Register RW: .......................</p>
+            <p>No. Register RT: .......................</p>
+            <p style="text-align: justify;">Bersama ini kami mohon bantuannya untuk dilengkapi kebutuhan kepengurusan
+                surat yang diperlukan warga kami di bawah ini:</p>
+            <p class="contentisi">
+                <strong>Nama</strong>: {{ $data->nama_lengkap }}<br>
+                <strong>Jenis Kelamin</strong>: {{ $data->jenis_kelamin }}<br>
+                <strong>NIK/NO. KTP</strong>: {{ $data->nik }}<br>
+                <strong>Alamat</strong>: {{ $data->alamat }}<br>
+                <strong>Keperluan Untuk</strong>: Beri tanda √ pada kotak yang dibutuhkan
             </p>
-            <div class="data">
-                <p><span class="label">Nama</span>: TRI Yuniarto<br /></p>
-                <p><span class="label">Nomor KK</span>: 356787878777<br /></p>
-                <p><span class="label">NIK</span>: 232312323213<br /></p>
-                <p>
-                    <span class="label">Tempat dan Tanggal Lahir</span>: BALIKPAPAN, 31
-                    DESEMBER 1974<br />
-                </p>
-                <p><span class="label">Jenis Kelamin</span>: LAKI-LAKI<br /></p>
-                <p><span class="label">Agama</span>: ISLAM<br /></p>
-                <p><span class="label">Status Perkawinan</span>: Kawin<br /></p>
-                <p><span class="label">Alamat</span>: MOJOLANGU<br /></p>
-                <p><span class="label">Pendidikan</span>: SMK<br /></p>
-                <p><span class="label">Keperluan</span>: SKTM<br /></p>
-                <p><span class="label">Tujuan</span>: UNISMA<br /></p>
-                <p><span class="label">Berlaku tanggal</span>: 30 JULI 2024<br /></p>
-                <p>
-                    <span class="label">Berdasarkan Keterangan</span>:
-                    .../.../..../../../2024<br />
-                </p>
+            <table>
+                <tr>
+                    <th>1. SKU/SKDU</th>
+                    <th>2. BORO KERJA</th>
+                    <th>3. SKTM</th>
+                    <th>4. IJIN KERAMAIAN</th>
+                    <th>5. IMB/SPPL</th>
+                </tr>
+                <tr>
+                    <td>
+                        SYARAT-SYARATNYA:<br>
+                        Fc. KK + KTP pemohon 1x<br>
+                        Fc. Akta pendirian PT/CV bagi yang sudah terbentuk PT/CV 1x<br>
+                        Fc. Lunas PBB tahun ini 1x<br>
+                        Fc. Surat perjanjian sewa jika tempat usahanya sewa 1x<br>
+                        Fc. Foto tempat usaha 1x<br>
+                        Fc. Nomor Induk Berusaha 1 lbr
+                    </td>
+                    <td>
+                        SYARAT-SYARATNYA:<br>
+                        Fc. KK+KTP pemohon 1x<br>
+                        Fc. berwarna ukuran 4x6 = 3 lbr
+                    </td>
+                    <td>
+                        SYARAT-SYARATNYA:<br>
+                        Fc. Kartu Keluarga 1x<br>
+                        Fc. E-KTP 1x
+                    </td>
+                    <td>
+                        SYARAT-SYARATNYA:<br>
+                        Fc. Kartu Keluarga 1x<br>
+                        Fc. E-KTP 1x<br>
+                        Pelunasan PBB
+                    </td>
+                    <td>
+                        SYARAT-SYARATNYA:<br>
+                        Fc. Kartu Keluarga 1x<br>
+                        Fc. E-KTP 1x<br>
+                        Fc. Sertifikat tanah 1x<br>
+                        Fc. Lunas PBB tahun ini 1x<br>
+                        Asli + copy blanko isian dari dinas perijinan 1x<br>
+                        Fc. KKPR 1x<br>
+                        Fc. Nomor Induk Berusaha 1 lbr
+                    </td>
+                </tr>
+            </table>
+            <p style="text-align: justify;">Demikian surat pengantar ini kami sampaikan untuk diketahui, atas bantuan
+                dan kerjasama yang baik diucapkan terimakasih.</p>
+            <div class="signature">
+                <p style="text-align: justify;">Malang,..................20..</p>
+                <table>
+                    <tr>
+                        <td>
+                            <p>Ketua RW.07</p><br>
+                            <p>Mulyani, S.Pd</p>
+                        </td>
+                        <td>
+                            <p>Ketua RT.08</p><br>
+                            <p>Suwadi</p>
+                        </td>
+                        <td>
+                            <p>Pemohon</p><br>
+                            <p>{{ $data->nama_lengkap }}</p>
+                        </td>
+                    </tr>
+                </table>
             </div>
-            <p>
-                1. Yang bersangkutan benar-benar penduduk Kelurahan Mojolangu
-                Kecamatan Lowokwaru Kota Malang.
-            </p>
-            <p>
-                2. Berdasarkan Keterangan RT/RW setempat di atas serta pernyataan
-                pemohon, yang bersangkutan tergolong orang yang tidak mampu / miskin.
-            </p>
-            <p>Demikian untuk menjadikan periksa dan dipergunakan sepertinya</p>
-        </div>
-        <div class="signature">
-            <p>Malang, 30 Juli 2024</p>
-            <p>Lurah Kelurahan Mojolangu</p>
-            <p class="ttd">(Nama Lurah)</p>
         </div>
     </div>
 </body>
