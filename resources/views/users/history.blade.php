@@ -77,7 +77,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="detaillModalLabel">Detail Produk</h5>
+                    <h5 class="modal-title" id="detaillModalLabel">Informasi Pengajuan</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -86,7 +86,6 @@
                     <form id="detailForm" method="POST" action="">
                         @csrf
                         <input type="hidden" name="id" id="detail-id">
-                        <p>Informasi Pengajuan</p>
                         <div class="form-group">
                             <label for="nama_lengkap">Nama Lengkap</label>
                             <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" readonly>
@@ -115,15 +114,13 @@
                         </div>
                         <div class="form-group">
                             <label for="pdf">Surat Pengantar</label>
-                            <p>PDF tidak dapat ditampilkan.
-                                <a id="pdf-download" href="" target="_blank">Klik di sini untuk mengunduh</a>.
-                            </p>
+                            <br>
+                            <a id="pdf-download" href="" target="_blank">Klik di sini untuk mengunduh</a>.
                         </div>
                         <div class="form-group">
                             <label for="product">Produk</label>
-                            <p>PDF tidak dapat ditampilkan.
-                                <a id="product-download" href="" target="_blank">Klik di sini untuk mengunduh</a>.
-                            </p>
+                            <br>
+                            <a id="product-download" href="" target="_blank">Klik di sini untuk mengunduh</a>.
                         </div>
                     </form>
                 </div>

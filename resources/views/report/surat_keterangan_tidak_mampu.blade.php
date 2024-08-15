@@ -129,20 +129,20 @@
                 Lowokwaru, menerangkan bahwa:
             </p>
             <div class="data">
-                <p><span class="label">Nama</span>: AI<br /></p>
+                <p><span class="label">Nama</span>: {{ $data->nama_lengkap }}<br /></p>
                 <p><span class="label">Nomor KK</span>: 356787878777<br /></p>
-                <p><span class="label">NIK</span>: 232312323213<br /></p>
+                <p><span class="label">NIK</span>: {{ $data->nik }}<br /></p>
                 <p>
                     <span class="label">Tempat dan Tanggal Lahir</span>: BALIKPAPAN, 31
                     DESEMBER 1974<br />
                 </p>
-                <p><span class="label">Jenis Kelamin</span>: LAKI-LAKI<br /></p>
+                <p><span class="label">Jenis Kelamin</span>: {{ $data->jenis_kelamin }}<br /></p>
                 <p><span class="label">Agama</span>: ISLAM<br /></p>
                 <p><span class="label">Status Perkawinan</span>: Kawin<br /></p>
-                <p><span class="label">Alamat</span>: MOJOLANGU<br /></p>
+                <p><span class="label">Alamat</span>: {{ $data->alamat }}<br /></p>
                 <p><span class="label">Pendidikan</span>: SMK<br /></p>
-                <p><span class="label">Keperluan</span>: SKTM<br /></p>
-                <p><span class="label">Tujuan</span>: UNISMA<br /></p>
+                <p><span class="label">Keperluan</span>: {{ $data->keperluan }}<br /></p>
+                <p><span class="label">Tujuan</span>: {{ $data->tujuan }}<br /></p>
                 <p><span class="label">Berlaku tanggal</span>: 30 JULI 2024<br /></p>
                 <p>
                     <span class="label">Berdasarkan Keterangan</span>:

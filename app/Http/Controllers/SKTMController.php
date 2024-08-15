@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SKTMExport;
 use App\Models\SKTM;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\Http;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SKTMController extends Controller
 {
@@ -111,6 +113,20 @@ class SKTMController extends Controller
         ]);
     }
 
+    public function rejectFinalSKTM(Request $request, $id)
+    {
+        $request->validate([
+            'keterangan' => 'required|string'
+        ]);
+
+        $data = SKTM::findOrFail($id);
+        $data->validasi = 'ditolak';
+        $data->keterangan = $request->input('keterangan');
+        $data->save();
+
+        return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM ditolak.');
+    }
+
 
     public function finalSKTM(Request $request, $id)
     {
@@ -151,6 +167,11 @@ class SKTMController extends Controller
         $data->save();
 
         return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM ditolak.');
+    }
+
+    public function reportAllData()
+    {
+        return Excel::download(new SKTMExport(), 'data_sktm_all.xlsx');
     }
 
     public function downloadSKTM($id)
@@ -262,20 +283,52 @@ class SKTMController extends Controller
 
     public function store(Request $request)
     {
+        // Validasi inputan
         $request->validate([
             'nama_lengkap' => 'required|string|max:255',
             'jenis_kelamin' => 'required|string|max:255',
             'nik' => 'required|numeric',
             'alamat' => 'required|string',
             'rt' => 'required|string',
+            'rw' => 'required|string',
             'foto_kk' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:10048',
             'foto_ktp' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:10048',
-            'rw' => 'required|string',
             'keperluan' => 'required|string',
             'tujuan' => 'required|string',
         ]);
 
+        // Ambil user yang sedang login
+        $user = Auth::user();
+
+        // Pengecekan data apakah sesuai dengan data user yang sedang login
+        $errors = [];
+        if ($request->nama_lengkap !== $user->nama_lengkap) {
+            $errors['nama_lengkap'] = 'Nama lengkap tidak sesuai dengan data user yang login.';
+        }
+        if ($request->jenis_kelamin !== $user->jenis_kelamin) {
+            $errors['jenis_kelamin'] = 'Jenis kelamin tidak sesuai dengan data user yang login.';
+        }
+        if ($request->nik !== $user->nik) {
+            $errors['nik'] = 'NIK tidak sesuai dengan data user yang login.';
+        }
+        if ($request->alamat !== $user->alamat) {
+            $errors['alamat'] = 'Alamat tidak sesuai dengan data user yang login.';
+        }
+        if ($request->rt !== $user->rt) {
+            $errors['rt'] = 'RT tidak sesuai dengan data user yang login.';
+        }
+        if ($request->rw !== $user->rw) {
+            $errors['rw'] = 'RW tidak sesuai dengan data user yang login.';
+        }
+
+        // Jika ada kesalahan, kembalikan ke halaman sebelumnya dengan error
+        if (!empty($errors)) {
+            return redirect()->back()->withErrors($errors)->withInput();
+        }
+
+        // Persiapkan data untuk disimpan
         $data = [
+            'id_users' => $user->id, // Tambahkan ID user yang sedang login
             'nama_lengkap' => $request->nama_lengkap,
             'jenis_kelamin' => $request->jenis_kelamin,
             'nik' => $request->nik,
@@ -286,18 +339,19 @@ class SKTMController extends Controller
             'tujuan' => $request->tujuan,
         ];
 
-        // Upload image if available
+        // Upload image jika tersedia
         $this->processImageUpload($request, 'foto_ktp', $data);
         $this->processImageUpload($request, 'foto_kk', $data);
 
-        // Create SKTM and get the instance
+        // Simpan data SKTM dan dapatkan instance yang baru dibuat
         $sktm = SKTM::create($data);
 
-        // Send notification to appropriate RT users
+        // Kirim notifikasi ke user RT yang sesuai
         $this->sendTelegramNotification($sktm->rt, $sktm->rw, $sktm->nama_lengkap);
 
         return redirect()->route('home')->with('success', 'Data Telah Tersimpan, Harap Menunggu Validasi Dari Pihak RT');
     }
+
 
     private function sendTelegramNotification($rt, $rw, $namaLengkap)
     {

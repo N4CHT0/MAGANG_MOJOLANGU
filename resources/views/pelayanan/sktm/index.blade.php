@@ -133,6 +133,10 @@
                                     @endforelse
                                 </tbody>
                             </table>
+                            <div class="card-actions">
+                                <a href="{{ route('sktms.all') }}" class="btn btn-success"><i class="fa fa-file-excel-o"
+                                        style="margin-right: 5px"></i>Cetak Data</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -241,6 +245,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Info Modal -->
 
 @endsection
 

@@ -16,6 +16,12 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, $role)
     {
+        // Jika user adalah admin, izinkan akses ke semua rute
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            return $next($request);
+        }
+
+        // Jika role user tidak sesuai dengan role yang dibutuhkan oleh rute
         if (!Auth::check() || Auth::user()->role !== $role) {
             abort(403, 'Unauthorized');
         }

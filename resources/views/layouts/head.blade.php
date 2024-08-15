@@ -29,6 +29,8 @@
 <link href="{{ asset('admin-master/html/css/pages/dashboard1.css') }}" rel="stylesheet">
 <!-- You can change the theme colors from here -->
 <link href="{{ asset('admin-master/html/css/colors/default.css') }}" id="theme" rel="stylesheet">
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/0d88189b50.js" crossorigin="anonymous"></script>
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
