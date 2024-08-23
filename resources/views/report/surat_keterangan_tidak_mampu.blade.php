@@ -39,7 +39,6 @@
             align-items: center;
             text-align: center;
             border-bottom: 5px solid black;
-            margin-bottom: 5mm;
             margin-right: 2mm;
         }
 
@@ -55,15 +54,15 @@
             text-align: center;
             text-decoration: underline;
             font-size: 30px;
-            margin-bottom: 1px;
+            margin-bottom: 0;
         }
 
         .content p {
-            line-height: 1.5;
-            margin: 0 0 10px 0;
             font-family: Times New Roman;
             text-align: center;
             font-size: 20px;
+            margin-top: 0;
+            margin-bottom: -15px;
         }
 
         .isi {
@@ -71,44 +70,81 @@
             text-align: justify;
         }
 
-        .isi p {
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        .data {
+        .isi table {
             width: 100%;
+            border-collapse: collapse;
         }
 
-        .data p {
-            font-size: 16px;
-            line-height: 1.5;
-            margin: 0 0 10px 0;
+        .isi table,
+        .isi table th,
+        .isi table td {
+            border: none;
         }
 
-        .data span {
-            width: 200px;
+        .isi th {
+            text-align: left;
+            width: 240px;
+            vertical-align: top;
+            padding-right: 10px;
+            /* Tambahkan padding kanan */
         }
 
-        .label {
-            display: inline-block;
-            width: 120px;
-            /* Lebar label */
+        .isi td {
+            padding-left: 10px;
+            vertical-align: top;
         }
 
         .signature {
             width: 100%;
-            text-align: right;
-            margin-top: 20mm;
+            /* margin-top: 20mm; */
         }
 
-        .signature p {
+        .signature table {
+            width: 100%;
+        }
+
+        .signature table td {
+            vertical-align: top;
+        }
+
+        .signature .left {
+            text-align: left;
             font-size: 16px;
-            line-height: 1.5;
+        }
+
+        .signature .right {
+            text-align: right;
+            font-size: 16px;
         }
 
         .signature .ttd {
-            margin-top: 30mm;
+            margin-top: 10mm;
+        }
+
+        /* Style tambahan untuk mengatur ukuran gambar yang berbeda */
+        .signature .qr {
+            width: 10px;
+            /* Ukuran untuk QR */
+            height: auto;
+        }
+
+        .signature .ttd-img {
+            width: 20px;
+            /* Ukuran untuk tanda tangan */
+            height: auto;
+        }
+
+        /* Style untuk footer */
+        .footer {
+            /* width: 100%; */
+            text-align: justify;
+            border-top: 1px solid black;
+            padding-top: 5px;
+            margin-top: 10mm;
+            font-size: 10px;
+            font-style: italic;
+            position: fixed;
+            bottom: 18mm;
         }
     </style>
 </head>
@@ -128,44 +164,94 @@
                 Yang bertanda tangan dibawah ini Lurah Kelurahan Mojolangu, Kecamatan
                 Lowokwaru, menerangkan bahwa:
             </p>
-            <div class="data">
-                <p><span class="label">Nama</span>: {{ $data->nama_lengkap }}<br /></p>
-                <p><span class="label">Nomor KK</span>: 356787878777<br /></p>
-                <p><span class="label">NIK</span>: {{ $data->nik }}<br /></p>
-                <p>
-                    <span class="label">Tempat dan Tanggal Lahir</span>: BALIKPAPAN, 31
-                    DESEMBER 1974<br />
-                </p>
-                <p><span class="label">Jenis Kelamin</span>: {{ $data->jenis_kelamin }}<br /></p>
-                <p><span class="label">Agama</span>: ISLAM<br /></p>
-                <p><span class="label">Status Perkawinan</span>: Kawin<br /></p>
-                <p><span class="label">Alamat</span>: {{ $data->alamat }}<br /></p>
-                <p><span class="label">Pendidikan</span>: SMK<br /></p>
-                <p><span class="label">Keperluan</span>: {{ $data->keperluan }}<br /></p>
-                <p><span class="label">Tujuan</span>: {{ $data->tujuan }}<br /></p>
-                <p><span class="label">Berlaku tanggal</span>: 30 JULI 2024<br /></p>
-                <p>
-                    <span class="label">Berdasarkan Keterangan</span>:
-                    .../.../..../../../2024<br />
-                </p>
-            </div>
-            <p>
-                <span class="label"></span>
-                1. Yang bersangkutan benar-benar penduduk Kelurahan Mojolangu
-                Kecamatan Lowokwaru Kota Malang.
-            </p>
-            <p>
-                <span class="label"></span>
-                2. Berdasarkan Keterangan RT/RW setempat di atas serta pernyataan
-                pemohon, yang bersangkutan tergolong orang yang tidak mampu / miskin.
-            </p>
-            <p>Demikian untuk menjadikan periksa dan dipergunakan sepertinya</p>
+            <table>
+                <tr>
+                    <td>Nama</td>
+                    <td>: AI</td>
+                </tr>
+                <tr>
+                    <td>Nomor KK</td>
+                    <td>: 356787878777</td>
+                </tr>
+                <tr>
+                    <td>NIK</td>
+                    <td>: 232312323213</td>
+                </tr>
+                <tr>
+                    <td>Tempat dan Tanggal Lahir</td>
+                    <td>: BALIKPAPAN, 31 DESEMBER 1974</td>
+                </tr>
+                <tr>
+                    <td>Jenis Kelamin</td>
+                    <td>: LAKI-LAKI</td>
+                </tr>
+                <tr>
+                    <td>Agama</td>
+                    <td>: ISLAM</td>
+                </tr>
+                <tr>
+                    <td>Status Perkawinan</td>
+                    <td>: Kawin</td>
+                </tr>
+                <tr>
+                    <td>Alamat</td>
+                    <td>: MOJOLANGU</td>
+                </tr>
+                <tr>
+                    <td>Pendidikan</td>
+                    <td>: SMK</td>
+                </tr>
+                <tr>
+                    <td>Keperluan</td>
+                    <td>: SKTM</td>
+                </tr>
+                <tr>
+                    <td>Tujuan</td>
+                    <td>: UNISMA</td>
+                </tr>
+                <tr>
+                    <td>Berlaku tanggal</td>
+                    <td>: 30 JULI 2024</td>
+                </tr>
+                <tr>
+                    <td>Berdasarkan Keterangan RT/RW</td>
+                    <td>: .../.../..../../../2024</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        1. Yang bersangkutan benar-benar penduduk Kelurahan Mojolangu
+                        Kecamatan Lowokwaru Kota Malang.<br />
+                        2. Berdasarkan Keterangan RT/RW setempat di atas serta pernyataan
+                        pemohon, yang bersangkutan tergolong orang yang tidak mampu /
+                        miskin.
+                    </td>
+                </tr>
+            </table>
+            <p>Demikian untuk menjadikan periksa dan dipergunakan sepertinya.</p>
         </div>
         <div class="signature">
-            <p>Malang, 30 Juli 2024</p>
-            <p>Lurah Kelurahan Mojolangu</p>
-            <p class="ttd">(Nama Lurah)</p>
+            <table>
+                <tr>
+                    <td class="left">
+                        <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/qr_sktm.jpg'))) }}"
+                            alt="qr" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right">
+                        <p>Malang, 30 Juli 2024</p>
+                        <p>LURAH MOJOLANGU</p>
+                        <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/ttd_sktm.jpg'))) }}"
+                            alt="ttd" />
+                    </td>
+                </tr>
+            </table>
         </div>
+    </div>
+
+    <div class="footer">
+        Sesuai dengan ketentuan peraturan perundang-undangan yang berlaku, surat ini telah ditandatangani secara elektronik yang tersertifikasi oleh Balai Sertifikasi Elektronik (BSrE) sehingga tidak diperlukan tanda tangan dan stempel basah.
     </div>
 </body>
 
