@@ -17,6 +17,14 @@
                                 aria-expanded="false"><i class="fa fa-user-circle-o"></i><span class="hide-menu">Data
                                     Pengguna</span></a>
                         </li>
+                        <li> <a class="waves-effect waves-dark" href="{{ route('logout') }}" aria-expanded="false"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
+                                    class="fa fa-sign-out" style="color: red;"></i><span class="hide-menu">Log
+                                    Out</span></a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </li>
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
@@ -34,24 +42,17 @@
                         <li> <a class="waves-effect waves-dark" href="{{ route('home') }}" aria-expanded="false"><i
                                     class="fa fa-tachometer"></i><span class="hide-menu">Beranda</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-profile.html" aria-expanded="false"><i
-                                    class="fa fa-user-circle-o"></i><span class="hide-menu">Profile</span></a>
-                        </li>
                         <li> <a class="waves-effect waves-dark" href="{{ route('sktms.index') }}"
                                 aria-expanded="false"><i class="fa fa-table"></i><span class="hide-menu">Data Pengurus
                                     SKTM</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="icon-fontawesome.html" aria-expanded="false"><i
-                                    class="fa fa-smile-o"></i><span class="hide-menu">Icons</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="map-google.html" aria-expanded="false"><i
-                                    class="fa fa-globe"></i><span class="hide-menu">Map</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-blank.html" aria-expanded="false"><i
-                                    class="fa fa-bookmark-o"></i><span class="hide-menu">Blank</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-error-404.html" aria-expanded="false"><i
-                                    class="fa fa-question-circle"></i><span class="hide-menu">404</span></a>
+                        <li> <a class="waves-effect waves-dark" href="{{ route('logout') }}" aria-expanded="false"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
+                                    class="fa fa-sign-out" style="color: red;"></i><span class="hide-menu">Log
+                                    Out</span></a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
                         </li>
                     </ul>
                 </nav>
@@ -70,24 +71,17 @@
                         <li> <a class="waves-effect waves-dark" href="{{ route('home') }}" aria-expanded="false"><i
                                     class="fa fa-tachometer"></i><span class="hide-menu">Beranda</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-profile.html" aria-expanded="false"><i
-                                    class="fa fa-user-circle-o"></i><span class="hide-menu">Profile</span></a>
-                        </li>
                         <li> <a class="waves-effect waves-dark" href="{{ route('sktms.index') }}"
                                 aria-expanded="false"><i class="fa fa-table"></i><span class="hide-menu">Data Pengurus
                                     SKTM</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="icon-fontawesome.html" aria-expanded="false"><i
-                                    class="fa fa-smile-o"></i><span class="hide-menu">Icons</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="map-google.html" aria-expanded="false"><i
-                                    class="fa fa-globe"></i><span class="hide-menu">Map</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-blank.html" aria-expanded="false"><i
-                                    class="fa fa-bookmark-o"></i><span class="hide-menu">Blank</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-error-404.html" aria-expanded="false"><i
-                                    class="fa fa-question-circle"></i><span class="hide-menu">404</span></a>
+                        <li> <a class="waves-effect waves-dark" href="{{ route('logout') }}" aria-expanded="false"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
+                                    class="fa fa-sign-out" style="color: red;"></i><span class="hide-menu">Log
+                                    Out</span></a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
                         </li>
                     </ul>
                 </nav>
@@ -110,6 +104,14 @@
                                 aria-expanded="false"><i class="fa fa-history"></i><span
                                     class="hide-menu">Riwayat</span></a>
                         </li>
+                        <li> <a class="waves-effect waves-dark" href="{{ route('logout') }}" aria-expanded="false"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
+                                    class="fa fa-sign-out" style="color: red;"></i><span class="hide-menu">Log
+                                    Out</span></a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </li>
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
@@ -131,20 +133,13 @@
                                 aria-expanded="false"><i class="fa fa-user-circle-o"></i><span class="hide-menu">Data
                                     Pengurus SKTM</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="table-basic.html" aria-expanded="false"><i
-                                    class="fa fa-table"></i><span class="hide-menu">Tables</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="icon-fontawesome.html" aria-expanded="false"><i
-                                    class="fa fa-smile-o"></i><span class="hide-menu">Icons</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="map-google.html" aria-expanded="false"><i
-                                    class="fa fa-globe"></i><span class="hide-menu">Map</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-blank.html" aria-expanded="false"><i
-                                    class="fa fa-bookmark-o"></i><span class="hide-menu">Blank</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-error-404.html" aria-expanded="false"><i
-                                    class="fa fa-question-circle"></i><span class="hide-menu">404</span></a>
+                        <li> <a class="waves-effect waves-dark" href="{{ route('logout') }}" aria-expanded="false"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
+                                    class="fa fa-sign-out" style="color: red;"></i><span class="hide-menu">Log
+                                    Out</span></a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
                         </li>
                     </ul>
                 </nav>

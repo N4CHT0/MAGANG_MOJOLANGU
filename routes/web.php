@@ -5,7 +5,10 @@ use App\Http\Controllers\SKTMController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\RoleMiddleware;
 
+// Definisikan middleware role secara manual
+Route::aliasMiddleware('role', RoleMiddleware::class);
 Route::get('/', function () {
     return view('welcome');
 });

@@ -23,17 +23,23 @@ class SKTMController extends Controller
         if ($user->role == 'kelurahan') {
             // Untuk user dengan role 'kelurahan', tampilkan hanya data yang tervalidasi
             $data = SKTM::where('validasi', 'tervalidasi')->get();
-        } elseif (!in_array($user->role, ['rt', 'admin'])) {
-            // Cek akses untuk role lainnya
-            return redirect()->back()->with('error', 'Anda tidak memiliki akses ke halaman ini.');
+        } elseif ($user->role == 'rw') {
+            // Untuk user dengan role 'rw', tampilkan data berdasarkan rw
+            $data = SKTM::where('rw', $user->rw)->get();
+        } elseif ($user->role == 'rt') {
+            // Untuk user dengan role 'rt', tampilkan data berdasarkan rt
+            $data = SKTM::where('rt', $user->rt)->get();
+        } elseif ($user->role == 'admin') {
+            // Untuk user dengan role 'admin', tampilkan semua data
+            $data = SKTM::all();
         } else {
-            // Untuk user dengan role 'rt', hanya tampilkan data berdasarkan RT mereka
-            // Untuk role 'admin', tampilkan semua data
-            $data = $user->role === 'rt' ? SKTM::where('rt', $user->rt)->get() : SKTM::all();
+            // Jika role user tidak sesuai dengan akses yang diizinkan
+            return redirect()->back()->with('error', 'Anda tidak memiliki akses ke halaman ini.');
         }
 
         return view('pelayanan.sktm.index', compact('data'));
     }
+
 
     public function validateSKTM(Request $request, $id)
     {

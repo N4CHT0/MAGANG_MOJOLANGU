@@ -61,21 +61,7 @@
                             class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;" />
                         <span class="d-none d-md-inline ms-2">{{ Auth::user()->nama_lengkap }}</span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown"
-                        style="max-height: 50vh; overflow-y: auto;">
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}"
-                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                <i class="fa fa-close me-2" style="color: red;"></i>
-                                <span class="d-inline">Log Out</span>
-                            </a>
-                        </li>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                    </ul>
                 </li>
-
             </ul>
         </div>
     </nav>
