@@ -123,15 +123,15 @@
 
         /* Style tambahan untuk mengatur ukuran gambar yang berbeda */
         .signature .qr {
-            width: 10px;
-            /* Ukuran untuk QR */
+            width: 80px;
             height: auto;
+            object-fit: contain;
         }
 
         .signature .ttd-img {
-            width: 20px;
-            /* Ukuran untuk tanda tangan */
-            height: auto;
+            width: auto;
+            height: 50px;
+            object-fit: contain;
         }
 
         /* Style untuk footer */
@@ -235,7 +235,7 @@
                 <tr>
                     <td class="left">
                         <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/qr_sktm.jpg'))) }}"
-                            alt="qr" />
+                            alt="qr" class="qr" />
                     </td>
                 </tr>
                 <tr>
@@ -243,7 +243,7 @@
                         <p>Malang, 30 Juli 2024</p>
                         <p>LURAH MOJOLANGU</p>
                         <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/ttd_sktm.jpg'))) }}"
-                            alt="ttd" />
+                            alt="ttd" class="ttd-img" />
                     </td>
                 </tr>
             </table>
