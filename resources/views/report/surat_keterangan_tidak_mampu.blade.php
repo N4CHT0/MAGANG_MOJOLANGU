@@ -130,20 +130,23 @@
             </p>
             <div class="data">
                 <p><span class="label">Nama</span>: {{ $data->nama_lengkap }}<br /></p>
-                <p><span class="label">Nomor KK</span>: 356787878777<br /></p>
+                <p><span class="label">Nomor KK</span>: {{ $data->Pengguna->no_kk }}<br /></p>
                 <p><span class="label">NIK</span>: {{ $data->nik }}<br /></p>
                 <p>
-                    <span class="label">Tempat dan Tanggal Lahir</span>: BALIKPAPAN, 31
-                    DESEMBER 1974<br />
+                    <span class="label">Tempat dan Tanggal Lahir</span>:
+                    {{ $data->Pengguna->tempat_lahir }},
+                    {{ \Carbon\Carbon::parse($data->Pengguna->tanggal_lahir)->translatedFormat('d F Y') }}<br />
+
                 </p>
                 <p><span class="label">Jenis Kelamin</span>: {{ $data->jenis_kelamin }}<br /></p>
-                <p><span class="label">Agama</span>: ISLAM<br /></p>
-                <p><span class="label">Status Perkawinan</span>: Kawin<br /></p>
+                <p><span class="label">Agama</span>: {{ $data->Pengguna->agama }}<br /></p>
+                <p><span class="label">Status Perkawinan</span>: {{ $data->Pengguna->status_perkawinan }}<br /></p>
                 <p><span class="label">Alamat</span>: {{ $data->alamat }}<br /></p>
-                <p><span class="label">Pendidikan</span>: SMK<br /></p>
+                <p><span class="label">Pendidikan</span>: {{ $data->Pengguna->pendidikan }}<br /></p>
                 <p><span class="label">Keperluan</span>: {{ $data->keperluan }}<br /></p>
                 <p><span class="label">Tujuan</span>: {{ $data->tujuan }}<br /></p>
-                <p><span class="label">Berlaku tanggal</span>: 30 JULI 2024<br /></p>
+                <p><span class="label">Berlaku Hingga</span>:
+                    {{ \Carbon\Carbon::parse($data->masa_berlaku)->translatedFormat('d F Y') }}<br /></p>
                 <p>
                     <span class="label">Berdasarkan Keterangan</span>:
                     .../.../..../../../2024<br />
@@ -162,7 +165,7 @@
             <p>Demikian untuk menjadikan periksa dan dipergunakan sepertinya</p>
         </div>
         <div class="signature">
-            <p>Malang, 30 Juli 2024</p>
+            <p>Malang, {{ \Carbon\Carbon::parse($data->waktu_finalisasi)->translatedFormat('d F Y') }}</p>
             <p>Lurah Kelurahan Mojolangu</p>
             <p class="ttd">(Nama Lurah)</p>
         </div>

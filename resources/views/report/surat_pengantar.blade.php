@@ -110,9 +110,11 @@
         <div class="header">
             <table>
                 <tr>
-                    <th style="font-size: 30px; border: 1px solid black;">RW 07</th>
-                    <th>RUKUN TETANGGA 08 RUKUN WARGA 07<br>KELURAHAN MOJOLANGU<br>KECAMATAN LOWOKWARU</th>
-                    <th style="font-size: 30px; border: 1px solid black;">RT 08</th>
+                    <th style="font-size: 30px; border: 1px solid black;">RW 0{{ $data->rw }}</th>
+                    <th>RUKUN TETANGGA {{ $data->rt }} RUKUN WARGA 0{{ $data->rw }}<br>KELURAHAN
+                        MOJOLANGU<br>KECAMATAN LOWOKWARU
+                    </th>
+                    <th style="font-size: 30px; border: 1px solid black;">RT 0{{ $data->rt }}</th>
                 </tr>
             </table>
         </div>
@@ -188,7 +190,8 @@
             <p style="text-align: justify;">Demikian surat pengantar ini kami sampaikan untuk diketahui, atas bantuan
                 dan kerjasama yang baik diucapkan terimakasih.</p>
             <div class="signature">
-                <p style="text-align: justify;">Malang,..................20..</p>
+                <p style="text-align: justify;">Malang,
+                    {{ \Carbon\Carbon::parse($data->waktu_validasi)->translatedFormat('d F Y') }}</p>
                 <table>
                     <tr>
                         <td>

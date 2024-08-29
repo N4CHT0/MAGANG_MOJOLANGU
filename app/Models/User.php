@@ -26,7 +26,17 @@ class User extends Authenticatable
         'role',
         'email',
         'password',
+        'no_kk',
+        'agama',
+        'pekerjaan',
+        'status_perkawinan',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'pendidikan',
         'telegram_number',
+        'waktu_validasi',
+        'waktu_finalisasi',
+        'data_updated',
     ];
 
     /**
@@ -50,5 +60,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function SKTM()
+    {
+        return $this->hasMany(SKTM::class);
     }
 }
