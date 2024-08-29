@@ -49,8 +49,12 @@ class SKTMController extends Controller
         // Set waktu_validasi dengan datetime saat ini
         $data->waktu_validasi = now();
 
-        // Generate PDF
-        $pdf = $this->generatePDF($data);
+        // Ambil data Ketua RW dan Ketua RT sesuai dengan role dan nomor
+        $ketuaRW = User::where('role', 'rw')->where('rw', $data->rw)->first();
+        $ketuaRT = User::where('role', 'rt')->where('rt', $data->rt)->where('rw', $data->rw)->first();
+
+        // Generate PDF dengan mengirimkan data SKTM, Ketua RW, dan Ketua RT
+        $pdf = $this->generatePDF($data, $ketuaRW, $ketuaRT);
 
         // Save PDF and get filename
         $pdfName = $this->processPDFUpload($pdf, $id);
@@ -145,7 +149,7 @@ class SKTMController extends Controller
         // Set nilai validasi menjadi 'final'
         $data->validasi = 'final';
 
-        // Perbaiki assignment untuk masa_berlaku
+        // Set masa berlaku dari request
         $data->masa_berlaku = $request->masa_berlaku;
 
         // Set waktu_finalisasi dengan datetime saat ini
@@ -156,8 +160,14 @@ class SKTMController extends Controller
             $data->keterangan = '';
         }
 
-        // Generate PDF
-        $pdf = $this->generateProductPDF($data);
+        // Simpan perubahan ke database
+        $data->save();
+
+        // Ambil data lurah berdasarkan role 'kelurahan'
+        $lurah = User::where('role', 'kelurahan')->first();
+
+        // Generate PDF dengan mengirimkan data SKTM dan lurah
+        $pdf = $this->generateProductPDF($data, $lurah);
 
         // Save PDF and get filename
         $pdfName = $this->processProductPDFUpload($pdf, $id);
@@ -174,7 +184,6 @@ class SKTMController extends Controller
         // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM berhasil difinalisasi.');
     }
-
 
 
     public function rejectSKTM(Request $request, $id)
@@ -241,33 +250,34 @@ class SKTMController extends Controller
     }
 
 
-    private function generatePDF($data)
+    private function generatePDF($data, $ketuaRW, $ketuaRT)
     {
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', true);
 
         $dompdf = new Dompdf($options);
-        $dompdf->loadHtml(view('report.surat_pengantar', compact('data'))->render());
+        $dompdf->loadHtml(view('report.surat_pengantar', compact('data', 'ketuaRW', 'ketuaRT'))->render());
         $dompdf->setPaper('F4', 'portrait');
         $dompdf->render();
 
         return $dompdf;
     }
 
-    private function generateProductPDF($data)
+    private function generateProductPDF($data, $lurah)
     {
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', true);
 
         $dompdf = new Dompdf($options);
-        $dompdf->loadHtml(view('report.surat_keterangan_tidak_mampu', compact('data'))->render());
+        $dompdf->loadHtml(view('report.surat_keterangan_tidak_mampu', compact('data', 'lurah'))->render());
         $dompdf->setPaper('F4', 'portrait');
         $dompdf->render();
 
         return $dompdf;
     }
+
 
     private function processPDFUpload($pdf, $id)
     {

@@ -190,17 +190,18 @@
             <p style="text-align: justify;">Demikian surat pengantar ini kami sampaikan untuk diketahui, atas bantuan
                 dan kerjasama yang baik diucapkan terimakasih.</p>
             <div class="signature">
-                <p style="text-align: justify;">Malang,
-                    {{ \Carbon\Carbon::parse($data->waktu_validasi)->translatedFormat('d F Y') }}</p>
+                <p>Malang, {{ \Carbon\Carbon::parse($data->waktu_validasi)->translatedFormat('d F Y') }}</p>
                 <table>
                     <tr>
                         <td>
-                            <p>Ketua RW.07</p><br>
-                            <p>Mulyani, S.Pd</p>
+                            <p>Ketua RW.0{{ $data->rw }}</p><br>
+                            <p>{{ $ketuaRW ? $ketuaRW->nama_lengkap : 'Nama Ketua RW Tidak Ditemukan' }}</p>
+                            <!-- Tampilkan nama Ketua RW -->
                         </td>
                         <td>
-                            <p>Ketua RT.08</p><br>
-                            <p>Suwadi</p>
+                            <p>Ketua RT.0{{ $data->rt }}</p><br>
+                            <p>{{ $ketuaRT ? $ketuaRT->nama_lengkap : 'Nama Ketua RT Tidak Ditemukan' }}</p>
+                            <!-- Tampilkan nama Ketua RT -->
                         </td>
                         <td>
                             <p>Pemohon</p><br>
@@ -209,6 +210,7 @@
                     </tr>
                 </table>
             </div>
+
         </div>
     </div>
 </body>

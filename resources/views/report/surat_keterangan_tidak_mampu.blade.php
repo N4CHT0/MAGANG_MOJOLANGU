@@ -203,7 +203,7 @@
         <div class="signature">
             <p>Malang, {{ \Carbon\Carbon::parse($data->waktu_finalisasi)->translatedFormat('d F Y') }}</p>
             <p>Lurah Kelurahan Mojolangu</p>
-            <p class="ttd">(Nama Lurah)</p>
+            <p class="ttd">{{ $lurah->nama_lengkap }}</p>
         </div>
     </div>
 
