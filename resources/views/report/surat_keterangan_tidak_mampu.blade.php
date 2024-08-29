@@ -39,7 +39,6 @@
             align-items: center;
             text-align: center;
             border-bottom: 5px solid black;
-            margin-bottom: 5mm;
             margin-right: 2mm;
         }
 
@@ -55,15 +54,15 @@
             text-align: center;
             text-decoration: underline;
             font-size: 30px;
-            margin-bottom: 1px;
+            margin-bottom: 0;
         }
 
         .content p {
-            line-height: 1.5;
-            margin: 0 0 10px 0;
             font-family: Times New Roman;
             text-align: center;
             font-size: 20px;
+            margin-top: 0;
+            margin-bottom: -15px;
         }
 
         .isi {
@@ -71,44 +70,81 @@
             text-align: justify;
         }
 
-        .isi p {
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        .data {
+        .isi table {
             width: 100%;
+            border-collapse: collapse;
         }
 
-        .data p {
-            font-size: 16px;
-            line-height: 1.5;
-            margin: 0 0 10px 0;
+        .isi table,
+        .isi table th,
+        .isi table td {
+            border: none;
         }
 
-        .data span {
-            width: 200px;
+        .isi th {
+            text-align: left;
+            width: 240px;
+            vertical-align: top;
+            padding-right: 10px;
+            /* Tambahkan padding kanan */
         }
 
-        .label {
-            display: inline-block;
-            width: 120px;
-            /* Lebar label */
+        .isi td {
+            padding-left: 10px;
+            vertical-align: top;
         }
 
         .signature {
             width: 100%;
-            text-align: right;
-            margin-top: 20mm;
+            /* margin-top: 20mm; */
         }
 
-        .signature p {
+        .signature table {
+            width: 100%;
+        }
+
+        .signature table td {
+            vertical-align: top;
+        }
+
+        .signature .left {
+            text-align: left;
             font-size: 16px;
-            line-height: 1.5;
+        }
+
+        .signature .right {
+            text-align: right;
+            font-size: 16px;
         }
 
         .signature .ttd {
-            margin-top: 30mm;
+            margin-top: 10mm;
+        }
+
+        /* Style tambahan untuk mengatur ukuran gambar yang berbeda */
+        .signature .qr {
+            width: 10px;
+            /* Ukuran untuk QR */
+            height: auto;
+        }
+
+        .signature .ttd-img {
+            width: 20px;
+            /* Ukuran untuk tanda tangan */
+            height: auto;
+        }
+
+        /* Style untuk footer */
+        .footer {
+            /* width: 100%; */
+            text-align: justify;
+            border-top: 1px solid black;
+            padding-top: 5px;
+            margin-top: 10mm;
+            font-size: 10px;
+            font-style: italic;
+            position: fixed;
+            bottom: 18mm;
         }
     </style>
 </head>
@@ -169,6 +205,12 @@
             <p>Lurah Kelurahan Mojolangu</p>
             <p class="ttd">(Nama Lurah)</p>
         </div>
+    </div>
+
+    <div class="footer">
+        Sesuai dengan ketentuan peraturan perundang-undangan yang berlaku, surat ini telah ditandatangani secara
+        elektronik yang tersertifikasi oleh Balai Sertifikasi Elektronik (BSrE) sehingga tidak diperlukan tanda tangan
+        dan stempel basah.
     </div>
 </body>
 
