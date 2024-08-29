@@ -123,15 +123,15 @@
 
         /* Style tambahan untuk mengatur ukuran gambar yang berbeda */
         .signature .qr {
-            width: 10px;
-            /* Ukuran untuk QR */
+            width: 80px;
             height: auto;
+            object-fit: contain;
         }
 
         .signature .ttd-img {
-            width: 20px;
-            /* Ukuran untuk tanda tangan */
-            height: auto;
+            width: auto;
+            height: 50px;
+            object-fit: contain;
         }
 
         /* Style untuk footer */
