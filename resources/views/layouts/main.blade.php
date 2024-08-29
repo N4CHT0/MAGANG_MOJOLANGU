@@ -44,22 +44,16 @@
                 <!-- ============================================================== -->
                 <!-- Bread crumb and right sidebar toggle -->
                 <!-- ============================================================== -->
-                <div class="row page-titles">
-                    <div class="col-md-5 align-self-center">
-                        <h3 class="text-themecolor">Dashboard</h3>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                            <li class="breadcrumb-item active">Dashboard</li>
-                        </ol>
-                    </div>
-                </div>
                 <!-- ============================================================== -->
                 <!-- End Bread crumb and right sidebar toggle -->
                 <!-- ============================================================== -->
                 <!-- ============================================================== -->
                 <!-- Sales Chart and browser state-->
                 <!-- ============================================================== -->
-                @yield('content')
+                <div class="row">
+                    @yield('content')
+                </div>
+
                 <!-- ============================================================== -->
                 <!-- ============================================================== -->
                 <!-- End Page Content -->
@@ -71,7 +65,7 @@
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-            <footer class="footer"> © 2021 Adminwrap by <a href="https://www.wrappixel.com/">wrappixel.com</a>
+            <footer class="footer"> © 2024 pandudesa by <a href="https://github.com/N4CHT0">N4CHT0</a>
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->

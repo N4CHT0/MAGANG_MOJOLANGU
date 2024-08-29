@@ -12,6 +12,7 @@ Route::aliasMiddleware('role', RoleMiddleware::class);
 Route::get('/', function () {
     return view('welcome');
 });
+Route::post('/update-data-warga', [UserController::class, 'update_data_warga'])->name('update_data_warga');
 
 Auth::routes();
 

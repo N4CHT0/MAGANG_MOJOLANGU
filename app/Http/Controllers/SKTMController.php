@@ -46,6 +46,9 @@ class SKTMController extends Controller
         $data = SKTM::findOrFail($id);
         $data->validasi = 'tervalidasi';
 
+        // Set waktu_validasi dengan datetime saat ini
+        $data->waktu_validasi = now();
+
         // Generate PDF
         $pdf = $this->generatePDF($data);
 
@@ -136,8 +139,17 @@ class SKTMController extends Controller
 
     public function finalSKTM(Request $request, $id)
     {
+        // Cari data SKTM berdasarkan ID
         $data = SKTM::findOrFail($id);
+
+        // Set nilai validasi menjadi 'final'
         $data->validasi = 'final';
+
+        // Perbaiki assignment untuk masa_berlaku
+        $data->masa_berlaku = $request->masa_berlaku;
+
+        // Set waktu_finalisasi dengan datetime saat ini
+        $data->waktu_finalisasi = now();
 
         // Kosongkan kolom keterangan jika ada nilainya
         if (!empty($data->keterangan)) {
@@ -150,16 +162,20 @@ class SKTMController extends Controller
         // Save PDF and get filename
         $pdfName = $this->processProductPDFUpload($pdf, $id);
 
-        // Save PDF name to 'product'
+        // Simpan nama file PDF ke field 'produk'
         $data->produk = $pdfName;
 
+        // Simpan perubahan ke database
         $data->save();
 
         // Kirim file PDF ke pengguna terkait
         $this->sendPDFToUser($data, 'produk');
 
+        // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM berhasil difinalisasi.');
     }
+
+
 
     public function rejectSKTM(Request $request, $id)
     {

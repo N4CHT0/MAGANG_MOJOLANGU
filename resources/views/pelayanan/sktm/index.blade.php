@@ -213,6 +213,10 @@
                             <input type="text" class="form-control" id="alamat" name="alamat" readonly>
                         </div>
                         <div class="form-group">
+                            <label for="masa_berlaku">Masa Berlaku Sampai</label>
+                            <input type="date" class="form-control" id="masa_berlaku" name="masa_berlaku">
+                        </div>
+                        <div class="form-group">
                             <label for="keperluan">Keperluan</label>
                             <input type="text" class="form-control" id="keperluan" name="keperluan">
                         </div>

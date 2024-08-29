@@ -47,6 +47,46 @@ class UserController extends Controller
         return view('users.history', compact('data'));
     }
 
+    public function update_data_warga(Request $request)
+    {
+        // Ambil data pengguna yang sedang login
+        $currentUser = auth()->user();
+
+        // Cek apakah pengguna sudah pernah memperbarui data
+        if ($currentUser->data_updated) {
+            return redirect()->back()->with('error', 'Anda sudah pernah memperbarui data.');
+        }
+
+        // Validasi input
+        $request->validate([
+            'no_kk' => 'required|string|max:255',
+            'agama' => 'required|string|max:255',
+            'pekerjaan' => 'required|string|max:255',
+            'status_perkawinan' => 'required|string',
+            'telegram_number' => 'required|string|max:255',
+            'tempat_lahir' => 'required|string|max:255',
+            'pendidikan' => 'required|string|max:255',
+            'tanggal_lahir' => 'required|date',
+        ]);
+
+        // Perbarui data pengguna
+        $currentUser->update([
+            'no_kk' => $request->no_kk,
+            'agama' => $request->agama,
+            'pekerjaan' => $request->pekerjaan,
+            'status_perkawinan' => $request->status_perkawinan,
+            'telegram_number' => $request->telegram_number,
+            'pendidikan' => $request->pendidikan,
+            'tempat_lahir' => $request->tempat_lahir,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'data_updated' => true, // Tandai data sebagai sudah diperbarui
+        ]);
+
+        return redirect()->route('home')->with('success', 'Data berhasil diperbarui.');
+    }
+
+
+
     // Show the form for creating a new resource.
     public function create()
     {
