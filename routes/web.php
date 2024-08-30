@@ -10,7 +10,7 @@ use App\Http\Middleware\RoleMiddleware;
 // Definisikan middleware role secara manual
 Route::aliasMiddleware('role', RoleMiddleware::class);
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 Route::post('/update-data-warga', [UserController::class, 'update_data_warga'])->name('update_data_warga');
 
@@ -19,6 +19,9 @@ Auth::routes();
 // Group untuk role 'admin' dengan akses penuh
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('users', UserController::class);
+    Route::get('export_data_excel', [UserController::class, 'export'])->name('users.export');
+    Route::get('/users/export/all', [UserController::class, 'reportAllData'])->name('users.export.all');
+
     // Tambahkan route lain khusus untuk admin jika diperlukan
 });
 

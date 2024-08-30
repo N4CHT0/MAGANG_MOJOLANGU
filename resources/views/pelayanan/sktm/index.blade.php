@@ -127,7 +127,7 @@
                                             @endif
                                         </tr>
                                     @empty
-                                        <tr>
+                                        <tr class="no-data">
                                             <td colspan="6" class="text-center">Tidak ada data</td>
                                         </tr>
                                     @endforelse
@@ -257,18 +257,34 @@
 @section('script')
     <script>
         $(document).ready(function() {
+            // Sembunyikan baris "Tidak ada data" bawaan jika ada
+            $('.default-no-data').hide();
+
             $('#searchInput').on('keyup', function() {
                 var value = $(this).val().toLowerCase();
+                var rowCount = 0;
+
                 $('.table tbody tr').each(function() {
                     var rowText = $(this).text().toLowerCase();
                     if (rowText.indexOf(value) > -1) {
                         $(this).show();
+                        rowCount++;
                     } else {
                         $(this).hide();
                     }
                 });
+
+                // Tampilkan pesan "Tidak ada data" jika rowCount adalah 0 dan tidak ada baris yang ditampilkan
+                if (rowCount === 0) {
+                    $('.no-data').show();
+                } else {
+                    $('.no-data').hide();
+                }
             });
         });
+
+
+
         $('#validateModal').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
             var id = button.data('id');
