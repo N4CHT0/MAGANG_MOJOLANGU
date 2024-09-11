@@ -140,7 +140,6 @@ class SKTMController extends Controller
         return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM ditolak.');
     }
 
-
     public function finalSKTM(Request $request, $id)
     {
         // Cari data SKTM berdasarkan ID
@@ -163,27 +162,73 @@ class SKTMController extends Controller
         // Simpan perubahan ke database
         $data->save();
 
+        // Jika ada file produk yang diunggah, proses dan simpan
+        if ($request->hasFile('produk')) {
+            $file = $request->file('produk');
+            $fileName = 'produk_' . $id . '.' . $file->getClientOriginalExtension();
+            $filePath = $file->storeAs('public/pdf', $fileName);
+
+            // Simpan nama file PDF ke field 'produk'
+            $data->produk = $fileName;
+            $data->save();
+        }
+
         // Ambil data lurah berdasarkan role 'kelurahan'
         $lurah = User::where('role', 'kelurahan')->first();
 
-        // Generate PDF dengan mengirimkan data SKTM dan lurah
-        $pdf = $this->generateProductPDF($data, $lurah);
-
-        // Save PDF and get filename
-        $pdfName = $this->processProductPDFUpload($pdf, $id);
-
-        // Simpan nama file PDF ke field 'produk'
-        $data->produk = $pdfName;
-
-        // Simpan perubahan ke database
-        $data->save();
-
-        // Kirim file PDF ke pengguna terkait
-        $this->sendPDFToUser($data, 'produk');
+        // Kirim file PDF ke pengguna terkait jika produk sudah diunggah
+        if (!empty($data->produk)) {
+            $this->sendPDFToUser($data, 'produk');
+        }
 
         // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM berhasil difinalisasi.');
     }
+
+
+    // public function finalSKTM(Request $request, $id)
+    // {
+    //     // Cari data SKTM berdasarkan ID
+    //     $data = SKTM::findOrFail($id);
+
+    //     // Set nilai validasi menjadi 'final'
+    //     $data->validasi = 'final';
+
+    //     // Set masa berlaku dari request
+    //     $data->masa_berlaku = $request->masa_berlaku;
+
+    //     // Set waktu_finalisasi dengan datetime saat ini
+    //     $data->waktu_finalisasi = now();
+
+    //     // Kosongkan kolom keterangan jika ada nilainya
+    //     if (!empty($data->keterangan)) {
+    //         $data->keterangan = '';
+    //     }
+
+    //     // Simpan perubahan ke database
+    //     $data->save();
+
+    //     // Ambil data lurah berdasarkan role 'kelurahan'
+    //     $lurah = User::where('role', 'kelurahan')->first();
+
+    //     // Generate PDF dengan mengirimkan data SKTM dan lurah
+    //     $pdf = $this->generateProductPDF($data, $lurah);
+
+    //     // Save PDF and get filename
+    //     $pdfName = $this->processProductPDFUpload($pdf, $id);
+
+    //     // Simpan nama file PDF ke field 'produk'
+    //     $data->produk = $pdfName;
+
+    //     // Simpan perubahan ke database
+    //     $data->save();
+
+    //     // Kirim file PDF ke pengguna terkait
+    //     $this->sendPDFToUser($data, 'produk');
+
+    //     // Redirect ke halaman index dengan pesan sukses
+    //     return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM berhasil difinalisasi.');
+    // }
 
 
     public function rejectSKTM(Request $request, $id)

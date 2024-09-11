@@ -242,6 +242,11 @@
                             <label for="keterangan">Keterangan (jika ditolak)</label>
                             <textarea class="form-control" id="keterangan" name="keterangan"></textarea>
                         </div>
+                        <div class="form-group">
+                            <label for="produk">Unggah Produk (PDF)</label>
+                            <input type="file" class="form-control-file" id="produk" name="produk"
+                                accept="application/pdf">
+                        </div>
                         <button type="submit" class="btn btn-success">Finalisasi</button>
                         <button type="button" id="rejecFinaltBtn" class="btn btn-danger">Tolak</button>
                     </form>
@@ -303,6 +308,33 @@
             modal.find('#foto_kk').attr('src', kk);
         });
 
+        // $('#finalModal').on('show.bs.modal', function(event) {
+        //     var button = $(event.relatedTarget);
+        //     var id = button.data('id');
+        //     var nama = button.data('nama');
+        //     var alamat = button.data('alamat');
+        //     var keperluan = button.data('keperluan');
+        //     var tujuan = button.data('tujuan');
+        //     var ktp = button.data('ktp');
+        //     var kk = button.data('kk');
+        //     var suratPengantar = button.data('pdf'); // Nama file PDF
+        //     var modal = $(this);
+        //     var finalUrl = '{{ route('sktm.final', ':id') }}';
+        //     finalUrl = finalUrl.replace(':id', id);
+        //     var pdfUrl = '{{ route('sktm.viewPDF', ':filename') }}';
+        //     pdfUrl = pdfUrl.replace(':filename', encodeURIComponent(suratPengantar)); // Encode nama file
+
+        //     modal.find('#final-id').val(id);
+        //     modal.find('#finalForm').attr('action', finalUrl);
+        //     modal.find('#nama_lengkap').val(nama);
+        //     modal.find('#alamat').val(alamat);
+        //     modal.find('#keperluan').val(keperluan);
+        //     modal.find('#tujuan').val(tujuan);
+        //     modal.find('#foto_ktp').attr('src', ktp);
+        //     modal.find('#foto_kk').attr('src', kk);
+        //     modal.find('#pdf-download').attr('href', pdfUrl); // Set href for download link
+        // });
+
         $('#finalModal').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
             var id = button.data('id');
@@ -328,6 +360,9 @@
             modal.find('#foto_ktp').attr('src', ktp);
             modal.find('#foto_kk').attr('src', kk);
             modal.find('#pdf-download').attr('href', pdfUrl); // Set href for download link
+
+            // Pastikan form dapat mengirimkan file dengan enctype="multipart/form-data"
+            modal.find('#finalForm').attr('enctype', 'multipart/form-data');
         });
 
         $('#rejecFinaltBtn').on('click', function() {
