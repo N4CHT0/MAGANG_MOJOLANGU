@@ -53,8 +53,12 @@ class SKTMController extends Controller
         $ketuaRW = User::where('role', 'rw')->where('rw', $data->rw)->first();
         $ketuaRT = User::where('role', 'rt')->where('rt', $data->rt)->where('rw', $data->rw)->first();
 
-        // Generate PDF dengan mengirimkan data SKTM, Ketua RW, dan Ketua RT
-        $pdf = $this->generatePDF($data, $ketuaRW, $ketuaRT);
+        // Update status layanan yang sedang diurus untuk pengguna
+        $user = $data->Pengguna;
+        $user->updateCurrentService('SKTM');
+
+        // Generate PDF dengan mengirimkan data SKTM, Ketua RW, Ketua RT, dan User
+        $pdf = $this->generatePDF($data, $ketuaRW, $ketuaRT, $user);
 
         // Save PDF and get filename
         $pdfName = $this->processPDFUpload($pdf, $id);
@@ -69,6 +73,8 @@ class SKTMController extends Controller
 
         return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM berhasil divalidasi dan PDF telah disimpan.');
     }
+
+
 
     private function sendPDFToUser(SKTM $sktm, $fileType)
     {
@@ -295,19 +301,20 @@ class SKTMController extends Controller
     }
 
 
-    private function generatePDF($data, $ketuaRW, $ketuaRT)
+    private function generatePDF($data, $ketuaRW, $ketuaRT, $user)
     {
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', true);
 
         $dompdf = new Dompdf($options);
-        $dompdf->loadHtml(view('report.surat_pengantar', compact('data', 'ketuaRW', 'ketuaRT'))->render());
+        $dompdf->loadHtml(view('report.surat_pengantar', compact('data', 'ketuaRW', 'ketuaRT', 'user'))->render());
         $dompdf->setPaper('F4', 'portrait');
         $dompdf->render();
 
         return $dompdf;
     }
+
 
     private function generateProductPDF($data, $lurah)
     {

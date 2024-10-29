@@ -5,19 +5,37 @@
         <!-- ============================================================== -->
         <div class="navbar-header">
             <a class="navbar-brand" href="/home">
-                <!-- Logo icon --><b>
+                <!-- Logo icon -->
+                <b>
                     <img src="{{ asset('admin-master/assets/images/LOGO_MOJOLANGU.png') }}"
                         style="width: 50px;height: 50px;" alt="homepage" class="dark-logo" />
                     <img src="{{ asset('admin-master/assets/images/logo-light-icon.png') }}" alt="homepage"
                         class="light-logo" />
                 </b>
-                <!-- Logo text --><span>
-                    <img src="{{ asset('admin-master/assets/images/LOGO_APP.jpg') }}" alt="homepage" class="dark-logo"
-                        style="width: 100px;height: 20px;" />
-                    <img src="{{ asset('admin-master/assets/images/logo-light-text.png') }}" class="light-logo"
-                        alt="homepage" /></span>
+
+                <!-- Logo text -->
+                @if (!auth()->check() || auth()->user()->role == 'warga')
+                    <!-- Tampilkan LOGO_APP.jpg untuk role warga dan pengguna yang belum login -->
+                    <span>
+                        <img src="{{ asset('admin-master/assets/images/LOGO_APP.jpg') }}" alt="homepage"
+                            class="dark-logo" style="width: 100px;height: 20px;" />
+                        <img src="{{ asset('admin-master/assets/images/logo-light-text.png') }}" class="light-logo"
+                            alt="homepage" />
+                    </span>
+                @else
+                    <!-- Tampilkan LogoAPK.png untuk role selain warga -->
+                    <span>
+                        <img src="{{ asset('admin-master/assets/images/LogoAPK.png') }}" alt="homepage"
+                            class="dark-logo" style="width: 100px;height: 20px;" />
+                        <img src="{{ asset('admin-master/assets/images/logo-light-text.png') }}" class="light-logo"
+                            alt="homepage" />
+                    </span>
+                @endif
             </a>
         </div>
+
+
+
         <!-- ============================================================== -->
         <!-- End Logo -->
         <!-- ============================================================== -->

@@ -24,6 +24,8 @@ class HomeController extends Controller
                 return view('home.rt');
             case 'rw':
                 return view('home.rw');
+            case 'lpmd':
+                return view('home.lpmd');
             case 'kelurahan':
                 return view('home.kelurahan');
             default:

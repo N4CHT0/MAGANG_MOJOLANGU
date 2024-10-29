@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\KriteriaController;
+use App\Http\Controllers\PembangunanController;
 use App\Http\Controllers\SKTMController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -27,18 +29,49 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 // Group untuk role 'rt'
 Route::middleware(['auth', 'role:rt'])->group(function () {
+
+    // Layanan SKTM
     Route::post('sktms/{id}/validate', [SKTMController::class, 'validateSKTM'])->name('sktm.validate');
     Route::post('sktms/{id}/reject', [SKTMController::class, 'rejectSKTM'])->name('sktm.reject');
+
+    // Pembangunan
+    Route::get('/pembangunan/create', [PembangunanController::class, 'create'])->name('pembangunan.create');
+    Route::post('/pembangunan/', [PembangunanController::class, 'store'])->name('pembangunan.store');
+    Route::get('/riwayat-pengajuan-rt', [PembangunanController::class, 'riwayatPengajuanRt'])->name('riwayat.pengajuan.rt');
 });
 
 // Group untuk role 'rw'
 Route::middleware(['auth', 'role:rw'])->group(function () {
     // Rute khusus untuk 'rw'
+    Route::get('/verifikasi', [PembangunanController::class, 'verifikasi'])->name('pembangunan.verifikasi');
+    Route::post('/approve', [PembangunanController::class, 'approve'])->name('pembangunan.approve');
+    Route::post('/reject', [PembangunanController::class, 'reject'])->name('pembangunan.reject');
+    Route::get('/riwayat-pengajuan-rw', [PembangunanController::class, 'riwayatPengajuanRw'])->name('riwayat.pengajuan.rw');
 });
 
 // Group untuk role 'warga'
 Route::middleware(['auth', 'role:warga'])->group(function () {
     Route::get('/history', [UserController::class, 'history'])->name('users.riwayat');
+});
+
+// Group untuk role 'lpmd'
+Route::middleware(['auth', 'role:lpmd'])->group(function () {
+    Route::get('/validasi', [PembangunanController::class, 'validasi'])->name('pembangunan.validasi');
+    Route::post('/approveValidasi', [PembangunanController::class, 'approveValidasi'])->name('pembangunan.approveValidasi');
+    Route::post('/rejectValidasi', [PembangunanController::class, 'rejectValidasi'])->name('pembangunan.rejectValidasi');
+    // Menampilkan semua kriteria
+    Route::get('/kriteria', [KriteriaController::class, 'index'])->name('kriteria.index');
+    // Menyimpan kriteria baru
+    Route::post('/kriteria', [KriteriaController::class, 'store'])->name('kriteria.store');
+    // Menampilkan form untuk mengedit kriteria (opsional, jika ingin menggunakan method get)
+    Route::get('/kriteria/{id}/edit', [KriteriaController::class, 'edit'])->name('kriteria.edit');
+    // Memperbarui kriteria yang ada
+    Route::put('/kriteria/{id}', [KriteriaController::class, 'update'])->name('kriteria.update');
+    // Menghapus kriteria
+    Route::delete('kriteria/{id}', [KriteriaController::class, 'destroy'])->name('kriteria.destroy');
+    Route::get('/alternatif', [PembangunanController::class, 'dataAlternatif'])->name('kriteria.alternatif');
+    Route::get('/perbandingan-kriteria', [KriteriaController::class, 'compareCriteria'])->name('kriteria.perbandingan');
+    Route::post('/compare/submit', [KriteriaController::class, 'storeComparison'])->name('compare.submit');
 });
 
 // Group untuk role 'kelurahan'

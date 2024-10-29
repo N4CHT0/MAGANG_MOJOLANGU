@@ -136,18 +136,29 @@
                 surat yang diperlukan warga kami di bawah ini:</p>
             <p class="contentisi">
                 <strong>Nama</strong>: {{ $data->nama_lengkap }}<br>
-                <strong>Jenis Kelamin</strong>: {{ $data->jenis_kelamin }}<br>
+                <strong>Jenis Kelamin</strong>:{{ $data->jenis_kelamin }}<br>
                 <strong>NIK/NO. KTP</strong>: {{ $data->nik }}<br>
                 <strong>Alamat</strong>: {{ $data->alamat }}<br>
-                <strong>Keperluan Untuk</strong>: Beri tanda √ pada kotak yang dibutuhkan
+                <strong>Keperluan Untuk</strong>:
+                Beri Tanda <input type="checkbox" checked> pada kotak yang diperlukan
             </p>
             <table>
                 <tr>
-                    <th>1. SKU/SKDU</th>
-                    <th>2. BORO KERJA</th>
-                    <th>3. SKTM</th>
-                    <th>4. IJIN KERAMAIAN</th>
-                    <th>5. IMB/SPPL</th>
+                    <th><input type="checkbox"
+                            {{ in_array('SKU/SKDU', explode(', ', $user->current_service)) ? 'checked' : '' }}> 1.
+                        SKU/SKDU</th>
+                    <th><input type="checkbox"
+                            {{ in_array('BORO KERJA', explode(', ', $user->current_service)) ? 'checked' : '' }}> 2.
+                        BORO KERJA</th>
+                    <th><input type="checkbox"
+                            {{ in_array('SKTM', explode(', ', $user->current_service)) ? 'checked' : '' }}> 3. SKTM
+                    </th>
+                    <th><input type="checkbox"
+                            {{ in_array('IJIN KERAMAIAN', explode(', ', $user->current_service)) ? 'checked' : '' }}>
+                        4. IJIN KERAMAIAN</th>
+                    <th><input type="checkbox"
+                            {{ in_array('IMB/SPPL', explode(', ', $user->current_service)) ? 'checked' : '' }}> 5.
+                        IMB/SPPL</th>
                 </tr>
                 <tr>
                     <td>
@@ -210,7 +221,6 @@
                     </tr>
                 </table>
             </div>
-
         </div>
     </div>
 </body>
