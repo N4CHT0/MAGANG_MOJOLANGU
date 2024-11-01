@@ -1,11 +1,42 @@
 @extends('layouts.main')
 @section('content')
     <div class="row">
-        <!-- Matriks Perbandingan Berpasangan -->
+        <!-- Matriks Awal Sebelum Normalisasi -->
         <div class="col-12 mt-3">
             <div class="card">
                 <div class="card-body">
-                    <h4>Matriks Perbandingan Berpasangan</h4>
+                    <h4>Matriks Awal Sebelum Normalisasi</h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>Kriteria</th>
+                                    @foreach ($kriteria as $krit)
+                                        <th>{{ $krit->nama_kriteria }}</th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($initialMatrix as $i => $row)
+                                    <tr>
+                                        <td>{{ $kriteria[$i]->nama_kriteria }}</td>
+                                        @foreach ($row as $value)
+                                            <td>{{ $value }}</td>
+                                        @endforeach
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Matriks Perbandingan Berpasangan (Setelah Normalisasi) -->
+        <div class="col-12 mt-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Matriks Perbandingan Berpasangan (Setelah Normalisasi)</h4>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
                             <thead class="table-primary">
@@ -45,7 +76,7 @@
         <div class="col-12 mt-3">
             <div class="card">
                 <div class="card-body">
-                    <h4>Matriks Nilai Kriteria</h4>
+                    <h4>Matriks Nilai Kriteria dan Priority Vector</h4>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
                             <thead class="table-primary">
@@ -75,6 +106,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- Konsistensi Result Card -->
         <div class="col-12 mt-3">

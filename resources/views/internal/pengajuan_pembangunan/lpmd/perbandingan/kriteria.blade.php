@@ -96,8 +96,8 @@
                 });
             });
 
-            // Aktifkan semua select sebelum form submit
-            submitBtn.addEventListener('click', function() {
+            // Pastikan semua select aktif sebelum form submit
+            submitBtn.addEventListener('click', function(event) {
                 nilaiPerbandingan.forEach(select => {
                     select.disabled = false;
                 });

@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class KriteriaController extends Controller
 {
-    // SIMPAN PERBANDINGAN
     public function storeComparison(Request $request)
     {
         if (is_null($request->comparisons)) {
@@ -23,71 +22,102 @@ class KriteriaController extends Controller
 
         // Inisialisasi matriks dengan nilai 1 di diagonal
         $matrix = [];
-        $isAllOnes = true; // Flag untuk memeriksa apakah semua nilai adalah 1
-
         for ($i = 0; $i < $n; $i++) {
-            $matrix[$i] = array_fill(0, $n, 1);
+            $matrix[$i] = array_fill(0, $n, 1); // Diagonal bernilai 1
         }
+
+        // Debugging untuk melihat data yang diterima dari form
+        // dd($request->comparisons); // Pastikan ini menunjukkan nilai yang benar: 1, 3, 5
 
         // Update matriks dengan nilai dari request (gunakan skala 1-9)
         foreach ($request->comparisons as $key => $value) {
             $indices = explode('_', $key);
-            if (count($indices) < 2 || $indices[0] >= $n || $indices[1] >= $n) {
+
+            // Debugging untuk memastikan indeks yang diambil benar
+            // var_dump("Indices", $indices);
+
+            if (count($indices) < 2) {
                 continue;
             }
 
-            $i = (int)$indices[0];
-            $j = (int)$indices[1];
+            // Konversi indeks dari ID kriteria ke indeks array
+            $i = (int)$indices[0] - 1; // Pastikan ini adalah indeks array yang benar
+            $j = (int)$indices[1] - 1;
 
+            // Debugging untuk memastikan posisi dan nilai yang dimasukkan ke dalam matriks
+            // var_dump("Setting matrix[$i][$j] = $value and matrix[$j][$i] = " . (1 / (float)$value));
+
+            // Set nilai sesuai input pengguna
             $matrix[$i][$j] = (float)$value;
-            $matrix[$j][$i] = ($value == 1) ? 1 : (1 / $matrix[$i][$j]);
+            $matrix[$j][$i] = ($value == 1) ? 1 : (1 / (float)$value);
+        }
 
-            if ($value != 1) {
-                $isAllOnes = false; // Jika ada nilai selain 1, set flag menjadi false
+        // Debugging tambahan untuk melihat isi matriks setelah pengisian
+        // dd($matrix);
+
+        // Simpan matriks awal sebelum normalisasi
+        $initialMatrix = $matrix;
+
+        // Hitung jumlah per kolom untuk normalisasi
+        $columnSums = array_fill(0, $n, 0);
+        foreach ($matrix as $i => $row) {
+            foreach ($row as $j => $value) {
+                $columnSums[$j] += $value;
             }
         }
 
-        // Jika semua nilai adalah 1, maka Priority Vector semuanya akan bernilai 1/n
-        $columnSums = [];
-        if ($isAllOnes) {
-            $priorityVector = array_fill(0, $n, round(1 / $n, 5));
-            $lambdaMax = $n;
-            $consistencyIndex = 0;
-            $consistencyRatio = 0;
-            $columnSums = array_fill(0, $n, $n); // Mengisi jumlah kolom dengan nilai yang benar jika semua nilai adalah 1
-        } else {
-            // Hitung jumlah per kolom untuk normalisasi
-            $columnSums = array_fill(0, $n, 0);
-            foreach ($matrix as $i => $row) {
-                foreach ($row as $j => $value) {
-                    $columnSums[$j] += $value;
-                }
-            }
+        // Debugging tambahan untuk memastikan columnSums benar
+        // dd($columnSums); // Ini harus menunjukkan jumlah setiap kolom
 
-            // Normalisasi matriks dan hitung Priority Vector
-            $priorityVector = [];
-            foreach ($matrix as $i => $row) {
-                $rowSum = 0;
-                foreach ($row as $j => $value) {
-                    $normalizedValue = $value / $columnSums[$j];
-                    $matrix[$i][$j] = round($normalizedValue, 4);
-                    $rowSum += $normalizedValue;
-                }
-                $priorityVector[$i] = round($rowSum / $n, 5);
+        // Normalisasi matriks dan hitung Priority Vector
+        $priorityVector = [];
+        foreach ($matrix as $i => $row) {
+            $rowSum = 0;
+            foreach ($row as $j => $value) {
+                $normalizedValue = $value / $columnSums[$j];
+                $matrix[$i][$j] = round($normalizedValue, 4);
+                $rowSum += $normalizedValue;
             }
-
-            // Hitung λ maks, CI, dan CR
-            $lambdaMax = $this->calculateLambdaMax($matrix, $priorityVector);
-            $consistencyIndex = ($lambdaMax - $n) / ($n - 1);
-            $consistencyRatio = $this->calculateConsistencyRatio($consistencyIndex, $n);
+            $priorityVector[$i] = round($rowSum / $n, 5);
         }
 
-        return view('internal.pengajuan_pembangunan.lpmd.perbandingan.hasil', compact('matrix', 'priorityVector', 'columnSums', 'lambdaMax', 'consistencyIndex', 'consistencyRatio', 'kriteria'));
+        // Debugging tambahan untuk memastikan matriks setelah normalisasi
+        // dd($matrix); // Ini harus menunjukkan matriks setelah normalisasi
+
+        // Debugging tambahan untuk memastikan Priority Vector benar
+        // dd($priorityVector); // Ini harus menunjukkan nilai rata-rata dari setiap baris matriks normalisasi
+
+
+        // Hitung λ maks, CI, dan CR
+        $lambdaMax = $this->calculateLambdaMax($matrix, $priorityVector);
+        $consistencyIndex = ($lambdaMax - $n) / ($n - 1);
+        $consistencyRatio = $this->calculateConsistencyRatio($consistencyIndex, $n);
+
+        return view('internal.pengajuan_pembangunan.lpmd.perbandingan.hasil', compact('initialMatrix', 'matrix', 'priorityVector', 'columnSums', 'lambdaMax', 'consistencyIndex', 'consistencyRatio', 'kriteria'));
     }
 
 
 
 
+    public function compareCriteria()
+    {
+        // Ambil semua kriteria dari database
+        $kriteria = Kriteria::all();
+
+        // Buat kombinasi perbandingan kriteria
+        $comparisons = [];
+        for ($i = 0; $i < count($kriteria); $i++) {
+            for ($j = $i + 1; $j < count($kriteria); $j++) {
+                $comparisons[] = [
+                    'kriteria1' => $kriteria[$i],
+                    'kriteria2' => $kriteria[$j],
+                ];
+            }
+        }
+
+        // Tampilkan view perbandingan kriteria dengan data
+        return view('internal.pengajuan_pembangunan.lpmd.perbandingan.kriteria', compact('comparisons', 'kriteria'));
+    }
 
 
     private function calculateLambdaMax($matrix, $priorityVector)
@@ -114,27 +144,6 @@ class KriteriaController extends Controller
         }
 
         return $consistencyIndex / $randomIndex[$n - 1];
-    }
-
-    // MEMBANDINGKAN KRITERIA
-    public function compareCriteria()
-    {
-        // Ambil semua kriteria dari database
-        $kriteria = Kriteria::all();
-
-        // Buat kombinasi perbandingan kriteria
-        $comparisons = [];
-        for ($i = 0; $i < count($kriteria); $i++) {
-            for ($j = $i + 1; $j < count($kriteria); $j++) {
-                $comparisons[] = [
-                    'kriteria1' => $kriteria[$i],
-                    'kriteria2' => $kriteria[$j],
-                ];
-            }
-        }
-
-        // Tampilkan view perbandingan kriteria dengan data
-        return view('internal.pengajuan_pembangunan.lpmd.perbandingan.kriteria', compact('comparisons', 'kriteria'));
     }
 
     // UNTUK MENAMPILKAN DATA KRITERIA
