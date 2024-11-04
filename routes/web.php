@@ -72,6 +72,10 @@ Route::middleware(['auth', 'role:lpmd'])->group(function () {
     Route::get('/alternatif', [PembangunanController::class, 'dataAlternatif'])->name('kriteria.alternatif');
     Route::get('/perbandingan-kriteria', [KriteriaController::class, 'compareCriteria'])->name('kriteria.perbandingan');
     Route::post('/compare/submit', [KriteriaController::class, 'storeComparison'])->name('compare.submit');
+    Route::get('/perbandingan-nilai', [KriteriaController::class, 'compareValue'])->name('nilai.perbandingan');
+    Route::post('/compare-nilai-submit', [KriteriaController::class, 'storeComparisonValue'])->name('nilai.submit');
+    Route::get('/hasil-prioritas', [KriteriaController::class, 'calculateFinalScore'])->name('hasil.prioritas');
+    Route::post('/save-ranking-pdf', [KriteriaController::class, 'saveRankingPdf'])->name('save-ranking-pdf');
 });
 
 // Group untuk role 'kelurahan'
