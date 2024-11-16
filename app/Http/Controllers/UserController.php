@@ -2,15 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UserExport;
 use App\Models\SKTM;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
+    public function export(Request $request)
+    {
+        $rt = $request->input('rt');
+        $rw = $request->input('rw');
+
+        $users = User::where('rt', $rt)->where('rw', $rw)->get();
+
+        return Excel::download(new UserExport($users), 'users_rt' . $rt . '_rw' . $rw . '.xlsx');
+    }
+
+    public function reportAllData()
+    {
+        // Ambil semua data pengguna
+        $users = User::all(); // Mengambil semua data dari model User
+
+        // Ekspor data ke file Excel tanpa mengubah format data
+        return Excel::download(new UserExport($users), 'data_users_all.xlsx');
+    }
+
+
+
     // Display a listing of the resource.
     public function index()
     {

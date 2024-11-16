@@ -24,7 +24,7 @@
                             </thead>
                             <tbody>
                                 @php $no = 1 @endphp
-                                @foreach ($data as $item)
+                                @forelse ($data as $item)
                                     <tr>
                                         <td>{{ $no++ }}</td>
                                         <td>{{ $item->nama_lengkap }}</td>
@@ -62,7 +62,11 @@
                                             </div>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center">Tidak ada data</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>

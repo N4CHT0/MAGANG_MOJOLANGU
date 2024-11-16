@@ -54,7 +54,9 @@
             text-decoration: none;
         }
     </style>
-    <div class="col-12">
+
+
+    <div class="col-12 my-special-card-container">
         <div class="card">
             <div class="card-header bg-info d-flex justify-content-between align-items-center">
                 <span style="color: white; font-size: 20px;font-weight: 400;">Biodata</span>
@@ -99,6 +101,7 @@
                 </div>
             </div>
         </div>
+
         <div class="col-12 my-special-card-container">
             <div class="card">
                 <div class="card-header bg-info d-flex justify-content-between align-items-center">
@@ -108,12 +111,12 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <a href="{{ route('pembangunan.verifikasi') }}" class="my-special-card-link">
+                            <a href="{{ route('pembangunan.validasi') }}" class="my-special-card-link">
                                 <div class="my-special-card h-100 position-relative">
                                     <img src="{{ asset('admin-master/assets/images/pembangunan.jpg') }}"
                                         class="card-img-top" alt="" style="max-height: 200px; object-fit: cover;">
                                     <div class="my-special-hover-text">
-                                        Pengajuan Usulan Pembangunan
+                                        Validasi Usulan Pembangunan
                                     </div>
                                 </div>
                             </a>
@@ -124,51 +127,7 @@
                                     <img src="{{ asset('admin-master/assets/images/pembangunan.jpg') }}"
                                         class="card-img-top" alt="" style="max-height: 200px; object-fit: cover;">
                                     <div class="my-special-hover-text">
-                                        Pengajuan Usulan Pembangunan
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <a href="#" class="my-special-card-link">
-                                <div class="my-special-card h-100 position-relative">
-                                    <img src="{{ asset('admin-master/assets/images/pembangunan.jpg') }}"
-                                        class="card-img-top" alt="" style="max-height: 200px; object-fit: cover;">
-                                    <div class="my-special-hover-text">
-                                        Pengajuan Usulan Pembangunan
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <a href="#" class="my-special-card-link">
-                                <div class="my-special-card h-100 position-relative">
-                                    <img src="{{ asset('admin-master/assets/images/pembangunan.jpg') }}"
-                                        class="card-img-top" alt="" style="max-height: 200px; object-fit: cover;">
-                                    <div class="my-special-hover-text">
-                                        Pengajuan Usulan Pembangunan
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <a href="#" class="my-special-card-link">
-                                <div class="my-special-card h-100 position-relative">
-                                    <img src="{{ asset('admin-master/assets/images/pembangunan.jpg') }}"
-                                        class="card-img-top" alt="" style="max-height: 200px; object-fit: cover;">
-                                    <div class="my-special-hover-text">
-                                        Pengajuan Usulan Pembangunan
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <a href="#" class="my-special-card-link">
-                                <div class="my-special-card h-100 position-relative">
-                                    <img src="{{ asset('admin-master/assets/images/pembangunan.jpg') }}"
-                                        class="card-img-top" alt="" style="max-height: 200px; object-fit: cover;">
-                                    <div class="my-special-hover-text">
-                                        Pengajuan Usulan Pembangunan
+                                        Riwayat Usulan Pembangunan
                                     </div>
                                 </div>
                             </a>
@@ -177,25 +136,29 @@
                 </div>
             </div>
         </div>
-        <div class="card">
-            <div class="card-body">
-                <h4>Harap Baca Sebelum Menggunakan Aplikasi</h4>
-                <h6>1. Pengguna Wajib Memiliki Telegram Yang Berstatus Aktif</h6>
-                <h6>2. Mengisi ID Telegram Pada Akun, Dapatkan ID Telegram Anda <a
-                        href="https://t.me/userinfobot">Disini</a></h6>
-                <h6> Jika Kesulitan Harap Lihat Panduan Untuk Mendapat ID Telegram Anda Di Sini</h6><br>
-                <h6>
-                    3. Jika Sudah Mendapat ID Telegram, Harap Masukan Data Anda
-                    @if (!Auth::user()->data_updated)
-                        <a href="#" data-toggle="modal" data-target="#updateDataWargaModal">Disini</a>
-                    @else
-                        <span class="text-muted">(Data sudah diperbarui)</span>
-                    @endif
-                </h6>
 
-                <h6>4. Pengguna Hanya Dapat Mengakses Layanan Dengan 1 Akun Untuk 1 Orang Saja.</h6>
+        <div class="col-12 my-special-card-container">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Harap Baca Sebelum Menggunakan Aplikasi</h4>
+                    <h6>1. Pengguna Wajib Memiliki Telegram Yang Berstatus Aktif</h6>
+                    <h6>2. Mengisi ID Telegram Pada Akun, Dapatkan ID Telegram Anda <a
+                            href="https://t.me/userinfobot">Disini</a></h6>
+                    <h6> Jika Kesulitan Harap Lihat Panduan Untuk Mendapat ID Telegram Anda Di Sini</h6><br>
+                    <h6>
+                        3. Jika Sudah Mendapat ID Telegram, Harap Masukan Data Anda
+                        @if (!Auth::user()->data_updated)
+                            <a href="#" data-toggle="modal" data-target="#updateDataWargaModal">Disini</a>
+                        @else
+                            <span class="text-muted">(Data sudah diperbarui)</span>
+                        @endif
+                    </h6>
+
+                    <h6>4. Pengguna Hanya Dapat Mengakses Layanan Dengan 1 Akun Untuk 1 Orang Saja.</h6>
+                </div>
             </div>
         </div>
+
     </div>
 
     <!-- Modal Form Update Data Warga -->

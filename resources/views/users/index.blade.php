@@ -40,7 +40,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($users as $user)
+                                    @forelse ($users as $user)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $user->nama_lengkap }}</td>
@@ -76,11 +76,60 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="text-center">Tidak ada data</td>
+                                        </tr>
+                                    @endforelse
+                                    <!-- Baris untuk pesan "Tidak ada data" saat search -->
+                                    <tr class="no-data">
+                                        <td colspan="6" class="text-center">Tidak ada data</td>
+                                    </tr>
                                 </tbody>
                             </table>
+                            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#filterModal">Filter
+                                & Export</a>
+                            <a href="{{ route('users.export.all') }}" class="btn btn-success">Export
+                                All</a>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Filter & Export -->
+    <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filterModalLabel">Filter Data</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('users.export') }}" method="GET">
+                        <div class="form-group">
+                            <label for="rw">Pilih RW</label>
+                            <select id="rw" name="rw" class="form-control">
+                                @foreach ($users->unique('rw') as $user)
+                                    <option value="{{ $user->rw }}">{{ $user->rw }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="rt">Pilih RT</label>
+                            <select id="rt" name="rt" class="form-control">
+                                @foreach ($users->unique('rt') as $user)
+                                    <option value="{{ $user->rt }}" data-rw="{{ $user->rw }}">{{ $user->rt }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Export to Excel</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -89,16 +138,39 @@
 @section('script')
     <script>
         $(document).ready(function() {
+            $('#rw').on('change', function() {
+                var selectedRw = $(this).val();
+                $('#rt option').each(function() {
+                    var option = $(this);
+                    if (option.data('rw') == selectedRw) {
+                        option.show();
+                    } else {
+                        option.hide();
+                    }
+                });
+                $('#rt').val($('#rt option:visible:first').val());
+            });
+
             $('#searchInput').on('keyup', function() {
                 var value = $(this).val().toLowerCase();
+                var rowCount = 0;
+
                 $('.table tbody tr').each(function() {
                     var rowText = $(this).text().toLowerCase();
                     if (rowText.indexOf(value) > -1) {
                         $(this).show();
+                        rowCount++;
                     } else {
                         $(this).hide();
                     }
                 });
+
+                // Tampilkan pesan "Tidak ada data" jika rowCount adalah 0
+                if (rowCount === 0) {
+                    $('.no-data').show();
+                } else {
+                    $('.no-data').hide();
+                }
             });
         });
     </script>

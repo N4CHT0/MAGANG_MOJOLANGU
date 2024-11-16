@@ -85,7 +85,7 @@
             text-align: left;
             width: 240px;
             vertical-align: top;
-            padding-right: 10px;
+            padding-right: 20px;
             /* Tambahkan padding kanan */
         }
 
@@ -123,14 +123,24 @@
 
         .signature .qr {
             display: block;
+<<<<<<< HEAD
             max-width: 70px;
             max-height: auto;
+=======
+            max-width: 35px;
+            max-height: 35px;
+>>>>>>> d22b27a140b1ad5da7b30aa40a432cca3cb84bc1
         }
 
         .signature .ttd-img {
             display: block;
+<<<<<<< HEAD
             max-width: auto;
             max-height: 50px;
+=======
+            max-width: 20px;
+            max-height: 20px;
+>>>>>>> d22b27a140b1ad5da7b30aa40a432cca3cb84bc1
         }
 
         /* Style untuk footer */
@@ -166,6 +176,7 @@
             <table>
                 <tr>
                     <td>Nama</td>
+<<<<<<< HEAD
                     <td>: AI</td>
                 </tr>
                 <tr>
@@ -211,6 +222,53 @@
                 <tr>
                     <td>Berlaku tanggal</td>
                     <td>: 30 JULI 2024</td>
+=======
+                    <td style="padding-left: 30px;">: {{ $data->nama_lengkap }}</td>
+                </tr>
+                <tr>
+                    <td>Nomor KK</td>
+                    <td>: {{ $data->Pengguna->no_kk }}</td>
+                </tr>
+                <tr>
+                    <td>NIK</td>
+                    <td>: {{ $data->nik }}</td>
+                </tr>
+                <tr>
+                    <td>Tempat dan Tanggal Lahir</td>
+                    <td>: {{ $data->Pengguna->tempat_lahir }}, {{ $data->Pengguna->tanggal_lahir }}</td>
+                </tr>
+                <tr>
+                    <td>Jenis Kelamin</td>
+                    <td>: {{ $data->jenis_kelamin }}</td>
+                </tr>
+                <tr>
+                    <td>Agama</td>
+                    <td>: {{ $data->Pengguna->agama }}</td>
+                </tr>
+                <tr>
+                    <td>Status Perkawinan</td>
+                    <td>: {{ $data->Pengguna->status_perkawinan }}</td>
+                </tr>
+                <tr>
+                    <td>Alamat</td>
+                    <td>: {{ $data->alamat }}</td>
+                </tr>
+                <tr>
+                    <td>Pendidikan</td>
+                    <td>: {{ $data->Pengguna->pendidikan }}</td>
+                </tr>
+                <tr>
+                    <td>Keperluan</td>
+                    <td>: {{ $data->keperluan }}</td>
+                </tr>
+                <tr>
+                    <td>Tujuan</td>
+                    <td>: {{ $data->tujuan }}</td>
+                </tr>
+                <tr>
+                    <td>Berlaku tanggal</td>
+                    <td>: {{ \Carbon\Carbon::parse($data->masa_berlaku)->translatedFormat('d F Y') }}</td>
+>>>>>>> d22b27a140b1ad5da7b30aa40a432cca3cb84bc1
                 </tr>
                 <tr>
                     <td>Berdasarkan Keterangan RT/RW</td>
@@ -234,15 +292,26 @@
                 <tr>
                     <td class="left">
                         <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/qr_sktm.jpg'))) }}"
+<<<<<<< HEAD
                             alt="qr" />
+=======
+                            alt="qr" style="max-width: 90px; max-height: 40px" />
+>>>>>>> d22b27a140b1ad5da7b30aa40a432cca3cb84bc1
                     </td>
                 </tr>
                 <tr>
                     <td class="right">
+<<<<<<< HEAD
                         <p>Malang, 30 Juli 2024</p>
                         <p>LURAH MOJOLANGU</p>
                         <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/ttd_sktm.jpg'))) }}"
                             alt="ttd" />
+=======
+                        <p>Malang, {{ \Carbon\Carbon::parse($data->waktu_finalisasi)->translatedFormat('d F Y') }}</p>
+                        <p>LURAH MOJOLANGU</p>
+                        <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/ttd_sktm.jpg'))) }}"
+                            alt="ttd" style="max-width: 200px; max-height: 45px" />
+>>>>>>> d22b27a140b1ad5da7b30aa40a432cca3cb84bc1
                     </td>
                 </tr>
             </table>

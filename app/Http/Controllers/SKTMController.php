@@ -53,8 +53,12 @@ class SKTMController extends Controller
         $ketuaRW = User::where('role', 'rw')->where('rw', $data->rw)->first();
         $ketuaRT = User::where('role', 'rt')->where('rt', $data->rt)->where('rw', $data->rw)->first();
 
-        // Generate PDF dengan mengirimkan data SKTM, Ketua RW, dan Ketua RT
-        $pdf = $this->generatePDF($data, $ketuaRW, $ketuaRT);
+        // Update status layanan yang sedang diurus untuk pengguna
+        $user = $data->Pengguna;
+        $user->updateCurrentService('SKTM');
+
+        // Generate PDF dengan mengirimkan data SKTM, Ketua RW, Ketua RT, dan User
+        $pdf = $this->generatePDF($data, $ketuaRW, $ketuaRT, $user);
 
         // Save PDF and get filename
         $pdfName = $this->processPDFUpload($pdf, $id);
@@ -69,6 +73,8 @@ class SKTMController extends Controller
 
         return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM berhasil divalidasi dan PDF telah disimpan.');
     }
+
+
 
     private function sendPDFToUser(SKTM $sktm, $fileType)
     {
@@ -140,7 +146,6 @@ class SKTMController extends Controller
         return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM ditolak.');
     }
 
-
     public function finalSKTM(Request $request, $id)
     {
         // Cari data SKTM berdasarkan ID
@@ -163,27 +168,73 @@ class SKTMController extends Controller
         // Simpan perubahan ke database
         $data->save();
 
+        // Jika ada file produk yang diunggah, proses dan simpan
+        if ($request->hasFile('produk')) {
+            $file = $request->file('produk');
+            $fileName = 'produk_' . $id . '.' . $file->getClientOriginalExtension();
+            $filePath = $file->storeAs('public/pdf', $fileName);
+
+            // Simpan nama file PDF ke field 'produk'
+            $data->produk = $fileName;
+            $data->save();
+        }
+
         // Ambil data lurah berdasarkan role 'kelurahan'
         $lurah = User::where('role', 'kelurahan')->first();
 
-        // Generate PDF dengan mengirimkan data SKTM dan lurah
-        $pdf = $this->generateProductPDF($data, $lurah);
-
-        // Save PDF and get filename
-        $pdfName = $this->processProductPDFUpload($pdf, $id);
-
-        // Simpan nama file PDF ke field 'produk'
-        $data->produk = $pdfName;
-
-        // Simpan perubahan ke database
-        $data->save();
-
-        // Kirim file PDF ke pengguna terkait
-        $this->sendPDFToUser($data, 'produk');
+        // Kirim file PDF ke pengguna terkait jika produk sudah diunggah
+        if (!empty($data->produk)) {
+            $this->sendPDFToUser($data, 'produk');
+        }
 
         // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM berhasil difinalisasi.');
     }
+
+
+    // public function finalSKTM(Request $request, $id)
+    // {
+    //     // Cari data SKTM berdasarkan ID
+    //     $data = SKTM::findOrFail($id);
+
+    //     // Set nilai validasi menjadi 'final'
+    //     $data->validasi = 'final';
+
+    //     // Set masa berlaku dari request
+    //     $data->masa_berlaku = $request->masa_berlaku;
+
+    //     // Set waktu_finalisasi dengan datetime saat ini
+    //     $data->waktu_finalisasi = now();
+
+    //     // Kosongkan kolom keterangan jika ada nilainya
+    //     if (!empty($data->keterangan)) {
+    //         $data->keterangan = '';
+    //     }
+
+    //     // Simpan perubahan ke database
+    //     $data->save();
+
+    //     // Ambil data lurah berdasarkan role 'kelurahan'
+    //     $lurah = User::where('role', 'kelurahan')->first();
+
+    //     // Generate PDF dengan mengirimkan data SKTM dan lurah
+    //     $pdf = $this->generateProductPDF($data, $lurah);
+
+    //     // Save PDF and get filename
+    //     $pdfName = $this->processProductPDFUpload($pdf, $id);
+
+    //     // Simpan nama file PDF ke field 'produk'
+    //     $data->produk = $pdfName;
+
+    //     // Simpan perubahan ke database
+    //     $data->save();
+
+    //     // Kirim file PDF ke pengguna terkait
+    //     $this->sendPDFToUser($data, 'produk');
+
+    //     // Redirect ke halaman index dengan pesan sukses
+    //     return redirect()->route('sktms.index')->with('success', 'Pengajuan SKTM berhasil difinalisasi.');
+    // }
 
 
     public function rejectSKTM(Request $request, $id)
@@ -250,19 +301,20 @@ class SKTMController extends Controller
     }
 
 
-    private function generatePDF($data, $ketuaRW, $ketuaRT)
+    private function generatePDF($data, $ketuaRW, $ketuaRT, $user)
     {
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', true);
 
         $dompdf = new Dompdf($options);
-        $dompdf->loadHtml(view('report.surat_pengantar', compact('data', 'ketuaRW', 'ketuaRT'))->render());
+        $dompdf->loadHtml(view('report.surat_pengantar', compact('data', 'ketuaRW', 'ketuaRT', 'user'))->render());
         $dompdf->setPaper('F4', 'portrait');
         $dompdf->render();
 
         return $dompdf;
     }
+
 
     private function generateProductPDF($data, $lurah)
     {
