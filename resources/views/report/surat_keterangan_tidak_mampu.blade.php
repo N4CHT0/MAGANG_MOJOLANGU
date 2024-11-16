@@ -123,14 +123,24 @@
 
         .signature .qr {
             display: block;
+<<<<<<< HEAD
+            max-width: 70px;
+            max-height: auto;
+=======
             max-width: 35px;
             max-height: 35px;
+>>>>>>> d22b27a140b1ad5da7b30aa40a432cca3cb84bc1
         }
 
         .signature .ttd-img {
             display: block;
+<<<<<<< HEAD
+            max-width: auto;
+            max-height: 50px;
+=======
             max-width: 20px;
             max-height: 20px;
+>>>>>>> d22b27a140b1ad5da7b30aa40a432cca3cb84bc1
         }
 
         /* Style untuk footer */
@@ -166,6 +176,53 @@
             <table>
                 <tr>
                     <td>Nama</td>
+<<<<<<< HEAD
+                    <td>: AI</td>
+                </tr>
+                <tr>
+                    <td>Nomor KK</td>
+                    <td>: 356787878777</td>
+                </tr>
+                <tr>
+                    <td>NIK</td>
+                    <td>: 232312323213</td>
+                </tr>
+                <tr>
+                    <td>Tempat dan Tanggal Lahir</td>
+                    <td>: BALIKPAPAN, 31 DESEMBER 1974</td>
+                </tr>
+                <tr>
+                    <td>Jenis Kelamin</td>
+                    <td>: LAKI-LAKI</td>
+                </tr>
+                <tr>
+                    <td>Agama</td>
+                    <td>: ISLAM</td>
+                </tr>
+                <tr>
+                    <td>Status Perkawinan</td>
+                    <td>: Kawin</td>
+                </tr>
+                <tr>
+                    <td>Alamat</td>
+                    <td>: MOJOLANGU</td>
+                </tr>
+                <tr>
+                    <td>Pendidikan</td>
+                    <td>: SMK</td>
+                </tr>
+                <tr>
+                    <td>Keperluan</td>
+                    <td>: SKTM</td>
+                </tr>
+                <tr>
+                    <td>Tujuan</td>
+                    <td>: UNISMA</td>
+                </tr>
+                <tr>
+                    <td>Berlaku tanggal</td>
+                    <td>: 30 JULI 2024</td>
+=======
                     <td style="padding-left: 30px;">: {{ $data->nama_lengkap }}</td>
                 </tr>
                 <tr>
@@ -211,6 +268,7 @@
                 <tr>
                     <td>Berlaku tanggal</td>
                     <td>: {{ \Carbon\Carbon::parse($data->masa_berlaku)->translatedFormat('d F Y') }}</td>
+>>>>>>> d22b27a140b1ad5da7b30aa40a432cca3cb84bc1
                 </tr>
                 <tr>
                     <td>Berdasarkan Keterangan RT/RW</td>
@@ -234,15 +292,26 @@
                 <tr>
                     <td class="left">
                         <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/qr_sktm.jpg'))) }}"
+<<<<<<< HEAD
+                            alt="qr" />
+=======
                             alt="qr" style="max-width: 90px; max-height: 40px" />
+>>>>>>> d22b27a140b1ad5da7b30aa40a432cca3cb84bc1
                     </td>
                 </tr>
                 <tr>
                     <td class="right">
+<<<<<<< HEAD
+                        <p>Malang, 30 Juli 2024</p>
+                        <p>LURAH MOJOLANGU</p>
+                        <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/ttd_sktm.jpg'))) }}"
+                            alt="ttd" />
+=======
                         <p>Malang, {{ \Carbon\Carbon::parse($data->waktu_finalisasi)->translatedFormat('d F Y') }}</p>
                         <p>LURAH MOJOLANGU</p>
                         <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/ttd_sktm.jpg'))) }}"
                             alt="ttd" style="max-width: 200px; max-height: 45px" />
+>>>>>>> d22b27a140b1ad5da7b30aa40a432cca3cb84bc1
                     </td>
                 </tr>
             </table>
@@ -250,9 +319,7 @@
     </div>
 
     <div class="footer">
-        Sesuai dengan ketentuan peraturan perundang-undangan yang berlaku, surat ini telah ditandatangani secara
-        elektronik yang tersertifikasi oleh Balai Sertifikasi Elektronik (BSrE) sehingga tidak diperlukan tanda tangan
-        dan stempel basah.
+        Sesuai dengan ketentuan peraturan perundang-undangan yang berlaku, surat ini telah ditandatangani secara elektronik yang tersertifikasi oleh Balai Sertifikasi Elektronik (BSrE) sehingga tidak diperlukan tanda tangan dan stempel basah.
     </div>
 </body>
 
