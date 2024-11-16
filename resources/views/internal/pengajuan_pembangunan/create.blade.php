@@ -47,11 +47,17 @@
                                 <div class="md-6">
                                     <select id="kategori" class="form-control @error('kategori') is-invalid @enderror"
                                         name="kategori" required>
-                                        <option value="">Jalan</option>
+                                        <option value="">Pilih Kategori Pembangunan</option>
+                                        <option value="Jalan">Jalan</option>
                                         <option value="Irigasi">Irigasi</option>
                                         <option value="Taman">Taman</option>
                                         <option value="Gorong - Gorong">Gorong - Gorong</option>
-                                        <option value="Bangunan">Bangunan</option>
+                                        <option value="Jembatan">Jembatan</option>
+                                        <option value="Renovasi">Renovasi</option>
+                                        <option value="Pengajuan Barang">Pengajuan Barang</option>
+                                        <option value="Fasilitas Kesehatan">Fasilitas Kesehatan</option>
+                                        <option value="Fasilitas Olahraga">Fasilitas Olahraga</option>
+                                        <option value="Pembangunan Lainnya">Pembangunan Lainnya</option>
                                     </select>
 
                                     @error('kategori')

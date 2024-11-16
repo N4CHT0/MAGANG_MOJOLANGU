@@ -320,7 +320,7 @@ class KriteriaController extends Controller
 
     private function calculateConsistencyRatio($consistencyIndex, $n)
     {
-        $randomIndex = [0, 0, 0.58, 0.9, 1.12, 1.24, 1.32, 1.41, 1.45]; // Sampai ukuran 9
+        $randomIndex = [0, 0, 0.58, 0.9, 1.12, 1.24, 1.32, 1.41, 1.45, 1.49, 1.51, 1.48, 1.56, 1.57, 1.59]; // Sampai ukuran 14
 
         if ($n > count($randomIndex)) {
             // Jika n lebih besar dari yang didukung randomIndex, tampilkan pesan error atau defaultkan
