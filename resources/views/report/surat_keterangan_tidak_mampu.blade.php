@@ -121,17 +121,16 @@
             margin-top: 10mm;
         }
 
-        /* Style tambahan untuk mengatur ukuran gambar yang berbeda */
         .signature .qr {
-            width: 80px;
-            height: auto;
-            object-fit: contain;
+            display: block;
+            max-width: 70px;
+            max-height: auto;
         }
 
         .signature .ttd-img {
-            width: auto;
-            height: 50px;
-            object-fit: contain;
+            display: block;
+            max-width: auto;
+            max-height: 50px;
         }
 
         /* Style untuk footer */
@@ -164,53 +163,94 @@
                 Yang bertanda tangan dibawah ini Lurah Kelurahan Mojolangu, Kecamatan
                 Lowokwaru, menerangkan bahwa:
             </p>
-            <div class="data">
-                <p><span class="label">Nama</span>: {{ $data->nama_lengkap }}<br /></p>
-                <p><span class="label">Nomor KK</span>: {{ $data->Pengguna->no_kk }}<br /></p>
-                <p><span class="label">NIK</span>: {{ $data->nik }}<br /></p>
-                <p>
-                    <span class="label">Tempat dan Tanggal Lahir</span>:
-                    {{ $data->Pengguna->tempat_lahir }},
-                    {{ \Carbon\Carbon::parse($data->Pengguna->tanggal_lahir)->translatedFormat('d F Y') }}<br />
-
-                </p>
-                <p><span class="label">Jenis Kelamin</span>: {{ $data->jenis_kelamin }}<br /></p>
-                <p><span class="label">Agama</span>: {{ $data->Pengguna->agama }}<br /></p>
-                <p><span class="label">Status Perkawinan</span>: {{ $data->Pengguna->status_perkawinan }}<br /></p>
-                <p><span class="label">Alamat</span>: {{ $data->alamat }}<br /></p>
-                <p><span class="label">Pendidikan</span>: {{ $data->Pengguna->pendidikan }}<br /></p>
-                <p><span class="label">Keperluan</span>: {{ $data->keperluan }}<br /></p>
-                <p><span class="label">Tujuan</span>: {{ $data->tujuan }}<br /></p>
-                <p><span class="label">Berlaku Hingga</span>:
-                    {{ \Carbon\Carbon::parse($data->masa_berlaku)->translatedFormat('d F Y') }}<br /></p>
-                <p>
-                    <span class="label">Berdasarkan Keterangan</span>:
-                    .../.../..../../../2024<br />
-                </p>
-            </div>
-            <p>
-                <span class="label"></span>
-                1. Yang bersangkutan benar-benar penduduk Kelurahan Mojolangu
-                Kecamatan Lowokwaru Kota Malang.
-            </p>
-            <p>
-                <span class="label"></span>
-                2. Berdasarkan Keterangan RT/RW setempat di atas serta pernyataan
-                pemohon, yang bersangkutan tergolong orang yang tidak mampu / miskin.
-            </p>
-            <p>Demikian untuk menjadikan periksa dan dipergunakan sepertinya</p>
+            <table>
+                <tr>
+                    <td>Nama</td>
+                    <td>: AI</td>
+                </tr>
+                <tr>
+                    <td>Nomor KK</td>
+                    <td>: 356787878777</td>
+                </tr>
+                <tr>
+                    <td>NIK</td>
+                    <td>: 232312323213</td>
+                </tr>
+                <tr>
+                    <td>Tempat dan Tanggal Lahir</td>
+                    <td>: BALIKPAPAN, 31 DESEMBER 1974</td>
+                </tr>
+                <tr>
+                    <td>Jenis Kelamin</td>
+                    <td>: LAKI-LAKI</td>
+                </tr>
+                <tr>
+                    <td>Agama</td>
+                    <td>: ISLAM</td>
+                </tr>
+                <tr>
+                    <td>Status Perkawinan</td>
+                    <td>: Kawin</td>
+                </tr>
+                <tr>
+                    <td>Alamat</td>
+                    <td>: MOJOLANGU</td>
+                </tr>
+                <tr>
+                    <td>Pendidikan</td>
+                    <td>: SMK</td>
+                </tr>
+                <tr>
+                    <td>Keperluan</td>
+                    <td>: SKTM</td>
+                </tr>
+                <tr>
+                    <td>Tujuan</td>
+                    <td>: UNISMA</td>
+                </tr>
+                <tr>
+                    <td>Berlaku tanggal</td>
+                    <td>: 30 JULI 2024</td>
+                </tr>
+                <tr>
+                    <td>Berdasarkan Keterangan RT/RW</td>
+                    <td>: .../.../..../../../2024</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        1. Yang bersangkutan benar-benar penduduk Kelurahan Mojolangu
+                        Kecamatan Lowokwaru Kota Malang.<br />
+                        2. Berdasarkan Keterangan RT/RW setempat di atas serta pernyataan
+                        pemohon, yang bersangkutan tergolong orang yang tidak mampu /
+                        miskin.
+                    </td>
+                </tr>
+            </table>
+            <p>Demikian untuk menjadikan periksa dan dipergunakan sepertinya.</p>
         </div>
         <div class="signature">
-            <p>Malang, {{ \Carbon\Carbon::parse($data->waktu_finalisasi)->translatedFormat('d F Y') }}</p>
-            <p>Lurah Kelurahan Mojolangu</p>
-            <p class="ttd">{{ $lurah->nama_lengkap }}</p>
+            <table>
+                <tr>
+                    <td class="left">
+                        <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/qr_sktm.jpg'))) }}"
+                            alt="qr" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right">
+                        <p>Malang, 30 Juli 2024</p>
+                        <p>LURAH MOJOLANGU</p>
+                        <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/ttd_sktm.jpg'))) }}"
+                            alt="ttd" />
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 
     <div class="footer">
-        Sesuai dengan ketentuan peraturan perundang-undangan yang berlaku, surat ini telah ditandatangani secara
-        elektronik yang tersertifikasi oleh Balai Sertifikasi Elektronik (BSrE) sehingga tidak diperlukan tanda tangan
-        dan stempel basah.
+        Sesuai dengan ketentuan peraturan perundang-undangan yang berlaku, surat ini telah ditandatangani secara elektronik yang tersertifikasi oleh Balai Sertifikasi Elektronik (BSrE) sehingga tidak diperlukan tanda tangan dan stempel basah.
     </div>
 </body>
 
