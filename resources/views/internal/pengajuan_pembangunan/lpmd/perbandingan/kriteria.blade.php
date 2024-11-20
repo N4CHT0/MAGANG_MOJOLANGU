@@ -71,7 +71,7 @@
                                                 <select
                                                     name="comparisons[{{ $comparison['kriteria1']->id }}_{{ $comparison['kriteria2']->id }}]"
                                                     class="form-select nilai-perbandingan select-small" disabled required>
-                                                    @foreach ([1, 3, 5, 7, 9] as $value)
+                                                    @foreach ([1, 2, 3, 4, 5, 6, 7, 8, 9] as $value)
                                                         <option value="{{ $value }}"
                                                             {{ $value == $selectedValue ? 'selected' : '' }}>
                                                             {{ $value }}
