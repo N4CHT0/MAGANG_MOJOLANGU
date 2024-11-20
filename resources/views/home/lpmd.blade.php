@@ -59,7 +59,7 @@
     <div class="col-12 my-special-card-container">
         <div class="card">
             <div class="card-header bg-info d-flex justify-content-between align-items-center">
-                <span style="color: white; font-size: 20px;font-weight: 400;">Biodata</span>
+                <span style="color: white; font-size: 16px;font-weight: 400;">Biodata</span>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -96,41 +96,6 @@
                                     <span>{{ Auth::user()->rw }}</span>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12 my-special-card-container">
-            <div class="card">
-                <div class="card-header bg-info d-flex justify-content-between align-items-center">
-                    <span style="color: white; font-size: 20px;font-weight: 400;">Menu</span>
-                </div>
-
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <a href="{{ route('pembangunan.validasi') }}" class="my-special-card-link">
-                                <div class="my-special-card h-100 position-relative">
-                                    <img src="{{ asset('admin-master/assets/images/pembangunan.jpg') }}"
-                                        class="card-img-top" alt="" style="max-height: 200px; object-fit: cover;">
-                                    <div class="my-special-hover-text">
-                                        Validasi Usulan Pembangunan
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <a href="#" class="my-special-card-link">
-                                <div class="my-special-card h-100 position-relative">
-                                    <img src="{{ asset('admin-master/assets/images/pembangunan.jpg') }}"
-                                        class="card-img-top" alt="" style="max-height: 200px; object-fit: cover;">
-                                    <div class="my-special-hover-text">
-                                        Riwayat Usulan Pembangunan
-                                    </div>
-                                </div>
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -207,8 +172,7 @@
                         </div>
                         <div class="form-group">
                             <label for="telegram_number">ID Telegram</label>
-                            <input type="text" name="telegram_number" id="telegram_number" class="form-control"
-                                required>
+                            <input type="text" name="telegram_number" id="telegram_number" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="tempat_lahir">Tempat Lahir</label>

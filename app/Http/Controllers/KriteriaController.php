@@ -5,11 +5,62 @@ namespace App\Http\Controllers;
 use App\Models\HasilPerbandinganAHP;
 use App\Models\Kriteria;
 use App\Models\Pembangunan;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Illuminate\Http\Request;
 
 class KriteriaController extends Controller
 {
+    public function downloadPdf($id)
+    {
+        $data = HasilPerbandinganAHP::findOrFail($id);
+
+        // Pastikan file PDF ada sebelum mencoba mengunduh
+        $path = storage_path('app/public/pdf/' . $data->file_pdf);
+
+        if (!file_exists($path)) {
+            return redirect()->back()->with('error', 'File PDF tidak ditemukan.');
+        }
+
+        return response()->download($path, $data->file_pdf);
+    }
+
+
+    public function showRankingData()
+    {
+        $pembangunan = HasilPerbandinganAHP::all();
+        return view('internal.pengajuan_pembangunan.lpmd.index', compact('pembangunan'));
+    }
+
+
+    private function sendToLurah(Request $request)
+    {
+        // Ambil semua pengguna dengan role 'kelurahan'
+        $users = User::where('role', 'kelurahan')->get();
+
+        // Nama file PDF dan path lengkap
+        $fileName = $request->file_pdf . '.pdf';
+        $filePath = storage_path('app/public/pdf/' . $fileName);
+
+        // Pastikan file ada sebelum mengirim
+        if (!file_exists($filePath)) {
+            return; // Tambahkan logika error handling jika file tidak ditemukan
+        }
+
+        // Pesan yang dikirim bersama file PDF
+        $message = "Berikut laporan perbandingan ranking terbaru.";
+
+        // Kirim PDF ke setiap user dengan telegram_number
+        foreach ($users as $user) {
+            if ($user->telegram_number) {
+                // Kirim file PDF ke user melalui Telegram
+                $this->sendFileToTelegram($user->telegram_number, $filePath);
+                // Kirim pesan teks opsional jika ingin menyertakan pesan terpisah
+                $this->sendMessageToTelegram($user->telegram_number, $message);
+            }
+        }
+    }
+
     public function saveRankingPdf(Request $request)
     {
         $request->validate([
@@ -31,12 +82,15 @@ class KriteriaController extends Controller
         // Update model dengan nama file dan nama input
         $hasilPerbandingan->update([
             'file_pdf' => $fileName,
-            'input_nama' => $request->input_nama
+            'input_nama' => $request->input_nama,
+            'status' => 'Final'
         ]);
 
-        return redirect()->back()->with('success', 'Laporan PDF berhasil disimpan!');
-    }
+        // Panggil fungsi untuk mengirim PDF ke Telegram lurah
+        $this->sendToLurah($request);
 
+        return redirect()->back()->with('success', 'Laporan PDF berhasil disimpan dan dikirim ke Lurah!');
+    }
 
     public function calculateFinalScore()
     {
@@ -119,9 +173,19 @@ class KriteriaController extends Controller
                 foreach ($alternatif as $a2) {
                     if ($a1->id < $a2->id) {
                         $selected = $request->input("comparisons.{$k->id}.{$a1->id}_{$a2->id}");
-                        $value = $selected == "1"
-                            ? $request->input("values.{$k->id}.{$a1->id}_{$a2->id}")
-                            : 1 / $request->input("values.{$k->id}.{$a1->id}_{$a2->id}");
+                        $value = $request->input("values.{$k->id}.{$a1->id}_{$a2->id}");
+                        if ($selected == "1") {
+                            // Pastikan nilai bukan nol atau kosong sebelum digunakan
+                            $value = $value ? $value : 1; // Set nilai default jika kosong
+                            $matrix[$a1->id][$a2->id] = $value;
+                            $matrix[$a2->id][$a1->id] = 1 / $value;
+                        } else {
+                            // Cek jika $value adalah nol atau kosong untuk menghindari pembagian dengan nol
+                            $value = $value ? $value : 1; // Set nilai default jika kosong
+                            $matrix[$a1->id][$a2->id] = 1 / $value;
+                            $matrix[$a2->id][$a1->id] = $value;
+                        }
+
 
                         $matrix[$a1->id][$a2->id] = $selected == "1" ? $value : 1 / $value;
                         $matrix[$a2->id][$a1->id] = $selected == "1" ? 1 / $value : $value;

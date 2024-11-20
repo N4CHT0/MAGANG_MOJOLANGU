@@ -43,8 +43,26 @@
                                 <tbody>
                                     @php
                                         $no = 1;
+                                        $kriteriaValues = [
+                                            'Manfaat Sosial' => 9,
+                                            'Urgensi Proyek' => 8,
+                                            'Biaya Proyek' => 6,
+                                            'Dampak Ekonomi' => 6,
+                                            'Ketersediaan SDM' => 4,
+                                            'Keberlanjutan Manfaat' => 7,
+                                            'Kesiapan Infrastruktur' => 5,
+                                            'Dukungan Masyarakat' => 3,
+                                            'Efisiensi Waktu' => 3,
+                                            'Risiko Proyek' => 4,
+                                        ];
                                     @endphp
                                     @foreach ($comparisons as $index => $comparison)
+                                        @php
+                                            $k1Value = $kriteriaValues[$comparison['kriteria1']->nama_kriteria] ?? 0;
+                                            $k2Value = $kriteriaValues[$comparison['kriteria2']->nama_kriteria] ?? 0;
+                                            $selectedValue = abs($k1Value - $k2Value); // Nilai default berdasarkan selisih
+                                            $selectedValue = $selectedValue < 1 ? 1 : $selectedValue; // Minimal 1
+                                        @endphp
                                         <tr>
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $comparison['kriteria1']->nama_kriteria }}</td>
@@ -53,11 +71,12 @@
                                                 <select
                                                     name="comparisons[{{ $comparison['kriteria1']->id }}_{{ $comparison['kriteria2']->id }}]"
                                                     class="form-select nilai-perbandingan select-small" disabled required>
-                                                    <option value="1">1</option>
-                                                    <option value="3">3</option>
-                                                    <option value="5">5</option>
-                                                    <option value="7">7</option>
-                                                    <option value="9">9</option>
+                                                    @foreach ([1, 3, 5, 7, 9] as $value)
+                                                        <option value="{{ $value }}"
+                                                            {{ $value == $selectedValue ? 'selected' : '' }}>
+                                                            {{ $value }}
+                                                        </option>
+                                                    @endforeach
                                                 </select>
                                             </td>
                                         </tr>

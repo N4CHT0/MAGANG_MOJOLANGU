@@ -76,6 +76,11 @@ Route::middleware(['auth', 'role:lpmd'])->group(function () {
     Route::post('/compare-nilai-submit', [KriteriaController::class, 'storeComparisonValue'])->name('nilai.submit');
     Route::get('/hasil-prioritas', [KriteriaController::class, 'calculateFinalScore'])->name('hasil.prioritas');
     Route::post('/save-ranking-pdf', [KriteriaController::class, 'saveRankingPdf'])->name('save-ranking-pdf');
+    // Route untuk menampilkan data perankingan
+    Route::get('/perbandingan', [KriteriaController::class, 'showRankingData'])->name('perbandingan.index');
+
+    // Route untuk mengunduh PDF
+    Route::get('/perbandingan/{id}/download', [KriteriaController::class, 'downloadPdf'])->name('download.pdf');
 });
 
 // Group untuk role 'kelurahan'

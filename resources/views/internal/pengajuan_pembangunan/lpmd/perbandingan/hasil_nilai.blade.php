@@ -115,6 +115,12 @@
             </table>
         </div>
 
+        <div class="col-12 mt-3">
+            <a href="{{ route('hasil.prioritas') }}" class="btn btn-success">
+                Lanjutkan Perhitungan
+            </a>
+        </div>
+
 
     </div>
 @endsection

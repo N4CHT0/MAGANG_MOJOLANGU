@@ -124,5 +124,11 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-12 mt-3">
+            <a href="{{ route('nilai.perbandingan') }}" class="btn btn-primary">
+                Lanjutkan Perhitungan
+            </a>
+        </div>
     </div>
 @endsection

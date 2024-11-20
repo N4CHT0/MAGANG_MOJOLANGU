@@ -138,6 +138,11 @@
                         <li> <a class="waves-effect waves-dark" href="{{ route('home') }}" aria-expanded="false"><i
                                     class="fa fa-tachometer"></i><span class="hide-menu">Beranda</span></a>
                         </li>
+                        <li> <a class="waves-effect waves-dark" href="{{ route('pembangunan.validasi') }}"
+                                aria-expanded="false"><i class="fa fa-check-square-o"></i><span
+                                    class="hide-menu">Validasi
+                                    Usulan</span></a>
+                        </li>
                         <li> <a class="waves-effect waves-dark" href="{{ route('kriteria.index') }}"
                                 aria-expanded="false"><i class="fa fa-list-ol"></i><span class="hide-menu">Data
                                     Kriteria</span></a>
@@ -148,18 +153,11 @@
                         </li>
                         <li> <a class="waves-effect waves-dark" href="{{ route('kriteria.perbandingan') }}"
                                 aria-expanded="false"><i class="fa fa-connectdevelop"></i><span
-                                    style="font-size: 14px" class="hide-menu">Perbandingan Kriteria</span></a>
+                                    style="font-size: 14px" class="hide-menu">Proses Data</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="{{ route('nilai.perbandingan') }}"
-                                aria-expanded="false"><i class="fa fa-deviantart"></i><span style="font-size: 14px"
-                                    class="hide-menu">Perbandingan Nilai</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="{{ route('hasil.prioritas') }}"
-                                aria-expanded="false"><i class="fa fa-slideshare"></i><span class="hide-menu">Hasil
-                                    Akhir</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="#" aria-expanded="false"><i
-                                    class="fa fa-archive"></i><span class="hide-menu">Laporan Akhir</span></a>
+                        <li> <a class="waves-effect waves-dark" href="{{ route('perbandingan.index') }}"
+                                aria-expanded="false"><i class="fa fa-archive"></i><span class="hide-menu">Data
+                                    Perankingan</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="{{ route('logout') }}" aria-expanded="false"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i

@@ -71,7 +71,7 @@
 
         <!-- Button untuk Submit dan Menyimpan PDF -->
         <div class="col-12 mt-3">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#savePdfModal">
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#savePdfModal">
                 Simpan sebagai PDF
             </button>
         </div>
@@ -90,7 +90,8 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="inputNama">Nama</label>
-                            <input type="text" class="form-control" id="inputNama" name="input_nama" required>
+                            <input type="text" class="form-control" id="inputNama" name="input_nama"
+                                value="{{ Auth::user()->nama_lengkap }}" required readonly>
                         </div>
                         <div class="form-group mt-3">
                             <label for="pdfName">Nama File PDF</label>

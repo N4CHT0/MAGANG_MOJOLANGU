@@ -13,6 +13,7 @@ class Kriteria extends Model
     protected $fillable = [
         'id',
         'nama_kriteria',
+        'bobot',
         'deskripsi',
     ];
 }
