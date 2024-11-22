@@ -57,9 +57,22 @@
                                                     @php
                                                         $a1Kategori = $kategoriValues[$a1->kategori] ?? 0;
                                                         $a2Kategori = $kategoriValues[$a2->kategori] ?? 0;
-                                                        $isA1Higher = $a1Kategori > $a2Kategori;
-                                                        $selectedValue = max($a1Kategori, $a2Kategori);
+
+                                                        if ($a1Kategori > $a2Kategori) {
+                                                            // Jalan lebih penting
+                                                            $selectedValue = $a1Kategori;
+                                                            $isA1Higher = true;
+                                                        } elseif ($a1Kategori < $a2Kategori) {
+                                                            // Taman lebih penting
+                                                            $selectedValue = $a2Kategori;
+                                                            $isA1Higher = false;
+                                                        } else {
+                                                            // Sama penting
+                                                            $selectedValue = 1;
+                                                            $isA1Higher = true;
+                                                        }
                                                     @endphp
+
                                                     <tr>
                                                         <td>{{ $no++ }}</td>
                                                         <td>

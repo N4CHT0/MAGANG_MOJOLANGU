@@ -60,8 +60,22 @@
                                         @php
                                             $k1Value = $kriteriaValues[$comparison['kriteria1']->nama_kriteria] ?? 0;
                                             $k2Value = $kriteriaValues[$comparison['kriteria2']->nama_kriteria] ?? 0;
-                                            $selectedValue = abs($k1Value - $k2Value); // Nilai default berdasarkan selisih
-                                            $selectedValue = $selectedValue < 1 ? 1 : $selectedValue; // Minimal 1
+                                            $k1Value = $kriteriaValues[$comparison['kriteria1']->nama_kriteria] ?? 0;
+                                            $k2Value = $kriteriaValues[$comparison['kriteria2']->nama_kriteria] ?? 0;
+
+                                            if ($k1Value > $k2Value) {
+                                                // Kriteria 1 lebih penting dari Kriteria 2
+                                                $selectedValue = $k1Value - $k2Value + 1; // Skala 1-9
+                                            } elseif ($k1Value < $k2Value) {
+                                                // Kriteria 2 lebih penting dari Kriteria 1
+                                                $selectedValue = 9 - ($k2Value - $k1Value); // Skala 1-9 terbalik
+                                            } else {
+                                                // Jika sama penting
+                                                $selectedValue = 1;
+                                            }
+
+                                            // Pastikan nilai berada dalam rentang 1-9
+                                            $selectedValue = max(1, min($selectedValue, 9));
                                         @endphp
                                         <tr>
                                             <td>{{ $no++ }}</td>
