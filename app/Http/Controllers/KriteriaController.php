@@ -167,41 +167,30 @@ class KriteriaController extends Controller
             $dataPerbandingan['perbandingan_alternatif'] = [];
         }
 
+        $finalNormalizedMatrix = []; // Untuk hasil normalisasi akhir (alternatif)
+
         foreach ($kriteria as $k) {
             $matrix = [];
+
             foreach ($alternatif as $a1) {
                 foreach ($alternatif as $a2) {
                     if ($a1->id < $a2->id) {
-                        $selected = $request->input("comparisons.{$k->id}.{$a1->id}_{$a2->id}");
-                        $value = $request->input("values.{$k->id}.{$a1->id}_{$a2->id}");
-                        if ($selected == "1") {
-                            // Pastikan nilai bukan nol atau kosong sebelum digunakan
-                            $value = $value ? $value : 1; // Set nilai default jika kosong
-                            $matrix[$a1->id][$a2->id] = $value;
-                            $matrix[$a2->id][$a1->id] = 1 / $value;
-                        } else {
-                            // Cek jika $value adalah nol atau kosong untuk menghindari pembagian dengan nol
-                            $value = $value ? $value : 1; // Set nilai default jika kosong
-                            $matrix[$a1->id][$a2->id] = 1 / $value;
-                            $matrix[$a2->id][$a1->id] = $value;
-                        }
-
-
-                        $matrix[$a1->id][$a2->id] = $selected == "1" ? $value : 1 / $value;
-                        $matrix[$a2->id][$a1->id] = $selected == "1" ? 1 / $value : $value;
-                    } else if ($a1->id == $a2->id) {
-                        $matrix[$a1->id][$a2->id] = 1;
+                        $value = $request->input("values.{$k->id}.{$a1->id}_{$a2->id}") ?: 1;
+                        $matrix[$a1->id][$a2->id] = $value;
+                        $matrix[$a2->id][$a1->id] = 1 / $value;
+                    } elseif ($a1->id == $a2->id) {
+                        $matrix[$a1->id][$a2->id] = 1; // Diagonal utama
                     }
                 }
             }
 
-            // Step 1: Hitung jumlah kolom untuk setiap kolom matriks alternatif
+            // Hitung jumlah kolom untuk normalisasi
             $columnSums = [];
             foreach ($alternatif as $a) {
                 $columnSums[$a->id] = array_sum(array_column($matrix, $a->id));
             }
 
-            // Step 2: Normalisasi matriks alternatif berdasarkan jumlah kolom yang telah dihitung
+            // Normalisasi Matriks
             $normalizedMatrix = [];
             $priorityVector = [];
             foreach ($alternatif as $a1) {
@@ -211,31 +200,23 @@ class KriteriaController extends Controller
                     $normalizedMatrix[$a1->id][$a2->id] = round($normalizedValue, 3);
                     $rowSum += $normalizedValue;
                 }
-                $priorityVector[$a1->id] = round($rowSum / count($alternatif), 5);
+                $priorityVector[$a1->id] = round($rowSum / count($alternatif), 3);
             }
 
-            // Step 3: Simpan hasil perbandingan alternatif untuk kriteria ini
+            // Tambahkan hasil prioritas alternatif ke tabel hasil akhir
+            foreach ($priorityVector as $altId => $value) {
+                $finalNormalizedMatrix[$altId][$k->id] = $value;
+            }
+
             $dataPerbandingan['perbandingan_alternatif'][$k->id] = [
                 'matrix' => $matrix,
                 'normalizedMatrix' => $normalizedMatrix,
                 'priorityVector' => $priorityVector,
-                'columnSums' => $columnSums
+                'columnSums' => $columnSums,
             ];
         }
 
-        // Menghitung Hasil Normalisasi Akhir untuk Setiap Alternatif
-        $finalNormalizedResults = [];
-        foreach ($alternatif as $alt) {
-            $finalNormalizedResults[$alt->id] = [];
-        }
-
-        foreach ($dataPerbandingan['perbandingan_alternatif'] as $kriteriaId => $data) {
-            foreach ($data['priorityVector'] as $altId => $priority) {
-                $finalNormalizedResults[$altId][$kriteriaId] = $priority;
-            }
-        }
-
-        // Simpan hasil perbandingan yang sudah diperbarui
+        // Simpan hasil ke database
         $hasilPerbandingan->update([
             'data_perbandingan' => $dataPerbandingan,
         ]);
@@ -244,9 +225,11 @@ class KriteriaController extends Controller
             'dataPerbandinganAlternatif' => $dataPerbandingan['perbandingan_alternatif'],
             'kriteria' => $kriteria,
             'alternatif' => $alternatif,
-            'finalNormalizedResults' => $finalNormalizedResults
+            'finalNormalizedMatrix' => $finalNormalizedMatrix, // Hasil normalisasi alternatif
         ]);
     }
+
+
 
     public function compareValue()
     {
