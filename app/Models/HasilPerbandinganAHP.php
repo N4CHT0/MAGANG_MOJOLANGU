@@ -11,15 +11,21 @@ class HasilPerbandinganAHP extends Model
 
     protected $table = 'hasil_perbandingan_ahp';
 
+    // Kolom yang dapat diisi secara massal
     protected $fillable = [
         'data_perbandingan',
         'perangkingan_pembangunan',
         'file_pdf',
-        'input_nama'
+        'input_nama',
+        'status',
     ];
 
+    // Pastikan primary key adalah id (default Eloquent)
+    protected $primaryKey = 'id';
+
+    // Pastikan casting JSON bekerja
     protected $casts = [
-        'data_perbandingan' => 'array', // Mengonversi JSON otomatis menjadi array PHP
-        'perangkingan_pembangunan' => 'array' // Untuk menyimpan data perangkingan sebagai array
+        'data_perbandingan' => 'array',
+        'perangkingan_pembangunan' => 'array',
     ];
 }

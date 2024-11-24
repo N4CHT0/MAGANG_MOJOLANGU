@@ -11,6 +11,102 @@ use Illuminate\Http\Request;
 
 class KriteriaController extends Controller
 {
+    public function handleValidation(Request $request)
+    {
+        $option = $request->input('option');
+
+        if (!$option) {
+            return redirect()->back()->with('error', 'Pilihan tidak valid.');
+        }
+
+        $request->session()->forget('validated');
+        $hasilPerbandingan = HasilPerbandinganAHP::latest()->first();
+
+        switch ($option) {
+            case 'new_data':
+                if ($hasilPerbandingan) {
+                    $hasilPerbandingan->delete();
+                }
+                HasilPerbandinganAHP::create(['data_perbandingan' => [], 'status' => 'proses_pertama']);
+                return redirect()->route('kriteria.perbandingan')->with('info', 'Data baru berhasil dibuat. Mulai proses pertama.');
+
+            case 'new_id_data':
+                HasilPerbandinganAHP::create(['data_perbandingan' => [], 'status' => 'proses_pertama']);
+                return redirect()->route('kriteria.perbandingan')->with('info', 'Data baru berhasil dibuat dengan ID baru.');
+
+            case 'update_alternatif':
+                if (!$hasilPerbandingan || $hasilPerbandingan->status === 'proses_pertama') {
+                    return redirect()->route('validate.process')->with('error', 'Proses kedua belum bisa dilanjutkan. Mulai dari proses pertama.');
+                }
+                return redirect()->route('nilai.perbandingan')->with('info', 'Silakan lanjutkan proses perbandingan alternatif.');
+
+            case 'update_kriteria':
+                if (!$hasilPerbandingan || $hasilPerbandingan->status === 'proses_kedua') {
+                    return redirect()->route('validate.process')->with('error', 'Proses pertama belum bisa diperbarui. Mulai dari proses pertama.');
+                }
+                return redirect()->route('kriteria.perbandingan')->with('info', 'Silakan ubah nilai perbandingan kriteria.');
+
+            case 'overwrite': // Tambahkan logika untuk overwrite
+                if ($hasilPerbandingan) {
+                    $hasilPerbandingan->update([
+                        'data_perbandingan' => [], // Reset data
+                        'status' => 'proses_pertama', // Mulai kembali dari proses pertama
+                    ]);
+                }
+                return redirect()->route('kriteria.perbandingan')->with('info', 'Data berhasil ditimpa. Mulai kembali dari proses pertama.');
+
+            default:
+                return redirect()->back()->with('error', 'Pilihan tidak valid.');
+        }
+    }
+
+
+
+
+    public function validateProcess(Request $request)
+    {
+        $hasilPerbandingan = HasilPerbandinganAHP::latest()->first();
+
+        if (!$hasilPerbandingan) {
+            $request->session()->forget('validated');
+            return redirect()->route('kriteria.perbandingan')->with('info', 'Tidak ada data sebelumnya. Mulai proses pertama.');
+        }
+
+        $status = $hasilPerbandingan->status ?? 'proses_pertama';
+        $options = [];
+
+        if ($status === 'proses_pertama') {
+            $options = [
+                'new_data' => 'Buat sebagai data baru (reset dan mulai proses pertama)',
+                'new_id_data' => 'Buat sebagai data baru dengan ID baru',
+                'overwrite' => 'Timpa data saat ini (proses pertama)',
+            ];
+        } elseif ($status === 'proses_kedua') {
+            $options = [
+                'new_data' => 'Buat sebagai data baru (reset dan mulai proses pertama)',
+                'new_id_data' => 'Buat sebagai data baru dengan ID baru',
+                'update_alternatif' => 'Lanjutkan proses perbandingan alternatif (proses kedua)',
+            ];
+        } elseif ($status === 'proses_akhir') {
+            $options = [
+                'new_data' => 'Buat sebagai data baru (reset dan mulai proses pertama)',
+                'new_id_data' => 'Buat sebagai data baru dengan ID baru',
+                'update_alternatif' => 'Ubah nilai proses kedua (perbandingan alternatif)',
+                'update_kriteria' => 'Ubah nilai proses pertama (perbandingan kriteria)',
+                'overwrite' => 'Timpa data saat ini (proses akhir)', // Tambahkan opsi overwrite di sini
+            ];
+        }
+
+        $request->session()->put('validated', true);
+
+        return view('internal.pengajuan_pembangunan.lpmd.validasi.proses', [
+            'options' => $options,
+            'hasilPerbandingan' => $hasilPerbandingan,
+        ]);
+    }
+
+
+
     public function downloadPdf($id)
     {
         $data = HasilPerbandinganAHP::findOrFail($id);
@@ -83,7 +179,7 @@ class KriteriaController extends Controller
         $hasilPerbandingan->update([
             'file_pdf' => $fileName,
             'input_nama' => $request->input_nama,
-            'status' => 'Final'
+            'status' => 'final'
         ]);
 
         // Panggil fungsi untuk mengirim PDF ke Telegram lurah
@@ -94,10 +190,15 @@ class KriteriaController extends Controller
 
     public function calculateFinalScore()
     {
-        $hasilPerbandingan = HasilPerbandinganAhp::latest()->first();
+        $hasilPerbandingan = HasilPerbandinganAHP::latest()->first();
 
-        if (!$hasilPerbandingan) {
-            return redirect()->back()->with('error', 'Data perbandingan kriteria belum tersedia.');
+        // Jika data sudah dalam status proses_akhir, arahkan ke halaman validasi
+        if ($hasilPerbandingan && $hasilPerbandingan->status === 'proses_akhir') {
+            return redirect()->route('validate.process')->with('info', 'Proses akhir sudah selesai. Validasi diperlukan untuk melanjutkan.');
+        }
+
+        if (!$hasilPerbandingan || $hasilPerbandingan->status !== 'proses_kedua') {
+            return redirect()->back()->with('error', 'Proses kedua belum selesai. Lanjutkan proses kedua terlebih dahulu.');
         }
 
         $dataPerbandingan = $hasilPerbandingan->data_perbandingan;
@@ -140,9 +241,10 @@ class KriteriaController extends Controller
 
         $topPriority = $finalScores[0];
 
-        // Simpan hasil perangkingan ke dalam field perangkingan_pembangunan
+        // Simpan hasil perangkingan dan ubah status ke proses akhir
         $hasilPerbandingan->update([
-            'perangkingan_pembangunan' => $finalScores
+            'perangkingan_pembangunan' => $finalScores,
+            'status' => 'proses_akhir', // Status proses akhir
         ]);
 
         return view('internal.pengajuan_pembangunan.lpmd.perbandingan.hasil_prioritas', [
@@ -152,15 +254,24 @@ class KriteriaController extends Controller
         ]);
     }
 
+
+
+
     public function storeComparisonValue(Request $request)
     {
+        $hasilPerbandingan = HasilPerbandinganAHP::latest()->first();
+
+        // Jika data sudah ada dan statusnya proses_kedua, arahkan ke halaman validasi
+        if ($hasilPerbandingan && $hasilPerbandingan->status === 'proses_kedua' && !empty($hasilPerbandingan->data_perbandingan['perbandingan_alternatif'])) {
+            return redirect()->route('validate.process')->with('info', 'Proses kedua sudah selesai. Silakan validasi untuk melanjutkan.');
+        }
+
+        if (!$hasilPerbandingan || $hasilPerbandingan->status !== 'proses_pertama') {
+            return redirect()->back()->with('error', 'Proses pertama belum selesai. Mulai dari proses pertama.');
+        }
+
         $kriteria = Kriteria::all();
         $alternatif = Pembangunan::all();
-        $hasilPerbandingan = HasilPerbandinganAhp::latest()->first();
-
-        if (!$hasilPerbandingan) {
-            return redirect()->back()->with('error', 'Data perbandingan kriteria belum tersedia.');
-        }
 
         $dataPerbandingan = $hasilPerbandingan->data_perbandingan;
         if (!isset($dataPerbandingan['perbandingan_alternatif'])) {
@@ -216,9 +327,10 @@ class KriteriaController extends Controller
             ];
         }
 
-        // Simpan hasil ke database
+        // Simpan hasil ke database dan ubah status ke proses kedua
         $hasilPerbandingan->update([
             'data_perbandingan' => $dataPerbandingan,
+            'status' => 'proses_kedua', // Status proses kedua
         ]);
 
         return view('internal.pengajuan_pembangunan.lpmd.perbandingan.hasil_nilai', [
@@ -228,6 +340,8 @@ class KriteriaController extends Controller
             'finalNormalizedMatrix' => $finalNormalizedMatrix, // Hasil normalisasi alternatif
         ]);
     }
+
+
 
 
 
@@ -249,8 +363,27 @@ class KriteriaController extends Controller
         return view('internal.pengajuan_pembangunan.lpmd.perbandingan.nilai', compact('comparisons', 'kriteria', 'alternatif'));
     }
 
+    // Simpan Perbandingan Kriteria (Proses Pertama)
     public function storeComparison(Request $request)
     {
+        $request->session()->forget('validated'); // Hapus session validasi
+        $hasilPerbandingan = HasilPerbandinganAHP::latest()->first();
+
+        // Jika data sudah ada dan statusnya proses_pertama, arahkan ke halaman validasi
+        if ($hasilPerbandingan && $hasilPerbandingan->status === 'proses_pertama' && !empty($hasilPerbandingan->data_perbandingan['perbandingan_kriteria'])) {
+            return redirect()->route('validate.process')->with('info', 'Proses pertama sudah selesai. Silakan validasi untuk melanjutkan.');
+        }
+
+        // Jika data belum ada, buat data baru
+        if (!$hasilPerbandingan) {
+            $hasilPerbandingan = HasilPerbandinganAHP::create([
+                'data_perbandingan' => [
+                    'perbandingan_kriteria' => [] // Data dasar untuk memulai proses pertama
+                ],
+                'status' => 'proses_pertama',
+            ]);
+        }
+
         if (is_null($request->comparisons)) {
             return redirect()->back()->with('error', 'Tidak ada data perbandingan yang diterima.');
         }
@@ -264,26 +397,20 @@ class KriteriaController extends Controller
 
         // Inisialisasi matriks perbandingan berpasangan
         $matrix = array_fill(0, $n, array_fill(0, $n, 1));
-
         foreach ($request->comparisons as $key => $value) {
             $indices = explode('_', $key);
             if (count($indices) < 2) {
                 continue;
             }
-
             $i = (int)$indices[0] - 1;
             $j = (int)$indices[1] - 1;
-
             $matrix[$i][$j] = (float)$value;
             $matrix[$j][$i] = ($value == 1) ? 1 : (1 / (float)$value);
         }
 
         $initialMatrix = $matrix;
-
-        // Hitung jumlah setiap kolom untuk normalisasi
         $columnSums = array_map('array_sum', array_map(null, ...$matrix));
 
-        // Normalisasi matriks dan hitung priority vector
         $normalizedMatrix = [];
         $priorityVector = [];
         foreach ($matrix as $i => $row) {
@@ -296,12 +423,10 @@ class KriteriaController extends Controller
             $priorityVector[$i] = round($rowSum / $n, 5);
         }
 
-        // Hitung λ maks, CI, dan CR
         $lambdaMax = $this->calculateLambdaMax($matrix, $priorityVector);
         $consistencyIndex = ($lambdaMax - $n) / ($n - 1);
         $consistencyRatio = $this->calculateConsistencyRatio($consistencyIndex, $n);
 
-        // Gabungkan hasil perbandingan kriteria dalam struktur JSON
         $dataPerbandingan = [
             'perbandingan_kriteria' => [
                 'initial_matrix' => $initialMatrix,
@@ -313,12 +438,11 @@ class KriteriaController extends Controller
             ]
         ];
 
-        // Simpan data sebagai JSON
-        HasilPerbandinganAhp::create([
+        $hasilPerbandingan->update([
             'data_perbandingan' => $dataPerbandingan,
+            'status' => 'proses_pertama',
         ]);
 
-        // Mengirim data ke view
         return view('internal.pengajuan_pembangunan.lpmd.perbandingan.hasil', [
             'initialMatrix' => $initialMatrix,
             'matrix' => $normalizedMatrix,
@@ -330,6 +454,9 @@ class KriteriaController extends Controller
             'kriteria' => $kriteria,
         ]);
     }
+
+
+
 
     public function compareCriteria()
     {

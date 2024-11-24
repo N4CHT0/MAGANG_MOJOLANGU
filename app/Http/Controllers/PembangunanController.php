@@ -9,6 +9,39 @@ use Illuminate\Support\Facades\Storage;
 
 class PembangunanController extends Controller
 {
+
+    public function proses()
+    {
+        return view('internal.pengajuan_pembangunan.lpmd.proses');
+    }
+
+    public function detailPengajuan($id)
+    {
+        $pengajuan = Pembangunan::find($id);
+
+        if (!$pengajuan) {
+            return response()->json(['error' => 'Data tidak ditemukan'], 404);
+        }
+
+        // Uraikan JSON di field dokumentasi
+        $dokumentasi = [];
+        if ($pengajuan->dokumentasi) {
+            $files = json_decode($pengajuan->dokumentasi, true);
+            $dokumentasi = array_map(function ($file) {
+                return url("storage/img/{$file}");
+            }, $files);
+        }
+
+        return response()->json([
+            'nama' => $pengajuan->nama,
+            'status' => $pengajuan->status,
+            'tanggal_pengajuan' => $pengajuan->tanggal_pengajuan,
+            'keterangan' => $pengajuan->deskripsi ?? 'Tidak ada keterangan',
+            'dokumentasi' => $dokumentasi,
+        ]);
+    }
+
+
     // RIWAYAT PENGAJUAN RT
     public function riwayatPengajuanRt()
     {
@@ -39,9 +72,17 @@ class PembangunanController extends Controller
 
     public function verifikasi()
     {
-        $pembangunan = Pembangunan::whereNull('persetujuan')->get(); // Menampilkan data yang belum disetujui
+        $pembangunan = Pembangunan::whereNull('persetujuan')->get();
+
+        // Ubah dokumentasi ke array kosong jika null
+        foreach ($pembangunan as $item) {
+            $item->dokumentasi = $item->dokumentasi ? json_decode($item->dokumentasi, true) : [];
+        }
+
         return view('internal.pengajuan_pembangunan.rw.verifikasi', compact('pembangunan'));
     }
+
+
 
     public function approveValidasi(Request $request)
     {
@@ -82,6 +123,12 @@ class PembangunanController extends Controller
         $pembangunan = Pembangunan::where('persetujuan', 'disetujui')
             ->whereNull('validasi')
             ->get(); // Menampilkan data yang sudah disetujui tapi belum divalidasi
+
+        // Ubah dokumentasi ke array kosong jika null
+        foreach ($pembangunan as $item) {
+            $item->dokumentasi = $item->dokumentasi ? json_decode($item->dokumentasi, true) : [];
+        }
+
         return view('internal.pengajuan_pembangunan.lpmd.validasi', compact('pembangunan'));
     }
 

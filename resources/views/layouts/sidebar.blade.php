@@ -42,14 +42,17 @@
                         <li> <a class="waves-effect waves-dark" href="{{ route('home') }}" aria-expanded="false"><i
                                     class="fa fa-tachometer"></i><span class="hide-menu">Beranda</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="{{ route('sktms.index') }}"
+                        {{-- <li> <a class="waves-effect waves-dark" href="{{ route('sktms.index') }}"
                                 aria-expanded="false"><i class="fa fa-database"></i><span class="hide-menu">Data
-                                    Pengurus
-                                    SKTM</span></a>
+                                    Pengurus SKTM</span></a>
+                        </li> --}}
+                        <li> <a class="waves-effect waves-dark" href="{{ route('pembangunan.create') }}"
+                                aria-expanded="false"><i class="fa fa-database"></i><span class="hide-menu">Buat
+                                    Usulan</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="{{ route('riwayat.pengajuan.rt') }}"
                                 aria-expanded="false"><i class="fa fa-history"></i><span class="hide-menu">Riwayat
-                                    Usulan</span></a>
+                                </span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="{{ route('logout') }}" aria-expanded="false"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
@@ -76,14 +79,20 @@
                         <li> <a class="waves-effect waves-dark" href="{{ route('home') }}" aria-expanded="false"><i
                                     class="fa fa-tachometer"></i><span class="hide-menu">Beranda</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="{{ route('sktms.index') }}"
+                        <li> <a class="waves-effect waves-dark" href="{{ route('pembangunan.verifikasi') }}"
+                                aria-expanded="false"><i class="fa fa-table"></i><span class="hide-menu">Data
+                                    Usulan</span></a>
+                        </li>
+                        {{-- <li> <a class="waves-effect waves-dark" href="{{ route('sktms.index') }}"
                                 aria-expanded="false"><i class="fa fa-table"></i><span class="hide-menu">Data Pengurus
                                     SKTM</span></a>
-                        </li>
+                        </li> --}}
+
                         <li> <a class="waves-effect waves-dark" href="{{ route('riwayat.pengajuan.rw') }}"
                                 aria-expanded="false"><i class="fa fa-history"></i><span class="hide-menu">Riwayat
                                     Usulan</span></a>
                         </li>
+
                         <li> <a class="waves-effect waves-dark" href="{{ route('logout') }}" aria-expanded="false"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
                                     class="fa fa-sign-out" style="color: red;"></i><span
@@ -151,9 +160,12 @@
                                 aria-expanded="false"><i class="fa fa-book"></i><span class="hide-menu">Data
                                     Alternatif</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="{{ route('kriteria.perbandingan') }}"
-                                aria-expanded="false"><i class="fa fa-connectdevelop"></i><span
-                                    style="font-size: 14px" class="hide-menu">Proses Data</span></a>
+                        <li>
+                            <a class="waves-effect waves-dark" href="{{ route('proses.data') }}"
+                                aria-expanded="false">
+                                <i class="fa fa-connectdevelop"></i>
+                                <span class="hide-menu">Proses Data</span>
+                            </a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="{{ route('perbandingan.index') }}"
                                 aria-expanded="false"><i class="fa fa-archive"></i><span class="hide-menu">Data

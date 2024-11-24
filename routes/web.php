@@ -38,6 +38,7 @@ Route::middleware(['auth', 'role:rt'])->group(function () {
     Route::get('/pembangunan/create', [PembangunanController::class, 'create'])->name('pembangunan.create');
     Route::post('/pembangunan/', [PembangunanController::class, 'store'])->name('pembangunan.store');
     Route::get('/riwayat-pengajuan-rt', [PembangunanController::class, 'riwayatPengajuanRt'])->name('riwayat.pengajuan.rt');
+    Route::get('/riwayat/{id}', [PembangunanController::class, 'detailPengajuan'])->name('riwayat.detail');
 });
 
 // Group untuk role 'rw'
@@ -47,6 +48,7 @@ Route::middleware(['auth', 'role:rw'])->group(function () {
     Route::post('/approve', [PembangunanController::class, 'approve'])->name('pembangunan.approve');
     Route::post('/reject', [PembangunanController::class, 'reject'])->name('pembangunan.reject');
     Route::get('/riwayat-pengajuan-rw', [PembangunanController::class, 'riwayatPengajuanRw'])->name('riwayat.pengajuan.rw');
+    Route::get('/riwayat/{id}', [PembangunanController::class, 'detailPengajuan'])->name('riwayat.detail');
 });
 
 // Group untuk role 'warga'
@@ -56,9 +58,13 @@ Route::middleware(['auth', 'role:warga'])->group(function () {
 
 // Group untuk role 'lpmd'
 Route::middleware(['auth', 'role:lpmd'])->group(function () {
+    Route::get('/validate-process', [KriteriaController::class, 'validateProcess'])->name('validate.process');
+    Route::post('/handle-validation', [KriteriaController::class, 'handleValidation'])->name('handle.validation');
+
     Route::get('/validasi', [PembangunanController::class, 'validasi'])->name('pembangunan.validasi');
     Route::post('/approveValidasi', [PembangunanController::class, 'approveValidasi'])->name('pembangunan.approveValidasi');
     Route::post('/rejectValidasi', [PembangunanController::class, 'rejectValidasi'])->name('pembangunan.rejectValidasi');
+    Route::get('/riwayat/{id}', [PembangunanController::class, 'detailPengajuan'])->name('riwayat.detail');
     // Menampilkan semua kriteria
     Route::get('/kriteria', [KriteriaController::class, 'index'])->name('kriteria.index');
     // Menyimpan kriteria baru
@@ -69,6 +75,9 @@ Route::middleware(['auth', 'role:lpmd'])->group(function () {
     Route::put('/kriteria/{id}', [KriteriaController::class, 'update'])->name('kriteria.update');
     // Menghapus kriteria
     Route::delete('kriteria/{id}', [KriteriaController::class, 'destroy'])->name('kriteria.destroy');
+    Route::get('/proses-data', [PembangunanController::class, 'proses'])->name('proses.data');
+
+    // IMPLEMENTASI METODE
     Route::get('/alternatif', [PembangunanController::class, 'dataAlternatif'])->name('kriteria.alternatif');
     Route::get('/perbandingan-kriteria', [KriteriaController::class, 'compareCriteria'])->name('kriteria.perbandingan');
     Route::post('/compare/submit', [KriteriaController::class, 'storeComparison'])->name('compare.submit');

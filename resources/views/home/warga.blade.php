@@ -17,28 +17,28 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label>Nama :</label>
-                                    <span>{{ Auth::user()->nama_lengkap }}</span>
+                                    <h3>Nama :</h3>
+                                    <h3><strong>{{ Auth::user()->nama_lengkap }}</strong></h3>
                                 </div>
                                 <div class="form-group">
-                                    <label>NIK :</label>
-                                    <span>{{ Auth::user()->nik }}</span>
+                                    <h3>NIK :</h3>
+                                    <h3><strong>{{ Auth::user()->nik }}</strong></h3>
                                 </div>
                                 <div class="form-group">
-                                    <label>Jenis Kelamin :</label>
-                                    <span>{{ Auth::user()->jenis_kelamin }}</span>
+                                    <h3>Jenis Kelamin :</h3>
+                                    <h3><strong>{{ Auth::user()->jenis_kelamin }}</strong></h3>
                                 </div>
                                 <div class="form-group">
-                                    <label>Alamat :</label>
-                                    <span>{{ Auth::user()->alamat }}</span>
+                                    <h3>Alamat :</h3>
+                                    <h3><strong>{{ Auth::user()->alamat }}</strong></h3>
                                 </div>
                                 <div class="form-group">
-                                    <label>RT :</label>
-                                    <span>{{ Auth::user()->rt }}</span>
+                                    <h3>RT :</h3>
+                                    <h3><strong>{{ Auth::user()->rt }}</strong></h3>
                                 </div>
                                 <div class="form-group">
-                                    <label>RW :</label>
-                                    <span>{{ Auth::user()->rw }}</span>
+                                    <h3>RW :</h3>
+                                    <h3><strong>{{ Auth::user()->rw }}</strong></h3>
                                 </div>
                             </div>
                         </div>

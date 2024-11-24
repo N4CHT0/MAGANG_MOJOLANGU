@@ -24,6 +24,7 @@
                                             <label for="selectAll" class="form-check-label">Pilih Semua</label>
                                         </div>
                                     </th>
+                                    <th class="align-middle">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -42,6 +43,12 @@
                                                 <label for="checkbox{{ $data->id }}" class="form-check-label"></label>
                                             </div>
                                         </td>
+                                        <td class="text-center align-middle">
+                                            <button class="btn btn-info btn-sm detail-button" data-id="{{ $data->id }}"
+                                                data-bs-toggle="modal" data-bs-target="#detailModal" type="button">
+                                                <i class="fas fa-info-circle"></i> Detail
+                                            </button>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -53,7 +60,7 @@
             <!-- Tombol Aksi -->
             <div class="d-flex justify-content-end gap-3">
                 <button type="submit" class="btn btn-success">
-                    <i class="fas fa-check"></i> Validasi
+                    <i class="fas fa-check"></i> Setuju
                 </button>
                 <button type="button" class="btn btn-danger" id="tolakButton" data-bs-toggle="modal"
                     data-bs-target="#rejectModal">
@@ -62,14 +69,31 @@
             </div>
         </form>
 
+        <!-- Modal untuk Detail -->
+        <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detailModalLabel">Detail Pengajuan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="detailContent">
+                            <p class="text-center">Memuat data...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Modal untuk Tolak -->
         <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
-                <form action="{{ route('pembangunan.rejectValidasi') }}" method="POST">
+                <form action="{{ route('pembangunan.reject') }}" method="POST">
                     @csrf
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="rejectModalLabel">Tolak Validasi</h5>
+                            <h5 class="modal-title" id="rejectModalLabel">Tolak Usulan</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -91,7 +115,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-danger">
-                                <i class="fas fa-times"></i> Tolak Validasi
+                                <i class="fas fa-times"></i> Tolak Usulan
                             </button>
                         </div>
                     </div>
@@ -104,24 +128,24 @@
 @section('script')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Fungsi Pilih Semua
+            // Pilih Semua Checkbox
             document.getElementById('selectAll').addEventListener('change', function() {
-                var checkboxes = document.querySelectorAll('input.form-check-input:not(#selectAll)');
+                const checkboxes = document.querySelectorAll('input.form-check-input:not(#selectAll)');
                 checkboxes.forEach(checkbox => checkbox.checked = this.checked);
             });
 
-            // Menampilkan data yang dicentang di modal
+            // Tombol Tolak: Tampilkan Data di Modal
             document.getElementById('tolakButton').addEventListener('click', function() {
-                var checkboxes = document.querySelectorAll(
+                const checkboxes = document.querySelectorAll(
                     'input[type="checkbox"].form-check-input:checked');
-                var rejectTableBody = document.getElementById('rejectTableBody');
+                const rejectTableBody = document.getElementById('rejectTableBody');
                 rejectTableBody.innerHTML = ''; // Kosongkan tabel modal
 
                 checkboxes.forEach(function(checkbox) {
                     if (checkbox.id !== 'selectAll') {
-                        var nama = checkbox.dataset.nama;
-                        var pengusul = checkbox.dataset.pengusul;
-                        var kategori = checkbox.dataset.kategori;
+                        const nama = checkbox.dataset.nama;
+                        const pengusul = checkbox.dataset.pengusul;
+                        const kategori = checkbox.dataset.kategori;
 
                         // Tambahkan baris ke tabel modal
                         rejectTableBody.insertAdjacentHTML('beforeend', `
@@ -137,6 +161,44 @@
                             </tr>
                         `);
                     }
+                });
+            });
+
+            // Tombol Detail: Tampilkan Data di Modal
+            document.querySelectorAll('.detail-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const detailContent = document.getElementById('detailContent');
+
+                    detailContent.innerHTML = '<p class="text-center">Memuat data...</p>';
+
+                    fetch(`/riwayat/${id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const dokumentasi = Array.isArray(data.dokumentasi) ? data
+                                .dokumentasi : [];
+                            detailContent.innerHTML = `
+                                <p><strong>Nama Pembangunan:</strong> ${data.nama}</p>
+                                <p><strong>Status:</strong> ${data.status}</p>
+                                <p><strong>Tanggal Pengajuan:</strong> ${data.tanggal_pengajuan}</p>
+                                <p><strong>Keterangan:</strong> ${data.keterangan}</p>
+                                <div class="mt-3">
+                                    <h5>Dokumentasi:</h5>
+                                    <div class="row">
+                                        ${dokumentasi.map(image => `
+                                                    <div class="col-12 text-center">
+                                                        <img src="${image}" alt="Dokumentasi" class="modal-img img-thumbnail">
+                                                    </div>
+                                                `).join('')}
+                                    </div>
+                                </div>
+                            `;
+                        })
+                        .catch(error => {
+                            detailContent.innerHTML =
+                                `<p class="text-center text-danger">Gagal memuat data.</p>`;
+                            console.error(error);
+                        });
                 });
             });
         });
