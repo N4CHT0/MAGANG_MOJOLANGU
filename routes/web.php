@@ -48,7 +48,7 @@ Route::middleware(['auth', 'role:rw'])->group(function () {
     Route::post('/approve', [PembangunanController::class, 'approve'])->name('pembangunan.approve');
     Route::post('/reject', [PembangunanController::class, 'reject'])->name('pembangunan.reject');
     Route::get('/riwayat-pengajuan-rw', [PembangunanController::class, 'riwayatPengajuanRw'])->name('riwayat.pengajuan.rw');
-    Route::get('/riwayat/{id}', [PembangunanController::class, 'detailPengajuan'])->name('riwayat.detail');
+    Route::get('/riwayat-rw/{id}', [PembangunanController::class, 'detailPengajuan'])->name('riwayat.detail');
 });
 
 // Group untuk role 'warga'
