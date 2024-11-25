@@ -87,9 +87,12 @@ Route::middleware(['auth', 'role:lpmd'])->group(function () {
     Route::post('/save-ranking-pdf', [KriteriaController::class, 'saveRankingPdf'])->name('save-ranking-pdf');
     // Route untuk menampilkan data perankingan
     Route::get('/perbandingan', [KriteriaController::class, 'showRankingData'])->name('perbandingan.index');
+    Route::delete('/perbandingan/{id}', [KriteriaController::class, 'hapusPerbandingan'])->name('perbandingan.destroy');
+
 
     // Route untuk mengunduh PDF
     Route::get('/perbandingan/{id}/download', [KriteriaController::class, 'downloadPdf'])->name('download.pdf');
+    Route::get('/pembangunan/{id}/detail', [KriteriaController::class, 'showDetail'])->name('pembangunan.detail');
 });
 
 // Group untuk role 'kelurahan'
