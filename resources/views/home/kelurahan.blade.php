@@ -17,28 +17,28 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label>Nama :</label>
-                                    <span>{{ Auth::user()->nama_lengkap }}</span>
+                                    <h3>Nama :</h3>
+                                    <h3><strong>{{ Auth::user()->nama_lengkap }}</strong></h3>
                                 </div>
                                 <div class="form-group">
-                                    <label>NIK :</label>
-                                    <span>{{ Auth::user()->nik }}</span>
+                                    <h3>NIK :</h3>
+                                    <h3><strong>{{ Auth::user()->nik }}</strong></h3>
                                 </div>
                                 <div class="form-group">
-                                    <label>Jenis Kelamin :</label>
-                                    <span>{{ Auth::user()->jenis_kelamin }}</span>
+                                    <h3>Jenis Kelamin :</h3>
+                                    <h3><strong>{{ Auth::user()->jenis_kelamin }}</strong></h3>
                                 </div>
                                 <div class="form-group">
-                                    <label>Alamat :</label>
-                                    <span>{{ Auth::user()->alamat }}</span>
+                                    <h3>Alamat :</h3>
+                                    <h3><strong>{{ Auth::user()->alamat }}</strong></h3>
                                 </div>
                                 <div class="form-group">
-                                    <label>RT :</label>
-                                    <span>{{ Auth::user()->rt }}</span>
+                                    <h3>RT :</h3>
+                                    <h3><strong>{{ Auth::user()->rt }}</strong></h3>
                                 </div>
                                 <div class="form-group">
-                                    <label>RW :</label>
-                                    <span>{{ Auth::user()->rw }}</span>
+                                    <h3>RW :</h3>
+                                    <h3><strong>{{ Auth::user()->rw }}</strong></h3>
                                 </div>
                             </div>
                         </div>
@@ -46,31 +46,26 @@
                 </div>
             </div>
         </div>
+
         <div class="card">
             <div class="card-header bg-info d-flex justify-content-between align-items-center">
-                <span style="color: white; font-size: 20px;font-weight: 400;">Menu</span>
+                <span style="color: white; font-size: 20px;font-weight: 400;">Harap Baca</span>
             </div>
-
             <div class="card-body">
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <h4>Harap Baca Sebelum Menggunakan Aplikasi</h4>
-                <h6>1. Pengguna Wajib Memiliki Telegram Yang Berstatus Aktif</h6>
-                <h6>2. Mengisi ID Telegram Pada Akun, Dapatkan ID Telegram Anda <a
-                        href="https://t.me/userinfobot">Disini</a></h6>
-                <h6> Jika Kesulitan Harap Lihat Panduan Untuk Mendapat ID Telegram Anda Di Sini</h6><br>
-                <h6>
+                <h4>1. Pengguna Wajib Memiliki Telegram Yang Berstatus Aktif</h4>
+                <h4>2. Mengisi ID Telegram Pada Akun, Dapatkan ID Telegram Anda <a
+                        href="https://t.me/userinfobot">Disini</a></h4>
+                <h4> Jika Kesulitan Harap Lihat Panduan Untuk Mendapat ID Telegram Anda Di Sini</h4><br>
+                <h4>
                     3. Jika Sudah Mendapat ID Telegram, Harap Masukan Data Anda
                     @if (!Auth::user()->data_updated)
                         <a href="#" data-toggle="modal" data-target="#updateDataWargaModal">Disini</a>
                     @else
                         <span class="text-muted">(Data sudah diperbarui)</span>
                     @endif
-                </h6>
+                </h4>
 
-                <h6>4. Pengguna Hanya Dapat Mengakses Layanan Dengan 1 Akun Untuk 1 Orang Saja.</h6>
+                <h4>4. Pengguna Hanya Dapat Mengakses Layanan Dengan 1 Akun Untuk 1 Orang Saja.</h4>
             </div>
         </div>
     </div>

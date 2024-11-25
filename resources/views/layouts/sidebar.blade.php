@@ -196,9 +196,13 @@
                         <li> <a class="waves-effect waves-dark" href="{{ route('home') }}" aria-expanded="false"><i
                                     class="fa fa-tachometer"></i><span class="hide-menu">Beranda</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="{{ route('sktms.index') }}"
+                        {{-- <li> <a class="waves-effect waves-dark" href="{{ route('sktms.index') }}"
                                 aria-expanded="false"><i class="fa fa-user-circle-o"></i><span class="hide-menu">Data
                                     Pengurus SKTM</span></a>
+                        </li> --}}
+                        <li> <a class="waves-effect waves-dark" href="{{ route('perbandingan.index') }}"
+                                aria-expanded="false"><i class="fa fa-archive"></i><span
+                                    class="hide-menu">Pembangunan</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="{{ route('logout') }}" aria-expanded="false"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
