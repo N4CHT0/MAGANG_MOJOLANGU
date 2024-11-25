@@ -172,7 +172,7 @@
 
                     detailContent.innerHTML = '<p class="text-center">Memuat data...</p>';
 
-                    fetch(`/riwayat/${id}`)
+                    fetch(`/riwayat-rw/${id}`)
                         .then(response => response.json())
                         .then(data => {
                             const dokumentasi = Array.isArray(data.dokumentasi) ? data
@@ -186,10 +186,10 @@
                                     <h5>Dokumentasi:</h5>
                                     <div class="row">
                                         ${dokumentasi.map(image => `
-                                                <div class="col-12 text-center">
-                                                    <img src="${image}" alt="Dokumentasi" class="modal-img img-thumbnail">
-                                                </div>
-                                            `).join('')}
+                                                        <div class="col-12 text-center">
+                                                            <img src="${image}" alt="Dokumentasi" class="modal-img img-thumbnail">
+                                                        </div>
+                                                    `).join('')}
                                     </div>
                                 </div>
                             `;
