@@ -38,7 +38,7 @@ Route::middleware(['auth', 'role:rt'])->group(function () {
     Route::get('/pembangunan/create', [PembangunanController::class, 'create'])->name('pembangunan.create');
     Route::post('/pembangunan/', [PembangunanController::class, 'store'])->name('pembangunan.store');
     Route::get('/riwayat-pengajuan-rt', [PembangunanController::class, 'riwayatPengajuanRt'])->name('riwayat.pengajuan.rt');
-    Route::get('/riwayat/{id}', [PembangunanController::class, 'detailPengajuan'])->name('riwayat.detail');
+    Route::get('/riwayat-rt/{id}', [PembangunanController::class, 'detailPengajuan'])->name('riwayat.detail');
 });
 
 // Group untuk role 'rw'
