@@ -115,10 +115,10 @@
                                     <h5>Dokumentasi:</h5>
                                     <div class="row">
                                         ${data.dokumentasi.map(image => `
-                                                                        <div class="col-12 text-center">
-                                                                            <img src="${image}" alt="Dokumentasi" class="modal-img img-thumbnail">
-                                                                        </div>
-                                                                    `).join('')}
+                                                                                    <div class="col-12 text-center">
+                                                                                        <img src="${image}" alt="Dokumentasi" class="modal-img img-thumbnail">
+                                                                                    </div>
+                                                                                `).join('')}
                                     </div>
                                 </div>
                             `;
