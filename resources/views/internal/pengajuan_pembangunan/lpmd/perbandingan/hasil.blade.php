@@ -113,8 +113,14 @@
             <div class="card">
                 <div class="card-body">
                     <h4>Hasil Konsistensi</h4>
-                    <p><strong>Consistency Index (CI):</strong> {{ round($consistencyIndex, 4) }}</p>
-                    <p><strong>Consistency Ratio (CR):</strong> {{ round($consistencyRatio * 100, 2) }}%</p>
+                    <p><strong>Consistency Index (CI):</strong>
+                        {{ round($consistencyIndex, 4) }}
+                        {{-- ({{ round($consistencyIndex * 100, 2) }}%) --}}
+                    </p>
+                    <p><strong>Consistency Ratio (CR):</strong>
+                        {{ round($consistencyRatio, 4) }}
+                        {{-- ({{ round($consistencyRatio * 100, 2) }}%) --}}
+                    </p>
 
                     @if (round($consistencyRatio * 100, 2) < 0)
                         <p><strong style="color: green;">Hasil perhitungan bisa dinyatakan benar</strong></p>

@@ -11,19 +11,23 @@ use Illuminate\Http\Request;
 
 class KriteriaController extends Controller
 {
+    private function checkFinalStatus()
+    {
+        $hasilPerbandingan = HasilPerbandinganAHP::latest()->first();
+        if ($hasilPerbandingan && $hasilPerbandingan->status === 'final') {
+            return redirect()->route('validate.process')->with('info', 'Data terakhir sudah berstatus "final". Validasi diperlukan untuk melanjutkan.');
+        }
+        return $hasilPerbandingan;
+    }
+
     public function hapusPerbandingan($id)
     {
         try {
-            // Cari data berdasarkan ID
             $data = HasilPerbandinganAHP::findOrFail($id);
-
-            // Hapus data
             $data->delete();
 
-            // Redirect dengan pesan sukses
             return redirect()->route('perbandingan.index')->with('success', 'Data berhasil dihapus.');
         } catch (\Exception $e) {
-            // Redirect dengan pesan error jika terjadi kesalahan
             return redirect()->route('perbandingan.index')->with('error', 'Terjadi kesalahan saat menghapus data.');
         }
     }
@@ -31,8 +35,6 @@ class KriteriaController extends Controller
     public function showDetail($id)
     {
         $data = HasilPerbandinganAHP::findOrFail($id);
-
-        // Decode perangkingan_pembangunan jika disimpan dalam format JSON
         $finalScores = $data->perangkingan_pembangunan;
 
         return view('internal.pengajuan_pembangunan.lpmd.detail', compact('data', 'finalScores'));
@@ -49,29 +51,23 @@ class KriteriaController extends Controller
         $request->session()->forget('validated');
         $hasilPerbandingan = HasilPerbandinganAHP::latest()->first();
 
-        // Jika status terakhir adalah 'final', buat data baru untuk setiap proses
-        if (
-            $hasilPerbandingan
-            && $hasilPerbandingan->status === 'final'
-            && !empty($hasilPerbandingan->file_pdf)
-            && !empty($hasilPerbandingan->perangkingan_pembangunan)
-            && !empty($hasilPerbandingan->input_nama)
-        ) {
-
-            // Buat data baru dengan ID baru untuk setiap proses
-            $newData = HasilPerbandinganAHP::create([
-                'data_perbandingan' => [], // Reset data perbandingan
-                'status' => 'proses_pertama', // Mulai dari proses pertama
-            ]);
-
-            // Arahkan ke proses pertama dari data baru
-            return redirect()->route('kriteria.perbandingan')->with('info', 'Status data terakhir adalah "final". Data baru berhasil dibuat dengan ID baru untuk proses pertama.');
+        // Jika status data terakhir adalah 'final', buat data baru untuk 'proses_pertama'
+        if ($hasilPerbandingan && $hasilPerbandingan->status === 'final') {
+            if (!empty($hasilPerbandingan->file_pdf) && !empty($hasilPerbandingan->perangkingan_pembangunan) && !empty($hasilPerbandingan->input_nama)) {
+                // Buat data baru dengan status 'proses_pertama'
+                HasilPerbandinganAHP::create([
+                    'data_perbandingan' => [], // Reset data
+                    'status' => 'proses_pertama', // Mulai dari proses pertama
+                ]);
+                // Arahkan ke halaman perbandingan (proses pertama)
+                return redirect()->route('kriteria.perbandingan')->with('info', 'Status data terakhir adalah "final". Data baru berhasil dibuat dengan ID baru untuk proses pertama.');
+            }
         }
 
-        // Lanjutkan logika berdasarkan opsi yang dipilih
+        // Menentukan tindakan berdasarkan pilihan yang dipilih
         switch ($option) {
             case 'new_data':
-                // Hapus data lama dan buat data baru
+                // Jika ada data lama, hapus dan buat data baru
                 if ($hasilPerbandingan) {
                     $hasilPerbandingan->delete();
                 }
@@ -109,8 +105,6 @@ class KriteriaController extends Controller
         }
     }
 
-
-
     public function validateProcess(Request $request)
     {
         $hasilPerbandingan = HasilPerbandinganAHP::latest()->first();
@@ -123,6 +117,7 @@ class KriteriaController extends Controller
         $status = $hasilPerbandingan->status ?? 'proses_pertama';
         $options = [];
 
+        // Tentukan opsi berdasarkan status data terakhir
         if ($status === 'proses_pertama') {
             $options = [
                 'new_data' => 'Buat sebagai data baru (reset dan mulai proses pertama)',
@@ -141,7 +136,13 @@ class KriteriaController extends Controller
                 'new_id_data' => 'Buat sebagai data baru dengan ID baru',
                 'update_alternatif' => 'Ubah nilai proses kedua (perbandingan alternatif)',
                 'update_kriteria' => 'Ubah nilai proses pertama (perbandingan kriteria)',
-                'overwrite' => 'Timpa data saat ini (proses akhir)', // Tambahkan opsi overwrite di sini
+                'overwrite' => 'Timpa data saat ini (proses akhir)',
+            ];
+        } elseif ($status === 'final') {
+            $options = [
+                'new_data' => 'Buat sebagai data baru (reset dan mulai proses pertama)',
+                'new_id_data' => 'Buat sebagai data baru dengan ID baru',
+                'overwrite' => 'Timpa data saat ini (status final)',
             ];
         }
 
@@ -152,6 +153,8 @@ class KriteriaController extends Controller
             'hasilPerbandingan' => $hasilPerbandingan,
         ]);
     }
+
+
 
 
 
@@ -217,9 +220,10 @@ class KriteriaController extends Controller
         $path = storage_path('app/public/pdf/' . $fileName);
 
         // Generate PDF dengan library seperti DomPDF atau Snappy (wkhtmltopdf)
-        $pdf = FacadePdf::loadView('internal.pengajuan_pembangunan.lpmd.perbandingan.pdf_report', [
+        $pdf = FacadePdf::loadView('report.surat_pembangunan', [
             'finalScores' => $hasilPerbandingan->perangkingan_pembangunan,
-            'inputNama' => $request->input_nama
+            'inputNama' => $request->input_nama,
+            'data' => $request->created_at
         ]);
         $pdf->save($path);
 
@@ -233,23 +237,14 @@ class KriteriaController extends Controller
         // Panggil fungsi untuk mengirim PDF ke Telegram lurah
         $this->sendToLurah($request);
 
-        return redirect()->back()->with('success', 'Laporan PDF berhasil disimpan dan dikirim ke Lurah!');
+        return view('home.lpmd');
     }
 
     public function calculateFinalScore()
     {
-        $hasilPerbandingan = HasilPerbandinganAHP::latest()->first();
-
-        if ($hasilPerbandingan && $hasilPerbandingan->status === 'final') {
-            $hasilPerbandingan = HasilPerbandinganAHP::create([
-                'data_perbandingan' => [],
-                'status' => 'proses_akhir',
-            ]);
-        }
-
-        // Jika data sudah dalam status proses_akhir, arahkan ke halaman validasi
-        if ($hasilPerbandingan && $hasilPerbandingan->status === 'proses_akhir') {
-            return redirect()->route('validate.process')->with('info', 'Proses akhir sudah selesai. Validasi diperlukan untuk melanjutkan.');
+        $hasilPerbandingan = $this->checkFinalStatus();
+        if ($hasilPerbandingan instanceof \Illuminate\Http\RedirectResponse) {
+            return $hasilPerbandingan;
         }
 
         if (!$hasilPerbandingan || $hasilPerbandingan->status !== 'proses_kedua') {
@@ -258,8 +253,12 @@ class KriteriaController extends Controller
 
         $dataPerbandingan = $hasilPerbandingan->data_perbandingan;
         $bobotKriteria = $dataPerbandingan['perbandingan_kriteria']['priority_vector'];
-        $alternatif = Pembangunan::all();
+        $alternatif = Pembangunan::where('status', 'divalidasi')->get();
         $kriteria = Kriteria::all();
+
+        if ($alternatif->count() < 5) {
+            return redirect()->route('nilai.perbandingan')->with('danger', 'Data Pembangunan Minimal Terdapat 5.');
+        }
 
         $finalScores = [];
         $matrixData = []; // Array untuk menyimpan matriks perkalian
@@ -267,29 +266,34 @@ class KriteriaController extends Controller
         foreach ($alternatif as $alt) {
             $totalScore = 0;
             $row = [
-                'alternatif' => $alt->nama, // Tambahkan nama alternatif di sini
-            ]; // Untuk menyimpan data baris pada matrixData
+                'alternatif' => $alt->nama, // Nama alternatif untuk baris
+            ];
 
-            foreach ($kriteria as $krit) {
+            foreach ($kriteria as $j => $krit) {
                 $kriteriaId = $krit->id;
-                $bobot = $bobotKriteria[$kriteriaId - 1];
-                $nilaiNormalisasi = $dataPerbandingan['perbandingan_alternatif'][$kriteriaId]['priorityVector'][$alt->id];
+                $bobot = $bobotKriteria[$kriteriaId - 1] ?? 0; // Pastikan bobot ada
+                $nilaiNormalisasi = $dataPerbandingan['perbandingan_alternatif'][$kriteriaId]['priorityVector'][$alt->id] ?? 0; // Pastikan nilai normalisasi ada
                 $perkalian = $nilaiNormalisasi * $bobot;
 
-                $row[] = round($perkalian, 3);
+                // Simpan nilai perkalian di baris dengan indeks $j
+                $row[$j] = round($perkalian, 3);
+
+                // Tambahkan ke skor total baris
                 $totalScore += $perkalian;
             }
 
-            // Tambahkan hasil perkalian ke matrixData
-            $row['total'] = round($totalScore, 3); // Tambahkan kolom total
+            // Tambahkan total baris
+            $row['total'] = round($totalScore, 3);
             $matrixData[] = $row;
 
+            // Simpan skor akhir untuk alternatif
             $finalScores[] = [
                 'alternatif' => $alt->nama,
                 'score' => round($totalScore, 3)
             ];
         }
 
+        // Urutkan alternatif berdasarkan skor akhir
         usort($finalScores, function ($a, $b) {
             return $b['score'] <=> $a['score'];
         });
@@ -299,34 +303,26 @@ class KriteriaController extends Controller
         // Simpan hasil perangkingan dan ubah status ke proses akhir
         $hasilPerbandingan->update([
             'perangkingan_pembangunan' => $finalScores,
-            'status' => 'proses_akhir', // Status proses akhir
+            'status' => 'proses_akhir',
         ]);
+
+        // Ubah status alternatif yang telah diproses menjadi 'diproses'
+        Pembangunan::whereIn('id', $alternatif->pluck('id'))->update(['status' => 'diproses']);
 
         return view('internal.pengajuan_pembangunan.lpmd.perbandingan.hasil_prioritas', [
             'finalScores' => $finalScores,
             'topPriority' => $topPriority,
-            'matrixData' => $matrixData, // Tambahkan matrixData ke view
+            'matrixData' => $matrixData,
+            'alternatif' => $alternatif,
+            'kriteria' => $kriteria,
         ]);
     }
 
-
-
-
     public function storeComparisonValue(Request $request)
     {
-        $hasilPerbandingan = HasilPerbandinganAHP::latest()->first();
-
-        // Jika data terakhir berstatus 'final', buat data baru
-        if ($hasilPerbandingan && $hasilPerbandingan->status === 'final') {
-            $hasilPerbandingan = HasilPerbandinganAHP::create([
-                'data_perbandingan' => [],
-                'status' => 'proses_kedua',
-            ]);
-        }
-
-        // Jika data sudah ada dan statusnya proses_kedua, arahkan ke halaman validasi
-        if ($hasilPerbandingan && $hasilPerbandingan->status === 'proses_kedua' && !empty($hasilPerbandingan->data_perbandingan['perbandingan_alternatif'])) {
-            return redirect()->route('validate.process')->with('info', 'Proses kedua sudah selesai. Silakan validasi untuk melanjutkan.');
+        $hasilPerbandingan = $this->checkFinalStatus();
+        if ($hasilPerbandingan instanceof \Illuminate\Http\RedirectResponse) {
+            return $hasilPerbandingan;
         }
 
         if (!$hasilPerbandingan || $hasilPerbandingan->status !== 'proses_pertama') {
@@ -334,14 +330,19 @@ class KriteriaController extends Controller
         }
 
         $kriteria = Kriteria::all();
-        $alternatif = Pembangunan::all();
+        $alternatif = Pembangunan::where('status', 'divalidasi')->get();
+
+        if ($alternatif->count() < 5) {
+            return redirect()->route('nilai.perbandingan')->with('danger', 'Data Pembangunan Minimal Terdapat 5.');
+        }
 
         $dataPerbandingan = $hasilPerbandingan->data_perbandingan;
+
         if (!isset($dataPerbandingan['perbandingan_alternatif'])) {
             $dataPerbandingan['perbandingan_alternatif'] = [];
         }
 
-        $finalNormalizedMatrix = []; // Untuk hasil normalisasi akhir (alternatif)
+        $finalNormalizedMatrix = [];
 
         foreach ($kriteria as $k) {
             $matrix = [];
@@ -353,18 +354,16 @@ class KriteriaController extends Controller
                         $matrix[$a1->id][$a2->id] = $value;
                         $matrix[$a2->id][$a1->id] = 1 / $value;
                     } elseif ($a1->id == $a2->id) {
-                        $matrix[$a1->id][$a2->id] = 1; // Diagonal utama
+                        $matrix[$a1->id][$a2->id] = 1;
                     }
                 }
             }
 
-            // Hitung jumlah kolom untuk normalisasi
             $columnSums = [];
             foreach ($alternatif as $a) {
                 $columnSums[$a->id] = array_sum(array_column($matrix, $a->id));
             }
 
-            // Normalisasi Matriks
             $normalizedMatrix = [];
             $priorityVector = [];
             foreach ($alternatif as $a1) {
@@ -377,7 +376,6 @@ class KriteriaController extends Controller
                 $priorityVector[$a1->id] = round($rowSum / count($alternatif), 3);
             }
 
-            // Tambahkan hasil prioritas alternatif ke tabel hasil akhir
             foreach ($priorityVector as $altId => $value) {
                 $finalNormalizedMatrix[$altId][$k->id] = $value;
             }
@@ -390,47 +388,43 @@ class KriteriaController extends Controller
             ];
         }
 
-        // Simpan hasil ke database dan ubah status ke proses kedua
+
         $hasilPerbandingan->update([
             'data_perbandingan' => $dataPerbandingan,
-            'status' => 'proses_kedua', // Status proses kedua
+            'status' => 'proses_kedua',
         ]);
 
         return view('internal.pengajuan_pembangunan.lpmd.perbandingan.hasil_nilai', [
             'dataPerbandinganAlternatif' => $dataPerbandingan['perbandingan_alternatif'],
             'kriteria' => $kriteria,
             'alternatif' => $alternatif,
-            'finalNormalizedMatrix' => $finalNormalizedMatrix, // Hasil normalisasi alternatif
+            'finalNormalizedMatrix' => $finalNormalizedMatrix,
         ]);
     }
-
-
-
-
 
     public function compareValue()
     {
         $kriteria = Kriteria::all();
-        $alternatif = Pembangunan::all();
+        $alternatif = Pembangunan::where('status', 'divalidasi')->get();
 
-        $comparisons = [];
-        foreach ($kriteria as $k) {
-            foreach ($alternatif as $a) {
-                $comparisons[] = [
-                    'kriteria' => $k,
-                    'alternatif' => $a,
-                ];
-            }
+        if ($alternatif->count() < 5) {
+            return redirect()->route('kriteria.perbandingan')->with('danger', 'Data Pembangunan Minimal Terdapat 5.');
         }
 
-        return view('internal.pengajuan_pembangunan.lpmd.perbandingan.nilai', compact('comparisons', 'kriteria', 'alternatif'));
+        return view('internal.pengajuan_pembangunan.lpmd.perbandingan.nilai', compact('kriteria', 'alternatif'));
     }
+
 
     // Simpan Perbandingan Kriteria (Proses Pertama)
     public function storeComparison(Request $request)
     {
         $request->session()->forget('validated'); // Hapus session validasi
         $hasilPerbandingan = HasilPerbandinganAHP::latest()->first();
+
+        // Jika data terakhir berstatus 'final', arahkan ke halaman validasi
+        if ($hasilPerbandingan && $hasilPerbandingan->status === 'final') {
+            return redirect()->route('validate.process')->with('info', 'Data terakhir sudah berstatus "final". Validasi diperlukan sebelum melanjutkan.');
+        }
 
         // Jika data tidak ditemukan, buat data baru
         if (!$hasilPerbandingan) {
@@ -515,6 +509,7 @@ class KriteriaController extends Controller
             'kriteria' => $kriteria,
         ]);
     }
+
 
     public function compareCriteria()
     {

@@ -37,23 +37,43 @@
                                             </td>
                                             <td>{{ $data->input_nama ?? 'N/A' }}</td>
                                             <td>
-                                                <a href="{{ route('download.pdf', $data->id) }}"
-                                                    class="btn btn-sm btn-primary">
-                                                    <i class="fa fa-file-pdf-o"></i> Unduh PDF
-                                                </a>
-                                                <a href="{{ route('pembangunan.detail', $data->id) }}"
-                                                    class="btn btn-sm btn-info">
-                                                    <i class="fa fa-bar-chart"></i> Detail
-                                                </a>
-                                                <form action="{{ route('perbandingan.destroy', $data->id) }}" method="POST"
-                                                    style="display: inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger"
-                                                        onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                                        <i class="fa fa-trash"></i> Hapus
-                                                    </button>
-                                                </form>
+                                                @if (auth()->user()->role == 'kelurahan')
+                                                    <a href="{{ route('data_download.pdf', $data->id) }}"
+                                                        class="btn btn-sm btn-primary">
+                                                        <i class="fa fa-file-pdf-o"></i> Unduh PDF
+                                                    </a>
+                                                    <a href="{{ route('data_pembangunan.detail', $data->id) }}"
+                                                        class="btn btn-sm btn-info">
+                                                        <i class="fa fa-bar-chart"></i> Detail
+                                                    </a>
+                                                    <form action="{{ route('data_perbandingan.destroy', $data->id) }}"
+                                                        method="POST" style="display: inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                            onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                                            <i class="fa fa-trash"></i> Hapus
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <a href="{{ route('download.pdf', $data->id) }}"
+                                                        class="btn btn-sm btn-primary">
+                                                        <i class="fa fa-file-pdf-o"></i> Unduh PDF
+                                                    </a>
+                                                    <a href="{{ route('pembangunan.detail', $data->id) }}"
+                                                        class="btn btn-sm btn-info">
+                                                        <i class="fa fa-bar-chart"></i> Detail
+                                                    </a>
+                                                    <form action="{{ route('perbandingan.destroy', $data->id) }}"
+                                                        method="POST" style="display: inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                            onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                                            <i class="fa fa-trash"></i> Hapus
+                                                        </button>
+                                                    </form>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

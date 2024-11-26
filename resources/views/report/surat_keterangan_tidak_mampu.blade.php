@@ -172,8 +172,7 @@
             <table>
                 <tr>
                     <td>Nama</td>
-                    <<<<<<< HEAD
-                        <td>: AI</td>
+                    <<<<<<< HEAD <td>: AI</td>
                 </tr>
                 <tr>
                     <td>Nomor KK</td>
@@ -288,26 +287,15 @@
                 <tr>
                     <td class="left">
                         <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/qr_sktm.jpg'))) }}"
-                            <<<<<<< HEAD
-                            alt="qr" />
-                        =======
-                        alt="qr" style="max-width: 90px; max-height: 40px" />
-                        >>>>>>> d22b27a140b1ad5da7b30aa40a432cca3cb84bc1
+                            alt="qr" style="max-width: 90px; max-height: 40px" />
                     </td>
                 </tr>
                 <tr>
                     <td class="right">
-                        <<<<<<< HEAD
-                            <p>Malang, 30 Juli 2024</p>
-                            <p>LURAH MOJOLANGU</p>
-                            <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/ttd_sktm.jpg'))) }}"
-                                alt="ttd" />
-                            =======
-                            <p>Malang, {{ \Carbon\Carbon::parse($data->waktu_finalisasi)->translatedFormat('d F Y') }}</p>
-                            <p>LURAH MOJOLANGU</p>
-                            <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/ttd_sktm.jpg'))) }}"
-                                alt="ttd" style="max-width: 200px; max-height: 45px" />
-                            >>>>>>> d22b27a140b1ad5da7b30aa40a432cca3cb84bc1
+                        <p>Malang, {{ \Carbon\Carbon::parse($data->waktu_finalisasi)->translatedFormat('d F Y') }}</p>
+                        <p>LURAH MOJOLANGU</p>
+                        <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/ttd_sktm.jpg'))) }}"
+                            alt="ttd" style="max-width: 200px; max-height: 45px" />
                     </td>
                 </tr>
             </table>
@@ -315,7 +303,9 @@
     </div>
 
     <div class="footer">
-        Sesuai dengan ketentuan peraturan perundang-undangan yang berlaku, surat ini telah ditandatangani secara elektronik yang tersertifikasi oleh Balai Sertifikasi Elektronik (BSrE) sehingga tidak diperlukan tanda tangan dan stempel basah.
+        Sesuai dengan ketentuan peraturan perundang-undangan yang berlaku, surat ini telah ditandatangani secara
+        elektronik yang tersertifikasi oleh Balai Sertifikasi Elektronik (BSrE) sehingga tidak diperlukan tanda tangan
+        dan stempel basah.
     </div>
 </body>
 

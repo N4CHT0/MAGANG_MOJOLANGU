@@ -24,16 +24,16 @@
                                         <td>
                                             <span
                                                 class="badge
-                                                @if ($item->status == 'menunggu_verifikasi') badge-warning
-                                                @elseif ($item->status == 'disetujui') badge-success
+                                                @if ($item->status == 'disetujui') badge-warning
                                                 @elseif ($item->status == 'ditolak') badge-danger
-                                                @elseif ($item->status == 'divalidasi') badge-info @endif">
-                                                @if ($item->status == 'menunggu_verifikasi')
-                                                    Menunggu Verifikasi RT
-                                                @elseif ($item->status == 'disetujui')
-                                                    Disetujui RW
+                                                @elseif ($item->status == 'diproses') badge-primary
+                                                @elseif ($item->status == 'divalidasi') badge-success @endif">
+                                                @if ($item->status == 'disetujui')
+                                                    Menunggu Divalidasi LPMD
                                                 @elseif ($item->status == 'divalidasi')
                                                     Divalidasi LPMD
+                                                @elseif ($item->status == 'diproses')
+                                                    Sedang Diproses
                                                 @elseif ($item->status == 'ditolak')
                                                     Pembangunan Ditolak
                                                 @endif
@@ -115,10 +115,10 @@
                                     <h5>Dokumentasi:</h5>
                                     <div class="row">
                                         ${data.dokumentasi.map(image => `
-                                                                                    <div class="col-12 text-center">
-                                                                                        <img src="${image}" alt="Dokumentasi" class="modal-img img-thumbnail">
-                                                                                    </div>
-                                                                                `).join('')}
+                                                                                                                                            <div class="col-12 text-center">
+                                                                                                                                                <img src="${image}" alt="Dokumentasi" class="modal-img img-thumbnail">
+                                                                                                                                            </div>
+                                                                                                                                        `).join('')}
                                     </div>
                                 </div>
                             `;

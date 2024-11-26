@@ -38,7 +38,6 @@
             </div>
         </div>
 
-        <!-- Tabel Matriks Perkalian -->
         <div class="col-12 mt-3">
             <div class="card">
                 <div class="card-body">
@@ -47,27 +46,31 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Alternatif</th>
-                                <th>A1 (Jalan)</th>
-                                <th>A2 (Gorong-gorong)</th>
-                                <th>A3 (Jembatan)</th>
+                                @foreach ($alternatif as $alt)
+                                    <th>{{ $alt->nama }}</th>
+                                @endforeach
                                 <th>Total</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($matrixData as $row)
+                            @foreach ($matrixData as $i => $row)
                                 <tr>
                                     <td>{{ $row['alternatif'] }}</td>
-                                    <td>{{ $row[0] }}</td>
-                                    <td>{{ $row[1] }}</td>
-                                    <td>{{ $row[2] }}</td>
+                                    @foreach ($alternatif as $j => $alt)
+                                        <td>{{ isset($row[$j]) ? $row[$j] : '0.000' }}</td>
+                                    @endforeach
                                     <td>{{ $row['total'] }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
+
                     </table>
                 </div>
             </div>
         </div>
+
+
+
 
         <!-- Button untuk Submit dan Menyimpan PDF -->
         <div class="col-12 mt-3">

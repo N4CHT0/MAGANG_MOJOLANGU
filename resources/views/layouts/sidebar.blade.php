@@ -200,7 +200,7 @@
                                 aria-expanded="false"><i class="fa fa-user-circle-o"></i><span class="hide-menu">Data
                                     Pengurus SKTM</span></a>
                         </li> --}}
-                        <li> <a class="waves-effect waves-dark" href="{{ route('perbandingan.index') }}"
+                        <li> <a class="waves-effect waves-dark" href="{{ route('data_pembangunan.index') }}"
                                 aria-expanded="false"><i class="fa fa-archive"></i><span
                                     class="hide-menu">Pembangunan</span></a>
                         </li>

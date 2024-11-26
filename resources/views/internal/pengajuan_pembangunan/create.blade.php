@@ -54,7 +54,7 @@
                                         <option value="Gorong - Gorong">Gorong - Gorong</option>
                                         <option value="Jembatan">Jembatan</option>
                                         <option value="Renovasi">Renovasi</option>
-                                        <option value="Pengajuan Barang">Pengajuan Barang</option>
+                                        <option value="Pengadaan Barang">Pengajuan Barang</option>
                                         <option value="Fasilitas Kesehatan">Fasilitas Kesehatan</option>
                                         <option value="Fasilitas Olahraga">Fasilitas Olahraga</option>
                                         <option value="Pembangunan Lainnya">Pembangunan Lainnya</option>

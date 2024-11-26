@@ -86,6 +86,7 @@ Route::middleware(['auth', 'role:lpmd'])->group(function () {
     Route::post('/compare-nilai-submit', [KriteriaController::class, 'storeComparisonValue'])->name('nilai.submit');
     Route::get('/hasil-prioritas', [KriteriaController::class, 'calculateFinalScore'])->name('hasil.prioritas');
     Route::post('/save-ranking-pdf', [KriteriaController::class, 'saveRankingPdf'])->name('save-ranking-pdf');
+
     // Route untuk menampilkan data perankingan
     Route::get('/perbandingan', [KriteriaController::class, 'showRankingData'])->name('perbandingan.index');
     Route::delete('/perbandingan/{id}', [KriteriaController::class, 'hapusPerbandingan'])->name('perbandingan.destroy');
@@ -100,6 +101,14 @@ Route::middleware(['auth', 'role:lpmd'])->group(function () {
 Route::middleware(['auth', 'role:kelurahan'])->group(function () {
     Route::post('sktms/{id}/final', [SKTMController::class, 'finalSKTM'])->name('sktm.final');
     Route::post('sktms/{id}/reject-final', [SKTMController::class, 'rejectFinalSKTM'])->name('sktm.rejectFinal');
+    //Route untuk menampilkan data perankingan
+    Route::get('/data-pembangunan', [KriteriaController::class, 'showRankingData'])->name('data_pembangunan.index');
+    Route::delete('/data-pembangunan/{id}', [KriteriaController::class, 'hapusPerbandingan'])->name('data_perbandingan.destroy');
+
+
+    // Route untuk mengunduh PDF
+    Route::get('/data-pembangunan/{id}/download', [KriteriaController::class, 'downloadPdf'])->name('data_download.pdf');
+    Route::get('/data-pembangunan/{id}/detail', [KriteriaController::class, 'showDetail'])->name('data_pembangunan.detail');
     // Rute khusus untuk 'kelurahan'
 });
 
