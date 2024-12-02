@@ -38,6 +38,8 @@
             </div>
         </div>
 
+
+        <!-- Tabel Matriks Perkalian -->
         <div class="col-12 mt-3">
             <div class="card">
                 <div class="card-body">
@@ -46,29 +48,28 @@
                         <thead class="table-primary">
                             <tr>
                                 <th>Alternatif</th>
-                                @foreach ($alternatif as $alt)
-                                    <th>{{ $alt->nama }}</th>
+                                @foreach ($kriteria as $krit)
+                                    <th>{{ $krit->nama }}</th> <!-- Menampilkan nama kriteria -->
                                 @endforeach
-                                <th>Total</th>
+                                <th>Total</th> <!-- Kolom total -->
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($matrixData as $i => $row)
+                            @foreach ($matrixData as $row)
                                 <tr>
                                     <td>{{ $row['alternatif'] }}</td>
-                                    @foreach ($alternatif as $j => $alt)
-                                        <td>{{ isset($row[$j]) ? $row[$j] : '0.000' }}</td>
+                                    @foreach ($kriteria as $krit)
+                                        <td>{{ $row[$krit->id] ?? '0.000' }}</td>
+                                        <!-- Menampilkan nilai perkalian untuk kriteria tertentu -->
                                     @endforeach
-                                    <td>{{ $row['total'] }}</td>
+                                    <td>{{ $row['total'] }}</td> <!-- Menampilkan total -->
                                 </tr>
                             @endforeach
                         </tbody>
-
                     </table>
                 </div>
             </div>
         </div>
-
 
 
 

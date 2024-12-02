@@ -269,14 +269,15 @@ class KriteriaController extends Controller
                 'alternatif' => $alt->nama, // Nama alternatif untuk baris
             ];
 
-            foreach ($kriteria as $j => $krit) {
+            // Perhitungan untuk setiap kriteria
+            foreach ($kriteria as $krit) {
                 $kriteriaId = $krit->id;
                 $bobot = $bobotKriteria[$kriteriaId - 1] ?? 0; // Pastikan bobot ada
                 $nilaiNormalisasi = $dataPerbandingan['perbandingan_alternatif'][$kriteriaId]['priorityVector'][$alt->id] ?? 0; // Pastikan nilai normalisasi ada
                 $perkalian = $nilaiNormalisasi * $bobot;
 
-                // Simpan nilai perkalian di baris dengan indeks $j
-                $row[$j] = round($perkalian, 3);
+                // Simpan nilai perkalian di baris dengan indeks $krit->id
+                $row[$krit->id] = round($perkalian, 3); // Gunakan kriteriaId untuk kolom
 
                 // Tambahkan ke skor total baris
                 $totalScore += $perkalian;
@@ -307,7 +308,7 @@ class KriteriaController extends Controller
         ]);
 
         // Ubah status alternatif yang telah diproses menjadi 'diproses'
-        Pembangunan::whereIn('id', $alternatif->pluck('id'))->update(['status' => 'diproses']);
+        // Pembangunan::whereIn('id', $alternatif->pluck('id'))->update(['status' => 'diproses']);
 
         return view('internal.pengajuan_pembangunan.lpmd.perbandingan.hasil_prioritas', [
             'finalScores' => $finalScores,
@@ -317,6 +318,8 @@ class KriteriaController extends Controller
             'kriteria' => $kriteria,
         ]);
     }
+
+
 
     public function storeComparisonValue(Request $request)
     {

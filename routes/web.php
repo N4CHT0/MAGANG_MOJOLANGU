@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\PembangunanController;
@@ -12,8 +13,9 @@ use App\Http\Middleware\RoleMiddleware;
 // Definisikan middleware role secara manual
 Route::aliasMiddleware('role', RoleMiddleware::class);
 Route::get('/', function () {
-    return view('auth.login');
+    return view('home.guest');
 });
+Route::get('/daftar-masuk', [LoginController::class, 'loginPage'])->name('daftar-masuk');
 Route::post('/update-data-warga', [UserController::class, 'update_data_warga'])->name('update_data_warga');
 
 Auth::routes();
