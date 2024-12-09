@@ -20,24 +20,8 @@
                     <li class="nav-item dropdown active">
                         <a class="nav-link dropdown-toggle" href="#!" id="navbarDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Homepage <i class="tf-ion-chevron-down"></i>
+                            Beranda <i class="tf-ion-chevron-down"></i>
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="index.html">Homepage</a></li>
-                            <li><a class="dropdown-item" href="onepage-slider.html">Onepage</a></li>
-                            <li><a class="dropdown-item" href="onepage-text.html">Onepage 2</a></li>
-
-                            <li class="dropdown dropdown-submenu dropright">
-                                <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0501" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sub Menu <i
-                                        class="tf-ion-chevron-down"></i></a>
-
-                                <ul class="dropdown-menu" aria-labelledby="dropdown0501">
-                                    <li><a class="dropdown-item" href="index.html">Submenu 01</a></li>
-                                    <li><a class="dropdown-item" href="index.html">Submenu 02</a></li>
-                                </ul>
-                            </li>
-                        </ul>
                     </li>
                     <li class="nav-item ">
                         <a class="nav-link" href="about.html">About Us</a>

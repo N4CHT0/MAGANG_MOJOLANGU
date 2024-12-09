@@ -13,7 +13,7 @@ use App\Http\Middleware\RoleMiddleware;
 // Definisikan middleware role secara manual
 Route::aliasMiddleware('role', RoleMiddleware::class);
 Route::get('/', function () {
-    return view('home.guest');
+    return view('auth.login');
 });
 Route::get('/daftar-masuk', [LoginController::class, 'loginPage'])->name('daftar-masuk');
 Route::post('/update-data-warga', [UserController::class, 'update_data_warga'])->name('update_data_warga');

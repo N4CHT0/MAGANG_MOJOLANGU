@@ -205,7 +205,7 @@
                     alt="qr" style="max-width: 90px; max-height: 40px" />
             </div>
             <div class="right">
-                <p>Malang, {{ \Carbon\Carbon::parse($data)->translatedFormat('d F Y') }}</p>
+                <p>Malang, {{ \Carbon\Carbon::parse($data)->locale('id')->translatedFormat('d F Y') }}</p>
                 <p>LURAH MOJOLANGU</p>
                 <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('report/ttd_sktm.jpg'))) }}"
                     alt="ttd" style="max-width: 200px; max-height: 45px" />

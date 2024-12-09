@@ -308,7 +308,7 @@ class KriteriaController extends Controller
         ]);
 
         // Ubah status alternatif yang telah diproses menjadi 'diproses'
-        // Pembangunan::whereIn('id', $alternatif->pluck('id'))->update(['status' => 'diproses']);
+        Pembangunan::whereIn('id', $alternatif->pluck('id'))->update(['status' => 'diproses']);
 
         return view('internal.pengajuan_pembangunan.lpmd.perbandingan.hasil_prioritas', [
             'finalScores' => $finalScores,
